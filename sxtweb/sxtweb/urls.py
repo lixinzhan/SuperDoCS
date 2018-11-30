@@ -14,8 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth.views import LoginView
+
+# admin.site.logged_out_template = 'registration/logged_out.html'
+# admin.autodiscover()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('login/',LoginView.as_view(template_name='admin/login.html',
+            extra_context={'site_header': 'SuperDoCS Login',
+                'next': '/admin/'})),
+    path('admin/',  admin.site.urls),
+    path('xcalc/',  include('xcalc.urls')),
+    path('xcalib/', include('xcalib.urls')),
+    path('resources/', include('resources.urls')),
 ]
