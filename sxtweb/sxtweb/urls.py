@@ -13,16 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView
 
-# admin.site.logged_out_template = 'registration/logged_out.html'
-# admin.autodiscover()
+admin.site.site_header = "SuperDoCS Administration"
+admin.site.site_title = "SuperDoCS site admin"
+admin.site.index_title = "SuperDoCS Site Administration"
 
 urlpatterns = [
     path('login/',LoginView.as_view(template_name='admin/login.html',
-            extra_context={'site_header': 'SuperDoCS Login',
+            extra_context={'site_header': 'SuperDoCS User Login',
                 'next': '/admin/'})),
     path('admin/',  admin.site.urls),
     path('xcalc/',  include('xcalc.urls')),
