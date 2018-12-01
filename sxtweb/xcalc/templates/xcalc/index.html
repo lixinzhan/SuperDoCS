@@ -1,0 +1,179 @@
+{% extends "xcalc/base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block head %}{% trans 'SuperDoCS' %}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'xcalc:index' %}">{% trans 'Home' %}</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+{% if title %} &rsaquo; {{ title }}{% endif %}
+<a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
+</div>
+{% endblock %}
+
+
+{% block content %}
+    <div id="search-entry">     
+        {% if form.errors %}
+            <p style="color:red;">
+                Please correct the error{{ form.errors|pluralize }} below.
+            </p>
+        {% endif %}
+
+        <form action="" method="post">{% csrf_token %}
+            <div>
+            <ul>
+                <li>
+                    {{ form.planname.label_tag }}
+                    {{ form.planname }}</li>
+                <li>
+                    {{ form.patientid.label_tag }}
+                    {{ form.patientid }}
+                </li>
+                <li>
+                    {{ form.lastname.label_tag }}
+                    {{ form.lastname }}
+                </li>
+                <li>
+                    {{ form.firstname.label_tag }}
+                    {{ form.firstname }}
+                </li>
+            </ul>
+            </div>
+
+            <div>
+                <ul>
+                <li>{{ form.planstatus.label_tag }} {{ form.planstatus }}</li>
+                <li>{{ form.apprvstatus.label_tag }} {{ form.apprvstatus }}</li>
+                <li>{{ form.orderby.label_tag}} {{ form.orderby}}</li>
+                <li>{{ form.maxentry.label_tag}} {{ form.maxentry}}</li>
+                </ul>
+            </div>
+            <br/><br/>
+            <div>
+            <ul id="search-button-group">
+                <li>
+                <input type="submit" name="search_plan_submit" value="&nbsp; {% trans 'Search' %} &nbsp;">
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                <input type="submit" name="new_plan_submit" value="&nbsp;{% trans 'New Plan' %}&nbsp;">
+                </li>
+            </ul>
+            </div>
+        </form>    
+    </div>
+
+    {% if planpage|length > 0 %}
+    <div id="search-results">
+        <h2>{% trans 'Search Results' %}</h2>
+        
+        <table summary="Plan Search Results">
+            <!-- <caption><strong>Patient Search Results</strong></caption> -->
+            <thead>
+                <tr>
+                <th scope="col">{% trans 'Plan Name' %}</th>
+                <th scope="col">{% trans 'Patient MRN' %}</th>
+                <th scope="col">{% trans 'Last Name' %}</th>
+                <th scope="col">{% trans 'First Name' %}</th>
+                <th scope="col">{% trans 'Modified By' %}</th>
+                <th scope="col">{% trans 'Last Change Time' %}</th>
+                <th scopy="col">{% trans 'Calc. Ver.' %}</th>
+                <th scopy="col">{% trans 'Dose Calib.' %}</th>
+                <th scopy="col">{% trans 'Status' %}</th>
+                <th scopy="col">{% trans 'Approval' %}</th>
+                <th scopy="col">{% trans 'Plan QA' %}</th>
+                </tr>
+            </thead>
+        
+        <tbody id="itemContainer">
+            {% for plan in planpage.object_list %}
+                <tr>
+                    <th scope="row">
+                    <a href="/plan/{{ plan.id }}/">
+                        {{ plan.PlanName }}
+                    </a>    
+                    </th>
+                    <td align="left"><a href="/plan/{{ plan.id }}/">{{ plan.PatientId }}</a></td>
+                    <td> <a href="/plan/{{ plan.id }}/">{{ plan.LastName }}</a></td>
+                    <td> <a href="/plan/{{ plan.id }}/">{{ plan.FirstName }}</a></td>
+                    <td> {{ plan.ModifiedByUser }}</td>
+                    <td> {{ plan.LastModifiedDateTime|date:"Y/m/d H:i" }}</td>
+                    <td> {{ plan.SXTCalcVersion }}</td>
+                    <td> {{ plan.DoseCalibDate|date:"Y/m/d" }}</td>
+                    <td> {{ plan.PlanStatus }}</td>
+                    <td> {{ plan.ApprvStatus }}</td>
+                    <td> <a href="/plan_qa/{{ plan.id }}/">QA</a></td>
+                    <!--
+                    <td><a href="/patient/{{patient.PatientId}}/">Edit</a></td>
+                    -->
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+      <!-- # of items per page form -->
+      <form id="floatright">
+        <label id="floatright">Plans/Page: </label>
+        <select id="pagination">
+          <option selected="selected">20</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </form>
+
+    <!-- navigation holder -->
+    <div class="holder"></div>
+    
+    </div> <!-- search results -->
+
+    {% endif %}
+
+{% endblock %}
+
+
+
+
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}jPages-master/js/jquery-1.8.2.min.js"></script>
+  <script src="{{ STATIC_URL }}jPages-master/js/jPages.min.js"></script>
+
+  <script>
+  /* when document is ready */
+  $(function() {
+    /* initiate plugin */
+    $("div.holder").jPages({
+      containerID : "itemContainer",
+      first    : "First",
+      last     : "Last",
+      previous : "Prev",
+      next     : "Next",
+      fallback : 0,
+      delay    : 0,
+      perPage  : 10
+    });
+
+    /* on select change */
+    $("select#pagination").change(function(){
+      /* get new # of items per page */
+      var newPerPage = parseInt( $(this).val() );
+
+      /* destroy jPages and initiate plugin again */
+      $("div.holder").jPages("destroy").jPages({
+        containerID   : "itemContainer",
+        first    : "First",
+        last     : "Last",
+        previous : "Prev",
+        next     : "Next",
+        fallback : 0,
+        delay    : 0,
+        perPage  : newPerPage
+      });
+    });
+
+  });
+  </script>
+
+{% endblock %}
