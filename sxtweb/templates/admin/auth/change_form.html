@@ -1,0 +1,23 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="/plansearch">{% trans 'Home' %}</a> &rsaquo;
+     <a href="../../../">{% trans 'Admin' %}</a> &rsaquo;
+     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo; 
+     {% if has_change_permission %}
+          <a href="../">{{ opts.verbose_name_plural|capfirst }}</a>
+     {% else %}
+          {{ opts.verbose_name_plural|capfirst }}
+     {% endif %}
+     &rsaquo; 
+     {% if add %}
+          Add {{ opts.verbose_name }}
+     {% else %}
+          {{ original|truncatewords:"18" }}
+     {% endif %}
+</div>
+{% endif %}{% endblock %}

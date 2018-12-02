@@ -1,0 +1,13 @@
+{% extends "admin/delete_selected_confirmation.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="/plansearch">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../">{% trans "Admin" %}</a> &rsaquo;
+     <!-- <a href="../">{{ app_label|capfirst }}</a> &rsaquo; -->
+     <a href="../">{% trans 'SuperDoCS' %}</a> &rsaquo;
+     <a href="./">{{ opts.verbose_name_plural|capfirst }}</a> &rsaquo;
+     {% trans 'Delete multiple objects' %}
+</div>
+{% endblock %}
