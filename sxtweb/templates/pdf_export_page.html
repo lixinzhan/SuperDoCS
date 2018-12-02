@@ -1,0 +1,219 @@
+{% extends "base_pdf.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<table id="result-table">
+ <caption>
+    <p>{{ settings.INSTITUTE }}</p>
+ </caption>
+    <tr><td>{% trans 'Last Name'%}: </td>
+        <td>{{ plan.LastName }} </td>
+    </tr>
+    <tr><td>{% trans 'First Name' %}: </td>
+        <td>{{ plan.FirstName }} </td>
+    </tr>
+    <tr><td>{% trans 'Middle Name' %}: </td>
+        <td>{{ plan.MiddleName }} </td>
+    </tr>
+    <tr><td>{% trans 'Patient MRN' %}: </td>
+        <td>{{ plan.PatientId }} </td>
+    </tr>
+    <tr><td>{% trans 'Treatment Unit' %}: </td>
+        <td>{{ plan.Filter.Filter.Machine.MachineCode }} -- {{ plan.Filter.Filter.Machine }} </td>
+    </tr>
+    <tr><td>{% trans 'Filter' %}: </td>
+        <td>{{plan.Filter.Filter }}</td>
+    </tr>
+    <!--
+    <tr><td>{% trans 'Calibration Applicator' %}:</td>
+        <td>{{ plan.Filter.Cone }}</td>
+    </tr>
+    <tr><td>{% trans 'Calibrated on' %}:</td>
+        <td>{{ plan.DoseCalibDate|date }}</td>
+    </tr>
+    <tr>
+        {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+        <td>{% trans 'End Effect (min)' %}:</td>
+        {% else %}
+        <td>{% trans 'End Effect (MU)' %}:</td>
+        {% endifequal %}
+        <td>{{ plan.Filter.Filter.EndEffect }}</td>
+    </tr>
+    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    <tr><th>{% trans 'Air Kerma Rate in Air for Calib. Applicator (cGy/min)' %}:</th>
+        <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
+    </tr>
+    {% else %}
+    <tr><th>{% trans 'Air Kerma in Air per MU for Calib. Applicator (cGy/MU)' %}:</th>
+        <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
+    </tr>
+    {% endifequal %}
+        -->
+    <tr><td>{% trans 'Applicator' %}:</td>
+        <td>{{ plan.Cone }}</td>
+    </tr>    
+    {% if plan.CutoutRequired %}
+    <tr><td>{% trans 'Cutout Shape' %}:</td>
+        <td>{{plan.CutoutShape }}</td>
+    </tr>
+    <tr><td>{% trans 'Cutout Length (cm)' %}:</td>
+        <td>{{plan.CutoutLength|floatformat:2}}</td>
+    </tr>
+    <tr><td>{% trans 'Cutout Width (cm)' %}:</td>
+        <td>{{plan.CutoutWidth|floatformat:2}}</td>
+    </tr>
+    <tr><td>{% trans 'Cutout Thickness (cm)' %}:</td>
+        <td>{{plan.CutoutThickness|floatformat:2}}</td>
+    </tr>
+    <tr><td>{% trans 'StandIn(-)/StandOut(+) (cm)' %}: </td>
+        <td>{{ plan.StandOut|floatformat:2 }}</td>
+    </tr>
+    <!--
+    <tr><td>{% trans 'Focal Skin Distance (cm)' %}:</td>
+        <td>{{ plan.FSD|floatformat:"2"}}</td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter (cm)' %}:</td>
+        <td>{{ plan.Dequiv|floatformat:"3" }}  </td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter at Calib. Position (cm)' %}:</td>
+        <td>{{ plan.DequivCalib|floatformat:"3" }}  </td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter at Medium Surface (cm)' %}:</td>
+        <td>{{ plan.DequivSurface|floatformat:"3" }}  </td>
+    </tr>
+    -->
+    {% else %}
+    <tr><td>{% trans 'StandIn(-)/StandOut(+) (cm)' %}: </td>
+        <td>{{ plan.StandOut|floatformat:2 }}</td>
+    </tr>
+    <!--
+    <tr><td>{% trans 'Focal Surface Distance (cm)' %}:</td>
+        <td>{{ plan.FSD|floatformat:"2"}}</td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter (cm)' %}:</td>
+        <td>{{ plan.Dequiv|floatformat:"3" }}  </td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter at Calib. Position (cm)' %}:</td>
+        <td>{{ plan.DequivCalib|floatformat:"3" }}  </td>
+    </tr>
+    <tr><td>{% trans 'Equiv Diameter at Medium Surface (cm)' %}:</td>
+        <td>{{ plan.DequivSurface|floatformat:"3" }}  </td>
+    </tr>
+    -->
+   {% endif %}
+   <!--
+    <tr><td>{% trans 'Inverse Square Factor' %}:</td>
+        <td>{{ plan.ISF|floatformat:3 }}     </td>
+    </tr>
+    <tr><td>{% if plan.SpecifyROF %}{% trans 'User Specified ' %}{% endif %}{% trans 'Relative Exposure Factor' %}:</td>
+        <td>{{ plan.ROF|floatformat:3 }}</td>
+    </tr>
+    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    <tr><th>{% trans 'Air Kerma Rate in Air at Surface (cGy/min)' %}:</th>
+        <th>{{ plan.KR_air|floatformat:3 }}</th>
+    </tr>
+    {% else %}
+    <tr><th>{% trans 'Air Kerma in Air per MU at Surface (cGy/MU)' %}:</th>
+        <th>{{ plan.KR_air|floatformat:3 }}</th>
+    </tr>
+    {% endifequal %}
+    <tr><td>{% trans 'Back Scattering Factor for Water (Bw)' %}:</td>
+        <td>{{ plan.BSF_wat|floatformat:3 }}</td>
+    </tr>
+    {% ifnotequal plan.Cone.ConeEnd 'Open' %}
+    <tr><td>{% trans 'BSF Correction Factor for Cone End' %}:</td>
+        <td>{{ plan.BSF_ConeEnd|floatformat:3 }}</td>
+    </tr>
+    {% endifnotequal %}
+    <tr><td>{% trans 'Mass Abs. Coeff. (Water to Air in Air)' %}:</td>
+        <td>{{ plan.MassAbs_WatAir_air|floatformat:3 }}</td>
+    </tr>
+
+    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    <tr><th>{% trans 'Dose Rate at Water Surface (cGy/min)' %}:</th>
+        <th>{{ plan.DR_wat|floatformat:3 }}</th>
+    </tr>
+    {% else %}
+    <tr><th>{% trans 'Dose per MU at Water Surface (cGy/MU)' %}:</th>
+        <th>{{ plan.DR_wat|floatformat:3 }}</th>
+    </tr>
+    {% endifequal %}
+    
+    <tr><td>{% trans 'Destination Medium' %}:</td>
+        <td>{{ plan.TargetTissue }}</td>
+    </tr>
+    <tr><td>{% trans 'Mass Abs. Coeff. (Med. to Water in Air)' %}:</td>
+        <td>{{ plan.C_MedWat|floatformat:3 }}</td>
+    </tr>
+    <tr><td>{% trans 'BSF Ratio, Medium to Water (Bmed/Bw)' %}:</td>
+        <td>{{ plan.B_MedWat|floatformat:3 }}</td>
+    </tr>
+    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    <tr><th>{% trans 'Dose Rate at Medium Surface (cGy/min)' %}:</th>
+        <th>{{ plan.DR_med|floatformat:3 }}</th>
+    </tr>
+    {% else %}
+    <tr><th>{% trans 'Dose per MU at Medium Surface (cGy/MU)' %}:</th>
+        <th>{{ plan.DR_med|floatformat:3 }}</th>
+    </tr>
+    {% endifequal %}
+-->
+    <tr><td>{% trans 'Total Dose (cGy)' %}: </td>
+        <td>{{plan.TotalDose }}</td>
+    </tr>
+    <tr><td>{% trans 'Fractions' %}: </td>
+        <td>{{ plan.Fractions }}</td>
+    </tr>
+    <tr><td>{% trans 'Dose per Fraction (cGy)' %}:</td>
+        <td>{{ plan.DosePerFrac|floatformat:"-3" }}</td>
+    </tr>
+    <tr><td>{% trans 'Percentage Depth Dose (%)' %}:</td>
+        <td>{{ plan.PDD|floatformat:"-3" }}</td>
+    </tr>
+    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    <tr id="final-result"><th>{% trans 'Fractional Treatment Time (min)' %}:</th>
+        <th><span class="emphasize">{{ plan.TxTime|floatformat:3 }}</span>  </th>
+    </tr>
+    {% else %}
+    <tr id="final-result"><th>{% trans 'MU Delivery per Fraction (MU)' %}:</th>
+        <th><span class="emphasize">{{ plan.TxTime|floatformat:1 }}</span>  </th>
+    </tr>
+    {% endifequal %}
+    <tr><td>{% trans 'Physician' %}: </td>
+        <td>{{ plan.Doctor }} </td>
+    </tr>
+    <tr><td>{% trans 'Plan Status' %}: </td>
+     {% ifnotequal plan.PlanStatus 'Active' %}
+        <td>{{ plan.PlanStatus }} ({{ plan.StatusChangedBy }}) </td>
+     {% else %}
+        <td>{{ plan.PlanStatus }} </td>
+     {% endifnotequal %}
+    </tr>
+    <tr><td>{% trans 'Physics Approval' %} </td>
+     {% ifnotequal plan.ApprvStatus 'NotApproved' %}
+        <td>{{ plan.ApprvStatus }} ({{ plan.ApprovedBy }})</td>
+     {% else %}
+        <td>{{ plan.ApprvStatus }}</td>
+     {% endifnotequal %}
+    </tr>
+    <tr><td>{% trans 'Software Version for Calculation' %}: </td>
+        <td>{{ plan.SXTCalcVersion }}</td>
+    </tr>
+    <tr><td>{% trans 'System Calibrated On' %}: </td>
+        <td>{{ plan.DoseCalibDate }}</td>
+    </tr>
+    <tr><td>{% trans 'Last Modification' %}:</td>
+        <td>{{plan.LastModifiedDateTime|date }} ({{ plan.ModifiedByUser }})</td>
+    </tr>
+</table>
+{% endblock %}
+
+<!--
+{%block page_foot%}
+    {{block.super}}
+{%endblock%}
+-->

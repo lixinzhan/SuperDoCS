@@ -1,0 +1,89 @@
+# for ${SUPERDOCS_SITE}
+<VirtualHost *:80>
+    ServerName ${SUPERDOCS_SITE}
+
+    Alias /media/ /export/www/sxtweb/media/
+    Alias /static/ /export/www/sxtweb/static/
+
+    <Directory /export/www/sxtweb/static>
+        Options FollowSymLinks MultiViews
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    <Directory /export/www/sxtweb/media>
+        Options FollowSymLinks MultiViews
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    LogLevel info
+    ErrorLog /var/log/apache2/${SUPERDOCS_SITE}/errors.log
+    CustomLog /var/log/apache2/${SUPERDOCS_SITE}/access.log combined
+
+    WSGIDaemonProcess ${SUPERDOCS_SITE} processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
+    WSGIProcessGroup ${SUPERDOCS_SITE}
+    WSGIScriptAlias / /export/www/sxtweb/sxtweb/wsgi.py
+    WSGIApplicationGroup %{GLOBAL}
+
+    <Directory /export/www/sxtweb/sxtweb> 
+    <Files wsgi.py>
+        Order allow,deny
+        Allow from all
+    </Files>
+    </Directory>
+
+    <Location />
+        RewriteEngine on
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+    </Location>
+
+</VirtualHost>
+
+# for ${SUPERDOCS_SITE} ssl
+<VirtualHost *:443>
+    ServerName ${SUPERDOCS_SITE}
+
+    Alias /media/ /export/www/sxtweb/media/
+    Alias /static/ /export/www/sxtweb/static/
+
+    <Directory /export/www/sxtweb/static>
+        Options FollowSymLinks MultiViews
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    <Directory /export/www/sxtweb/media>
+        Options FollowSymLinks MultiViews
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    LogLevel info
+    ErrorLog /var/log/apache2/${SUPERDOCS_SITE}/errors.log
+    CustomLog /var/log/apache2/${SUPERDOCS_SITE}/access.log combined
+
+    # WSGIDaemonProcess ${SUPERDOCS_SITE} processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
+    WSGIProcessGroup ${SUPERDOCS_SITE}
+    WSGIScriptAlias / /export/www/sxtweb/sxtweb/wsgi.py
+    WSGIApplicationGroup %{GLOBAL}
+
+    <Directory /export/www/sxtweb/sxtweb> 
+    <Files wsgi.py>
+        Order allow,deny
+        Allow from all
+    </Files>
+    </Directory>
+    
+    # SSL stuff
+    SSLEngine On
+    SSLCertificateFile /etc/ssl/certs/${SUPERDOCS_SITE}.crt
+    SSLCertificateKeyFile /etc/ssl/private/${SUPERDOCS_SITE}.key
+    <LOCATION />
+        SSLRequireSSL On
+        SSLVerifyClient none
+        SSLVerifyDepth 1
+        SSLOptions +StdEnvVars +StrictRequire
+    </LOCATION>
+</VirtualHost>

@@ -1,0 +1,63 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block head %}
+    {% trans 'SuperDoCS' %}
+{% endblock %}
+{% block breadcrumbs %}{% if not is_popup %}
+    <div class="breadcrumbs">
+        SXT &rsaquo;
+        Profile ({{ user.username }})
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block promptbar %}
+<div id="promptbar">
+    <div id="bar-prompt">
+    {% trans 'Update User Profile and Password' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    
+    {% if form.errors %}
+        <p style="color:red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+    
+    <form action="" method="post">{% csrf_token %}
+    <div id="content-setup">        
+        <div class="module">            
+            <table id="item-list" summary="">
+                <caption>Profile edit for {{ user.username }}</caption>
+                {{ uform.as_table }}
+            </table>
+        </div>                
+        <input type="submit" name="save_submit" value="&nbsp; {% trans 'Save Profile' %} &nbsp;" />
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <input type="submit" name="cancel_submit" value="&nbsp; {% trans 'Cancel' %} &nbsp;" /> 
+
+        <br />
+        <br />
+        <br />
+
+        <div class="module">            
+            <table id="item-list" summary="">
+                <caption>Password change for <strong>{{ user.username }}</strong></caption>
+                {{ pform.as_table }}
+            </table>
+        </div>                
+        <input type="submit" name="change_passwd_submit" value="&nbsp; {% trans 'Change Password' %} &nbsp;" />
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <input type="submit" name="cancel_passwd_submit" value="&nbsp; {% trans 'Cancel' %} &nbsp;" /> 
+
+    </div>
+    </form>
+    
+{% endblock %}
+

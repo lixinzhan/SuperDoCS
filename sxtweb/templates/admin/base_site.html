@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_reorder_tag %}
+
+{% block title %}{{ title }} | {% trans 'SuperDoCS' %}{% endblock %}
+
+{% block branding %}
+{% admin_reorder %}
+<h1 id="site-name">SuperDoCS System ---
+<font color=red>
+    {% if user.is_superuser %}
+        ADMIN
+    {% else %}
+        COMMISSION
+    {% endif %}
+</font></h1>
+{% endblock %}
+
+
+{% block nav-global %}{% endblock %}
+
+{% block footer %}
+    <div id="footer">{{ COPYRIGHT }}.
+    Please <a href="mailto:{{ ADMINEMAIL }}">contact us</a> for any questions.
+    </div>
+{% endblock %}
