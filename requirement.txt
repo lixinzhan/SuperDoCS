@@ -3,3 +3,4 @@ django-admin
 numpy
 scipy
 xhtml2pdf
+Cython
