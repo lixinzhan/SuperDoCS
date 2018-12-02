@@ -1,33 +1,40 @@
-"""sxtweb URL Configuration
+from django.conf.urls import include, url
+from django.views.generic import RedirectView
+import django.contrib.auth.views as auth_views
+from tegmine.views import *
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 
+# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from django.urls import path, include
-from django.contrib.auth.views import LoginView
-
-admin.site.site_header = "SuperDoCS Administration"
-admin.site.site_title = "SuperDoCS site admin"
-admin.site.index_title = "SuperDoCS Site Administration"
+admin.autodiscover()
 
 urlpatterns = [
-    path('login/',LoginView.as_view(template_name='admin/login.html',
-            extra_context={'site_header': 'SuperDoCS User Login',
-                'next': '/admin/'})),
-    path('admin/',  admin.site.urls),
-    path('xcalc/',  include('xcalc.urls')),
-    path('xcalib/', include('xcalib.urls')),
-    path('resources/', include('resources.urls')),
+    url(r'^$', auth_views.login, name='login'),
+    url(r'^help/(\w+)/$', help_page, name='help_page'),
+    url(r'^help/$',help_page, name='help_page'),
+    url(r'^plansearch/$', plan_search_page, name='plan_search_page'),
+    url(r'^plan/(\w+)/$', plan_edit_page, name='plan_edit_page'),
+    url(r'^plan/$', RedirectView.as_view(url='/plan/new/')),
+    url(r'^plan_qa/(\w+)/$', plan_qa_page, name='plan_qa_page'),
+    url(r'^plan_qa/$', RedirectView.as_view(url='/plansearch/')),
+    url(r'^planstatus/$', RedirectView.as_view(url='/plansearch/')),
+    url(r'^planstatus/(\w+)/$',plan_status_page,name='plan_status_page'),
+
+    url(r'^login/$', auth_views.login, name="auth_views.login"),
+    url(r'^accounts/login/$', auth_views.login, name='auth_views.login'),
+    url(r'^logout/$',logout_page, name='logout_page'),
+    url(r'^user/(\w+)/profile/$',profile_page, name='profile_page'),
+
+    url(r'^plan_export/pdf/(\w+)$', pdf_export_page,name='pdf_export_page'),
+    url(r'^plan_export/csv/(\w+)$', csv_export_page,name='csv_export_page'),
+
+    # Uncomment the admin/doc line below to enable admin documentation:
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    # Uncomment the next line to enable the admin:
+    # url(r'^commission/', include(admin.site.urls)),
+    url('admin/', admin.site.urls),
+
+    # for Language setting view
+    url(r'^i18n/', include('django.conf.urls.i18n')), 
 ]
