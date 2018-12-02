@@ -35,8 +35,9 @@ cp -rf tegmine/templatetags ${SITE}/tegmine/
 cp -rf protocols/AAPM_TG61/Data ${SITE}/protocols/AAPM_TG61/
 
 cp sxtweb/__init__.py ${SITE}/sxtweb/
-#cp sxtweb/settings.py ${SITE}/sxtweb/
-sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/settings.py > ${SITE}/sxtweb/settings.py
+cp sxtweb/settings.py ${SITE}/sxtweb/
+cp sxtweb/version.py ${SITE}/sxtweb/
+sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py > ${SITE}/sxtweb/local.py
 cp sxtweb/urls.py ${SITE}/sxtweb/
 cp sxtweb/wsgi.py ${SITE}/sxtweb/
 cp sxtweb/sxt.db ${SITE}/sxtweb/
