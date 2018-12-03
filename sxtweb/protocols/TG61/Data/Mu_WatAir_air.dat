@@ -1,0 +1,44 @@
+# TG61 Table IV.
+# Ratios of average mass energy-absorption coefficients 
+# water to air, free in air, to convert air kerma to 
+# water kerma as a function of HVL (mm Al) or HVL (mm Cu).
+#
+# Column below are:
+# HVLMaterial HVL RatioOfAbsorptionCoeff
+
+Al 0.03 1.047
+Al 0.04 1.047
+Al 0.05 1.046
+Al 0.06 1.046
+Al 0.08 1.044
+Al 0.10 1.044
+Al 0.12 1.043
+Al 0.15 1.041
+Al 0.2  1.039
+Al 0.3  1.035
+Al 0.4  1.031
+Al 0.5  1.028
+Al 0.6  1.026
+Al 0.8  1.022
+Al 1.0  1.020
+Al 1.2  1.018
+Al 1.5  1.017
+Al 2.0  1.018
+Al 3.0  1.021
+Al 4.0  1.025
+Al 5.0  1.029
+Al 6.0  1.034
+Al 8.0  1.045
+Cu 0.1  1.020
+Cu 0.2  1.028
+Cu 0.3  1.035
+Cu 0.4  1.043
+Cu 0.5  1.050
+Cu 0.6  1.056
+Cu 0.8  1.068
+Cu 1.0  1.076
+Cu 1.5  1.085
+Cu 2.0  1.089
+Cu 3.0  1.100
+Cu 4.0  1.106
+Cu 5.0  1.109
