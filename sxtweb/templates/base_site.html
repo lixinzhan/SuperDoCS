@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% load sxt_filters %}
+{% block title %} SuperDoCS {% endblock %}
+{% block head %} SuperDoCS {% endblock %}
+
+{% block generalbar %}
+<ul id="general">
+    {% block langinfo %}
+    <li id="pagelanguage" class="home">
+        <ul>
+            <li>
+                <form action="/i18n/setlang/" method="post" id="generalbarform">
+                    {% csrf_token %}
+                    <label for="id_langselect">{% trans 'Language:' %} </label>
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <select name="language">
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                    <option {%ifequal language.code LANGUAGE_CODE%} selected="yes" {% endifequal %} value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+                    {% endfor %}
+                    </select>
+                    <input type="submit" id="setlang" value={% trans "Set" %} />
+                </form>
+<!--                
+        
+            <label for="id_langselect">Language: </label>
+            <select name="listperpage" id="id_langselect">
+                <option value="en" selected="selected">English</option>
+            </select>
+-->
+            </li>
+        </ul>
+    </li>
+    {% endblock %}
+
+    {% block logininfo %}
+        <li id="userstatus" class="login_status">
+        {% if user.is_active %}
+            {% trans 'Welcome,' %}
+            <strong>{{ user.username }} ({{ user.first_name }} {{user.last_name }})</strong> &nbsp;
+            <a href="/logout/">{% trans 'Logout' %}</a>
+        {% else %}
+            {% trans 'Please' %} <a href="/login">{% trans 'LOGIN' %}</a>
+        {% endif %}    
+        </li>
+    {% endblock %}
+
+</ul>
+{% endblock %}
+
+
+{% block branding %}
+<h1 id="site-name">
+    {% trans 'SuperDoCS Dose Calculation System' %}
+    <!-- ({% trans 'Ver.' %} {{ VERSION }}) -->
+</h1>
+<!---
+<font color=red>QA ONLY</font>' %}</h1>
+-->
+{% endblock %}
+
+{% block site_tabs %}
+<div id="site_tabs">
+    <ul id="portal-globalnav">
+        <!--
+        <li {% ifequal site_tab "home" %} class="selected" {% endifequal %}>
+            <a href="/" title={% trans "Home of SuperDoCS" %}>
+               <span>{% trans "HOME" %}</span>
+            </a>
+        </li>
+        -->
+        <li {% ifequal site_tab "search" %} class="selected" {% endifequal %}>
+            <!-- {% ifequal site_tab "home" %} class="selected" {%endifequal %} > -->
+            <a href="/plansearch/" title={% trans "Search" %}>
+               <span>{% trans "HOME" %}</span>
+            </a>
+        </li>
+        <li {% ifequal site_tab "planning" %} class="selected" {% endifequal %}>
+            {% block plan_link %}
+            <a href="/plan/new/" title={% trans "Planning" %}>
+               <span>{% trans "PLANNING" %}</span>
+            </a>
+            {% endblock %}
+        </li>
+        <li {% ifequal site_tab "plan_qa" %} class="selected" {% endifequal %}>
+            {% block qa_link %}
+            <a href="/plan_qa/new/" title={% trans "Plan_QA" %}>
+               <span>{% trans "PLAN QA" %}</span>
+            </a>
+            {% endblock %}
+        </li>
+        {% if user.is_active %}        
+        <li {% ifequal site_tab "settings" %} class="selected" {% endifequal %}>
+            <a href="/user/{{ user.username }}/profile/" title={% trans "Settings" %}>
+               <span>{% trans "SETTINGS" %}</span>
+            </a>
+        </li>
+        {% endif %}
+        {% if user.is_superuser %}
+        <li {% ifequal site_tab "admin" %} class="selected" {% endifequal %}>
+            <a href="/admin/" title={% trans "Administration" %}>
+               <span>{% trans "ADMIN" %}</span>
+            </a>
+        </li>
+        {% else %} {%if user|in_group:"Physicists" %}
+        <li {% ifequal site_tab "admin" %} class="selected" {% endifequal %}>
+            <a href="/commission/" title={% trans "Commission" %}>
+               <span>{% trans "COMMISSION" %}</span>
+            </a> </li> {% endif %}
+        {% endif %}
+        
+        <li {% ifequal site_tab "help" %} class="selected" {% endifequal %}>
+            <a href="/help/" title={% trans "Help" %}>
+               <span>{% trans "HELP" %}</span>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+{% endblock %} <!-- site_tabs -->
+
+{% block promptbar %}
+<div id="promptbar">
+    <div id="bar-prompt">
+    {% ifequal site_tab 'home' %}
+        {% if user.is_active %}
+        {% trans 'Welcome to SuperDoCS, you can now <a href="/plan/current/">Create a New Treatment Plan</a>' %}
+        {% trans 'or' %}
+        <a href="/plansearch/">{% trans 'Search an Existing Plan for Editing/QA' %}</a>
+        {% else %}
+        {% trans 'Please <a href="/">LOGIN</a> first' %}
+        {% endif %}
+    {% endifequal %}
+    {% ifequal site_tab 'search' %}
+        {% trans 'Search for existing plans using the combination of filters.' %}
+        {% trans 'For creating a new plan, please just <a href="/plan/new/">click here</a> or the "New Plan" button.' %}
+    {% endifequal %}
+    {% ifequal site_tab 'planning'%}
+        <a href="/plan/current/">{% trans 'Plan Edit' %}</a> &nbsp; &nbsp; &nbsp; &nbsp;
+        <a href="/planstatus/current/">{% trans 'Change Plan Status' %}</a>
+    {% endifequal %}
+    {% ifequal site_tab 'plan_qa' %}
+        {% trans 'Physicist can QA a plan here. The plan can only be approved by a physicist.' %}
+    {% endifequal %}
+    {% ifequal site_tab 'settings'%}
+        <a href="/user/{{ user.username }}/profile/">{% trans 'Profile' %}</a>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <!--
+        <a href="/user/{{ user.username }}/preference/">Preference</a>
+        -->
+    {% endifequal %}
+    {% ifequal site_tab 'help' %}
+        <!--
+        <a href="/help/about/">{% trans 'About' %}</a> &nbsp; &nbsp; &nbsp; &nbsp;
+        <a href="/help/documents/">{% trans 'Documents' %}</a> 
+        -->        
+        &nbsp; &nbsp; &nbsp;
+        <a href="/help/">{% trans 'Short User\'s Manual' %}</a>
+    {% endifequal %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    <hr class="fulllength" />
+    <div id="footer">{{ COPYRIGHT }}.
+    Please <a href="mailto:lixinzhan@gmail.com">contact us</a> for any questions.
+    </div>
+{% endblock %}

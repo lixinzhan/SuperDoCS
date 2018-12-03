@@ -1,0 +1,115 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+
+{% block content %}
+    {% if error_message %}
+        <p class="errornote">{{ error_message }}</p>
+    {% endif %}
+
+    <div id="content-main">
+	
+<h1>Instructions for Commissioning SuperDoCS</h1>
+
+    <h2>Login to SuperDoCS (as a user designated "Physicist").</h2>
+
+    <h2>Navigate to the "COMMISSION" page using the tabs at the top of the page.</h2>
+
+    <h2>Enter the institution specific data for all relevant categories:</h2>
+
+        <h3>X-Ray Machines (only the 1st one can be used for calculation)</h3>
+
+        <h3>Filters (NX and NK values corresponding to the local standard are entered here)</h3>
+
+        <h3>Cones</h3>
+
+        <h3>Chambers</h3>
+
+        <h3>Electrometers</h3>
+
+        <h3>Measurement Sets (electrometer chamber matched pairs)</h3>
+
+        <h3>Calibrations (the cross calibration between measurement equipments is entered here)</h3>
+        <h3>Output Factors (The place for defining relative exposure factors for each filter and cone combination)</h3> Relative exposure factor is conveniently expressed as fitted equations. The default equation by which SuperDoCS fits the cutout factors is described by
+                                    Fcutout = P D N / (L N + D N) + S (1 - e-UD),
+        where D is the equivalent cutout diameter and P, S, L, N and U are fitting parameters. The equivalent diameter is itself described by:
+
+    D = 2lw / (l + w) ,    for elliptical cutouts and
+
+    D = (4 / sqrt(PI)lw / (l + w) ,    for rectangular cutouts,
+
+where l and w are the length and width of the rectangular cutout or long axis and short axis of the ellipse, respectively.
+
+<h2>Fitting of the cutout data can be done independently by the user or with the aid of the attached excel file</h2>
+(if done independently, starting values of P=0.98, S=0.02, L= 0.25, N=15, U=25 are recommended).
+
+<h3>Using the "Cone and Cutout Factor.xls" spreadsheet to fit relative exposure factor data</h3>
+<p>
+    The "Cone \& Cutout Factor.xls" spreadsheet allows quick and easy computation of the five fit parameters described within it.
+<p>
+    The spreadsheet has the capacity for one filter (each filter being commissioned can use its own spreadsheet) and 6 cones.  Additional cones can use an additional spreadsheet or, if this temporary facilitation tool proves popular, then it can be expanded in capacity.
+<p>
+    Open the spreadsheet using Microsoft Excel.
+<p>
+    Enable the VB code behind the fit buttons by selecting "Enable Macros".
+<p>
+    If the Excel add-in "Solver" has not already been loaded (it is prepackaged with all versions of Excel) then please do so by:
+<p>
+For 2010 Version of Excel:
+<p>
+        Click the File tab, and then click Options.
+<p>
+        Click Add-Ins, and then in the Manage box, select Excel Add-ins.
+<p>
+        Click Go.
+<p>
+        In the Add-Ins available box, select the Solver Add-in check box, and then click OK.
+<p>
+        Tip If Solver Add-in is not listed in the Add-Ins available box, click Browse to locate the add-in.
+<p>
+        If you get prompted that the Solver add-in is not currently installed on your computer, click Yes to install it.
+<p>
+        After you load the Solver add-in, the Solver command is available in the Analysis group on the Data tab.
+<p>
+        If these instructions are not valid for your version of Excel please just type "Solver" into the Excel help menu and it will provide instructions specific to you version.
+<p>
+For Earlier Versions of Excel:
+<p>
+    Click the Tools Tab
+<p>
+    Click Add-Ins
+<p>
+    In the Add-Ins available box, select the Solver Add-in check box, and then click OK.
+<p>
+    After you load the Solver add-in, the Solver command is available under the Tools tab.
+<p>
+If these instructions are not valid for your version of Excel please just type"Solver" into the Excel help menu and it will provide instructions specific to your version.
+<p>
+Solver must be opened manually before any code using it can run.  This cannot be automated for multiple languages because of syntax changes.
+<p>
+                Under the tools tab click "Solver"
+<p>
+                It can be immediately closed or used but once opened manually (every time excel is restarted), all VB code using the Add-In is enabled. 
+<p>
+    Please enter all values into cells shaded in blue.  
+<p>
+    The spreadsheet has fields populated (as an example) so that you can see what the plots and fits look like for an existing filter.
+<p>
+    Please overwrite with your own data.
+<p>
+    The equation used for determining equivalent diameter is provided for both elliptical cutouts and rectangular cutouts.
+<p>
+    The fit equation is shown along with the reference.
+<p>
+    Once all cells shaded in blue and portion of the cutout data (up to 31 cutouts) has been entered click the green "Fit Cutouts" button (the button can be clicked more than once if additional iterations are required.
+<p>
+    Examine the quality of the fits in the plots contained within worksheets 2 and 3.
+<p>
+    Please contact us if there are any problems with any of these steps.
+<p>
+    Finally, transcribe the fit parameters (P, S, L, U and N) into the Output Factors page of SuperDoCS.    
+
+    </div>
+{% endblock %}

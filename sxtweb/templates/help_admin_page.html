@@ -1,0 +1,22 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+
+{% block content %}
+    {% if error_message %}
+        <p class="errornote">{{ error_message }}</p>
+    {% endif %}
+
+    <div id="content-main">
+
+    All system related configuration or settings can be done here.
+    
+    <p>
+	Groups, Users, Treatment Plan purging etc. can be done by clicking the ADMIN tab.
+	The admin page is only exposed to system administrators. It should be accessed
+	extremly careful.
+
+    </div>
+{% endblock %}
