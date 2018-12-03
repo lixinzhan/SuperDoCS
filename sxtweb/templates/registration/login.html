@@ -1,0 +1,104 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    window.onload = function() {
+        $("#login_username").focus();
+    };
+    });
+    </script>
+{% endblock %}
+
+{% block promptbar %}
+<div id="promptbar">
+    <div id="bar-prompt">
+        {% if user.is_active %}
+        {% trans 'Welcome to SuperDoCS, you can now <a href="/plan/current/">
+           Create a New Treatment Plan</a>' %}
+        {% trans 'or' %}
+        <a href="/plansearch/">{% trans 'Search an Existing Plan for Editing/QA' %}</a>
+        {% else %}
+        {% trans 'Please <a href="/">LOGIN</a> first' %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    {% if error_message %}
+        <p class="errornote">{{ error_message }}</p>
+    {% endif %}
+
+    <div id="content-main">
+    {% if user.is_active %}
+	<div>
+	<p>
+        {% blocktrans with user.first_name as first_name %}
+        Welcome, <strong>{{ first_name }}</strong>,
+        you have logged in to <strong>SuperDoCS</strong> System,
+        a dosimetry planning and management system. 
+        SuperDoCS facilitates clinical radiotherapy treatment by assisting the operator
+        in creating detailed planning calculations for patient treatment.
+        For more information about how to use SuperDoCS, please go to the
+        <strong><a href="/help/">HELP</a></strong> page.
+        {% endblocktrans %}
+        </p>
+        <p>
+        {% blocktrans %}
+	You can use SuperDoCS for treatment time calculation,
+	planning QA, dose rate verification and system administration.
+        Please use the tabs above to navigate and perform your clinical tasks.
+	You can start by clicking on the <strong><a href="/plansearch/">SEARCH</a></strong> tab
+	for an existing plan, or going directly to the 
+        <strong><a href="/plan/new/">PLANNING</a></strong>
+	tab to create a new plan.
+        {% endblocktrans %}
+	</p>
+	</div>
+    {% else %}
+        <div id='login-block'>
+	<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+	<ul id="login">
+	<li>
+	<label for="id_username">{% trans 'Username:' %}</label>
+	<input type="text" name="username" id="login_username" />
+	</li>
+	<li>
+	<label for="id_password">{% trans 'Password:' %}</label>
+	<input type="password" name="password" id="login_password" />
+	</li>
+	<li>
+	<input type="submit" id='login_submit' value={% trans 'Sign&nbsp;in' %} />
+	<input type="hidden" name="next" value="/plansearch/" />
+	</li>
+	</ul>
+        </form>
+        </div>
+
+	<div id='login-page-text'>
+        {% blocktrans %}
+	Welcome to <strong>SuperDoCS</strong> (
+        Superficial/Orthovoltage Dose Calculation System
+        ),
+        a dosimetry planning and management system, specifically designed
+        to be used with superficial and orthovoltage radiotherapy
+        systems for kilo-voltage radiation therapy. SuperDoCS 
+        facilitates clinical radiotherapy treatment by assisting the operator
+        in creating detailed planning calculations for patient treatment.
+        For more information about SuperDoCS, please go to the
+        <strong><a href="/help/">HELP</a></strong> page.
+        {% endblocktrans %}
+        
+	</div>
+	
+        <br />
+	
+
+    {% endif %}
+    </div>
+{% endblock %}

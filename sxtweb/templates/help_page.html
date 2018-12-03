@@ -1,0 +1,67 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+  <link rel="stylesheet" href="{% static "css/base_help.css" %}">
+{% endblock %}
+
+{% block content %}
+    Welcome to <span class="emphasize">SuperDoCS</span> System. SuperDoCS is
+    a dosimetry management system for kilo-voltage radiation therapy.
+    SuperDoCS integrates treatment time calculation, treatment plan QA,
+    and patient management into a single system.
+    
+    <h2>User log in</h2>
+    SuperDoCS is developed for the usage in a clinical environment, where patient privacy is
+    built in the center of medical services all the time. Only authorized users are allowed to login
+    this system. If you do not have an account yet, you need to contact your system administrator
+    for a valid account with proper permissions set.
+    
+    <h2>Plan Search</h2>
+	Once you login SuperDoCS System,  you are directed to a plan search page. You can search existing plans
+	by entering necessary information in the search fields and click the Search button for plan search.
+	If nothing is entered in the search fields, SuperDoCS will display all entries in the database.
+    <h2>Planning</h2>
+    <h3>Plan Name:</h3> a short name for the plan. A meaningful name is recommended to reflect the treatment plan.
+    Different health providers may have different conventions in setting Plan Name.
+    <h3>Patient MRN:</h3> the medical record number for the patient. It is assigned by the health provider.
+    <h3>Last Name, First Name:</h3> patient demographic information.
+    <h3>Total Dose:</h3> the prescripted total dose for delivery.
+    <h3>Fractions:</h3> number of fractions
+    <h3>Prescript. Depth:</h3> the prescription depth underneath skin. In the current version, SuperDoCS only
+    support prescription to patient skin, i.e., Prescript. Depth should be always set to ZERO.
+    <h3>Target Medium:</h3> SuperDoCS supports all the media defined in AAPM TG-61, together with water and air.
+    <h3>Filter, Cone:</h3> Filter and Cone to be used for treatment.
+    <h3>Cutout Required:</h3> Cutout is alway recommended for treatment.
+    <h3>Cutout Shape:</h3> SuperDoCS supports two kinds of cutouts: Oval and Rectangle. Their special cases
+    are circal and square.
+    <h3>Cutout Length, Cutout Width:</h3> These two paramenters are used to define the cutout shape.
+    For oval shaped cutout, they are the long and short axes. For rectangles, they are the long and short edges.
+    Cutout should not be bigger than the cone it will be used with in every dimension.
+    <h3>Cutout Thickness:</h3> The thickness of the cutout to be used. Cutout should be of the same thickness
+    as that used for  commissioning.
+    <h3>Stand In/Out:</h3> Use negative value for standin and positive value for stand out.
+    System is considering standin from cone-end, no matter if there is cutout presenting.
+    Standout is counted from the cutout-end. In this defination, any skin surface sits between
+    cone-end and cutout-end, if cutout is used, will be considered just as skin located at the position
+    of cutout-end.
+    <h3>User Specify REF:</h3> In some situations, a user may want to provide a Relative Exposure Factor, instead
+    of using the system calculated on from curving fitting of commissioning data. This usually happens for really
+    small field sizes.
+    <h3>Relative Exposure Factor:</h3> This will be the place for user provided REF.
+    <h3>Physician:</h3> The physician for the prescription.
+    <h3>Comment:</h3> Any extra information user may want to provided.
+    <h3>Calculate button:</h3> When all the necessary informaiton is filled in, use can click this button
+    for treatment delivery calculation. The calculated treatment delivery amount (in minutes or Monitor Units depending on the treatment machine)
+    will be shown.
+    <h3>Save button:</h3> User can save the filled information and calculated delivery amount by clicking this button
+    <h3>Cancel button:</h3> or cancel any changes without saving at all.
+    <h3>Plan QA button:</h3> User will be lead to the plan QA page when this button is clicked.
+    
+    <h2>Plan QA</h2>
+    This page is designed for the convenience of physicists for QA the treatment plan. While any user can
+    view this page, only physicists are allowed to approve the treatment plan.
+{% endblock %}

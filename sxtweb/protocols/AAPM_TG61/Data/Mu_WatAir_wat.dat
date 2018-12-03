@@ -1,0 +1,22 @@
+# TG61 Table VII.
+# Ratio of average mass energy-absorption coefficients of water to air
+# at 2cm depth in water, for a 10x10 cm2 field size, SSD=50cm, 
+# as a function of first HVL (in mm Cu or mm Al). 
+#
+# Columns are as below:
+# mmCu mmAl MuWatAir
+
+0.1  2.9 1.026
+0.2  4.8 1.032
+0.3  6.3 1.037
+0.4  7.5 1.041
+0.5  8.5 1.046
+0.6  9.3 1.050
+0.8 10.8 1.055
+1.0 12.0 1.060
+1.5 14.2 1.072
+2.0 15.8 1.081
+3.0 17.9 1.094
+4.0 19.3 1.101
+5.0 20.3 1.105
+

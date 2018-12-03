@@ -1,0 +1,305 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block head %}
+   {% trans 'SuperDoCS' %}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/plan_edit.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        //showAlert();
+        handleROF();
+        handleCutout();
+        handleFormChange();
+    });
+    </script>
+{% endblock %}
+
+<!-- ####################################################################### -->
+
+{% block breadcrumbs %}{% if not is_popup %}
+    <div class="breadcrumbs">
+        SXT &rsaquo;
+        <a href="/plansearch/">Search</a> &rsaquo;
+        {% if plan.pk %}
+            {% ifequal access 'edit' %}Edit ({{plan.PlanName }}){% endifequal %}
+            {% ifequal access 'view' %}View ({{plan.PlanName }}){% endifequal %}
+            {% ifequal access 'delete' %}Delete ({{plan.PlanName }}){% endifequal %}
+        {% else %}
+            New Plan
+        {% endif %}
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block qa_link %}
+    <a href="/plan_qa/{{ planid }}/" title={% trans "Plan QA" %}>
+        <span>{% trans "PLAN QA" %}</span>
+    </a>
+{% endblock %}
+{% block plan_link %}
+    <a href="/plan/{{ planid }}/" title={% trans "Planning" %}>
+        <span>{% trans "PLANNING" %}</span>
+    </a>
+{% endblock %}
+
+
+{% block promptbar %}
+<div id="promptbar">   
+    {% include "action_dropdown_menu.html" %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+   {% if form.errors %}
+       <p style="color:red;">
+           Please correct the error{{ form.errors|pluralize }} below.
+       </p>
+   {% endif %}
+   <form action="" method="post">{% csrf_token %}
+      <div id="content-setup">
+        <div class="block">
+        <!--
+        <input type="submit" name="copy_submit" class="assist-tools-right" value="&nbsp; {% trans 'Copy Plan' %} &nbsp;" />
+        -->
+            <table id="setup-table" summary="">
+               <caption>{% trans 'Prescription and Plan Setup' %}</caption>
+               <!-- uncomment below for checking possible saving and calculating errors -->
+               {{ planform.as_table }}
+            </table>
+            
+            <input type="hidden" name="FCD" value={{plan.FCD}} id="id_FCD" />
+            <input type="hidden" name="FSD" value={{plan.FSD}} id="id_FSD" />
+            <input type="hidden" name="ISF" value={{plan.ISF}} id="id_ISF" />
+            <input type="hidden" name="ROF" value={{plan.ROF}} id="id_ROF" />
+            <input type="hidden" name="PDD" value={{plan.PDD}} id="id_PDD" />
+            <input type="hidden" name="Dequiv" value={{plan.Dequiv}} id="id_Dequiv" />
+            <input type="hidden" name="DequivCalib" value={{plan.DequivCalib}} id="id_DequivCalib" />
+            <input type="hidden" name="DequivSurface" value={{plan.DequivSurface}} id="id_DequivSurface" />
+            <input type="hidden" name="KR_air_CalibCone" value={{plan.KR_air_CalibCone}} id="id_KR_air_CalibCone" />
+            <input type="hidden" name="KR_air" value={{plan.KR_air}} id="id_KR_air" />
+            <input type="hidden" name="BSF_wat" value={{plan.BSF_wat}} id="id_BSF_wat" />
+            <input type="hidden" name="BSF_ConeEnd" value={{plan.BSF_ConeEnd}} id="id_BSF_ConeEnd" />
+            <input type="hidden" name="MassAbs_WatAir_air" value={{plan.MassAbs_WatAir_air}} id="id_MassAbs_WatAir_air" />
+            <input type="hidden" name="DR_wat" value={{plan.DR_wat}} id="id_DR_wat" />
+            <input type="hidden" name="C_MedWat" value={{plan.C_MedWat}} id="id_C_MedWat" />
+            <input type="hidden" name="B_MedWat" value={{plan.B_MedWat}} id="id_B_MedWat" />
+            <input type="hidden" name="DR_med" value={{plan.DR_med}} id="id_DR_med" />
+            <input type="hidden" name="DosePerFrac" value={{plan.DosePerFrac}} id="id_DosePerFrac" />
+            <input type="hidden" name="TxTime" value={{plan.TxTime}} id="id_TxTime" />
+            <input type="hidden" name="ModifiedByUser" value={{ user.username }} id="id_ModifiedByUser" />
+            <input type="hidden" name="SXTCalcVersion" value={{ plan.SXTCalcVersion|default:'none' }} id="id_SXTCalcVersion" />
+            
+            <input type="hidden" name="DoseCalibDate"
+                   value={{ plan.DoseCalibDate|date:'Y-m-d'|default:'1001-01-01' }}
+                   id="id_DoseCalibDate" />
+            <input type="hidden" name="PlanStatus" value={{ plan.PlanStatus|default:'Active' }} id="id_PlanStatus" />
+            <input type="hidden" name="StatusChangedBy" value={{ plan.StatusChangedBy|default:'nobody' }} id="id_StatusChangedBy" />
+            <input type="hidden" name="StatusChangeDateTime"
+                   value={{ plan.StatusChangeDateTime|date:'Y-m-d-H:i:s' }}
+                   id="id_StatusChangeDateTime" />
+            <input type="hidden" name="ApprvStatus" value={{ plan.ApprvStatus|default:'NotApproved' }} id="id_ApprvStatus" />
+            <input type="hidden" name="ApprovedBy" value={{ plan.ApprovedBy|default:'nobody' }} id="id_ApprovedBy" />
+            <input type="hidden" name="ApprvDateTime"
+                   value={{ plan.StatusChangeDateTime|date:'Y-m-d H:i:s' }}
+                   id="id_ApprvDateTime" />
+            
+            <input type="hidden" name="autoROF" value={{ autoROF|floatformat:'3' }} id='id_autoROF' />
+            
+            <br /> <br />
+            
+        <div id="txbuttongroup">    
+            <a name="calc"></a>
+            <input type="submit" name="calc_submit" value={% trans "Calculate" %} />
+            <br /> <br /> <br />
+            <div id="txtime">
+                {% if error %}
+                    <span class="emphasize">{{ error }}</span>
+                {% else %}
+                    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+                        {% trans 'Fractional Treatment Time (min):' %}
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        <span id="calc_time" class="emphasize">
+                          {{ plan.TxTime|floatformat:2 }} {% trans 'min' %}
+                        </span>
+                    {% else %}
+                        {%ifequal plan.Cone.Machine.OutputControl 'MU' %}
+                        {% trans 'MU per Fraction:' %}
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        <span id="calc_time" class="emphasize">
+                          {{ plan.TxTime|floatformat:1 }} {% trans 'MU' %}
+                        </span>
+                        {% else %}
+                        {% trans 'Irradiation per Fraction:' %}
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        <span id="calc_time" class="emphasize">
+                          {{ plan.TxTime|floatformat:1 }}
+                        </span>
+                        {% endifequal %}
+                    {% endifequal %}
+                {% endif %}
+            </div>
+            
+        {% ifnotequal plan.ApprvStatus 'Approved' %}
+            {% ifnotequal plan.PlanStatus 'Active' %}
+                <br />
+                {% trans 'Plan Status:' %} &nbsp; &nbsp; {{ plan.PlanStatus }}. &nbsp; &nbsp;
+            {% else %}
+                <br />
+                {% trans 'Apprv Status:' %} &nbsp; {{ plan.ApprvStatus }}. &nbsp; &nbsp;
+            {% endifnotequal %}
+            <span class='warning'>
+            Not to be used for clinical treatment!
+            </span>
+        {% endifnotequal %}
+<!--        
+        {% ifnotequal plan.ApprvStatus 'NotApproved' %}
+            <br />
+            {% trans 'Apprv Status:' %} &nbsp; {{ plan.ApprvStatus }}
+        {% endifnotequal %}
+-->
+        <!--
+        {% ifequal plan.PlanStatus 'Active' %}
+        {% ifnotequal plan.ApprvStatus 'Approved' %}
+            <br />
+            Before saving, please make sure you have <strong>RE-CALCULATED</strong> the treatment time upon any related changes
+        {% endifnotequal %}
+        {% endifequal %}
+
+        {% ifequal changeflag 'newcalc' %}
+            <div id="id_{{ changeflag }}">
+                You just computed/recomputed the treatment time.
+                Please save your plan before leaving the page.
+            </div>
+        {% endifequal %}
+        -->
+        
+        <br />
+        <hr class="fulllength" />
+        <br />        
+        <input type="submit" name="qa_submit" class="float-right" value="&nbsp; {% trans 'Plan QA' %} &nbsp;" />
+        {% ifequal plan.PlanStatus 'Active' %}
+        {% ifnotequal plan.ApprvStatus 'Approved' %}
+        <input type="submit" name="save_submit" value="&nbsp; &nbsp; {% trans 'Save' %} &nbsp; &nbsp;" />
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        {% endifnotequal %}
+        {% endifequal %}
+        <input type="submit" name="cancel_submit" value="&nbsp; {% trans 'Cancel' %} &nbsp;" />
+        </div> <!-- txbuttongroup -->
+        
+        <!-- below is for transfering changeflag to check is there is newcalc -->
+        <div style="display:none" id="id_{{ changeflag }}">Change Flag: {{ changeflag }}</div>
+
+   
+        </div> <!-- block -->
+        
+        <!--#################################-->
+         <div class="edit-help">
+            <div id="minihelp">
+            <strong>Help and Descriptions:</strong>
+            <p>
+            <em>Plan Name</em>: a short name for the plan.</p>
+            <p>
+            <em>Patient MRN</em>: Medical Record Number for the patient.</p>
+            <p>
+            <em>Last Name, First Name</em>: Name of the patient.</p>
+            <p>
+            <em>Total Dose</em>: Prescribed total dose to be delivered, in cGy.</p>
+            <p>
+            <em>Fractions</em>: Number of fractions for the prescribed dose.</p>
+            <p>
+            <em>Prescript. Depth</em>: Depth that dose prescribed to.
+            In current implementation, dose can only be prescribed to surface (0.0 cm).</p>
+            <p>
+            <em>Target Medium</em>: Medium that dose prescribed to.
+            It can be any TG-61 provided medium, together with water and air for QA.</p>
+            <p>
+            <em>Filter, Cone</em>: The filter and cone to be used for treatment.</p>
+            <p>
+            <em>Cutout Shape, Cutout Lenth, Cutout Width, and Cutout Thickness</em>:
+            basic description of cutout if required.</p>
+            <p>
+            <em>Stand In(-) / Out(+)</em>: required when target surface is not flat.</p>
+            <p>
+            <em>Doctor</em>: the physician who prescribed the dose.</p>
+            <p>
+            <em>Comment</em>: for anything that need to be recorded.</p>
+            <p>
+            <em>Calculate</em> button: compute the treatment time based on the filled information.</p>
+            <p>
+            <em>Save</em> button: save filled info. and computed result to DB.</p>
+            <p>
+            <em>Cancel</em> button: go back to search page without saving.</p>
+            <p>
+            <em>Plan QA</em> button: go to QA page, for current plan.</p>
+        <!-- [ if !IE] -->
+        <!-- [endif] -->
+            </div>
+         </div>
+         <!-- onpage-help -->
+      </div>   <!-- content-setup -->
+
+<!-- Keep it. Enable it for debug when necessary -->
+<!--
+    <div id="calculate-result">
+        <table>
+            <tr><th id="table-session-head" colspan="2">Calculation Result</th></tr>
+            <tr><th>Kerma Rate in Air for Calibration Cone:</th>
+                <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th></tr>
+            <tr><td>Calibration Cone:</td>
+                <td>{{ plan.Filter.Cone.ConeName }}</td></tr>
+            <tr><td>Focal Calib-Cone-End Distance (cm):</td>
+                <td>{{ plan.FCD|floatformat:'-3'}}</td></tr>
+            <tr><td>Focal Surface Distance (cm):</td>
+                <td>{{ plan.FSD|floatformat:'-3'}}</td></tr>
+            <tr><td>Inverse Square Factor:</td>
+                <td>{{ plan.ISF|floatformat:3 }}     </td></tr>
+            <tr><td>Equiv Diameter at Calib. Position (cm):</td>
+                <td>{{ plan.DequivCalib|floatformat:"-3" }}  </td></tr>
+            <tr><td>Equiv Diameter at Medium Surface (cm):</td>
+                <td>{{ plan.Dequiv|floatformat:"-3" }}  </td></tr>
+            <tr><td>Relative Output Factor:</td>
+                <td>{{ plan.ROF|floatformat:3 }}</td></tr>
+            <tr><th>Kerma Rate in Air at Surface:</th>
+                <th>{{ plan.KR_air|floatformat:3 }}</th></tr>
+            <tr><td>Back Scattering Factor for Water (Bw):</td>
+                <td>{{ plan.BSF_wat|floatformat:3 }}</td></tr>
+            <tr><td>Mass Abs. Coeff. (Water to Air in Air):</td>
+                <td>{{ plan.MassAbs_WatAir_air|floatformat:3 }}</td></tr>
+            <tr><th>Dose Rate at Water Surface:</th>
+                <th>{{ plan.DR_wat|floatformat:3 }}</th></tr>
+            <tr><td>Destination Medium:</td>
+                <td>{{ plan.TargetTissue }}</td></tr>
+            <tr><td>Mu_MedWat (Med to Water in Air):</td>
+                <td>{{ plan.C_MedWat|floatformat:3 }}</td></tr>
+            <tr><td>B_MedWat (Bmed/Bw):</td>
+                <td>{{ plan.B_MedWat|floatformat:3 }}</td></tr>
+            <tr><th>Dose Rate at Medium Surface (cGy/min):</th>
+                <th>{{ plan.DR_med|floatformat:3 }}</th></tr>
+            <tr><td>Percentage Depth Dose (%):</td>
+                <td>{{ plan.PDD|floatformat:"-3" }}</td></tr>
+            <tr><td>Dose Per Fraction (cGy):</td>
+                <td>{{ plan.DosePerFrac|floatformat:"-3" }}</td></tr>
+            <tr id="final-result"><th>Treatment Time (min/frac):</th>
+                <th>{{ plan.TxTime|floatformat:3 }}  </th></tr>
+        </table>
+
+        <br />
+        <br />
+    </div>
+ -->
+      
+      <br />
+   </form>
+{% endblock %}
+

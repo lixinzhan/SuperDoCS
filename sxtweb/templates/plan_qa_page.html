@@ -1,0 +1,325 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block head %}
+    {% trans 'SuperDoCS' %}
+{% endblock %}
+
+
+{% block qa_link %}
+    <a href="/plan_qa/{{ plan.pk }}/" title={% trans "Plan QA" %}>
+        <span>{% trans "PLAN QA" %}</span>
+    </a>
+{% endblock %}
+
+{% block plan_link %}
+    <a href="/plan/{{ plan.pk }}/" title={% trans "Planning" %}>
+        <span>{% trans "PLANNING" %}</span>
+    </a>
+{% endblock %}
+
+{% block promptbar %}
+<div id="promptbar">
+    {% include "action_dropdown_menu.html" %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+    {% if form.errors %}
+        <p style="color:red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+    
+    <form action="" method="post">{% csrf_token %}
+
+    {% ifequal access 'view' %}<p id="disclaim"><em>View only. No change will be saved!</em></p>{% endifequal %}
+
+
+    <div id="plan_qa">
+        <table id="qa-table">
+         <caption>
+            {{plan.LastName}}, {{plan.FirstName}} ({{plan.PatientId}}): {{ plan.PlanName }}
+         </caption>
+            <tr><td>{% trans 'Filter' %}: </td>
+               <td>{{plan.Filter.Filter}}</td><td class="right"></td></tr>
+            <tr><td>{% trans 'Calibration Applicator' %}:</td>
+                <td>{{ plan.Filter.Cone }}</td>
+                <td class="right">FCD</td></tr>
+	    <tr><td>{% trans 'Calibrated on' %}:</td>
+		<td>{{ plan.DoseCalibDate|date }}</td>
+		<td class="right"></td></tr>
+	    <tr>
+		{% ifequal plan.Cone.Machine.OutputControl 'min' %}
+		<td>{% trans 'End Effect (min)' %}:</td>
+		{% else %}
+		<td>{% trans 'End Effect (MU)' %}:</td>
+		{% endifequal %}
+		<td>{{ plan.Filter.Filter.EndEffect }}</td>
+		<td class="right">&delta;t</td></tr>
+            {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+            <tr><th>{% trans 'Air Kerma Rate in Air for Calib. Applicator (cGy/min)' %}:</th>
+                <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
+            {% else %}
+            <tr><th>{% trans 'Air Kerma in Air per MU for Calib. Applicator (cGy/MU)' %}:</th>
+                <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
+            {% endifequal %}
+                <th class="right">
+                <math><mrow><msubsup><mi>K</mi><mtext>air</mtext><mtext>(cal)</mtext></msubsup></mrow></math></th></tr>
+	    
+            <tr><td>{% trans 'Treatment Applicator' %}:</td>
+                <td>{{ plan.Cone }}</td>
+                <td class="right">
+                <math><mrow><msup><mi>D</mi><mtext>(x)</mtext></msubsup></mrow></math>,
+                <math><mrow><msup><mtext>FCD</mtext><mtext>(x)</mtext></msubsup></mrow></math>
+                </td></tr>
+            
+            {% if plan.CutoutRequired %}
+            <tr><td>{% trans 'Cutout Shape' %}:</td>
+                <td>{{plan.CutoutShape }}</td>
+                <td class="right"></td></tr>
+            <tr><td>{% trans 'Cutout Length (cm)' %}:</td>
+                <td>{{plan.CutoutLength|floatformat:2}}</td>
+                <td class="right">L</td></tr>
+            <tr><td>{% trans 'Cutout Width (cm)' %}:</td>
+                <td>{{plan.CutoutWidth|floatformat:2}}</td>
+                <td class="right">W</td></tr>
+            <tr><td>{% trans 'Cutout Thickness (cm)' %}:</td>
+                <td>{{plan.CutoutThickness|floatformat:2}}</td>
+                <td class="right">H</td></tr>
+            <tr><td>{% trans 'StandIn(-)/StandOut(+) (cm)' %}: </td>
+                <td>{{ plan.StandOut|floatformat:2 }}</td>
+                <td class="right">SIO</td></tr>
+            <tr><td>{% trans 'Focal Skin Distance (cm)' %}:</td>
+                <td>{{ plan.FSD|floatformat:"2"}}</td>
+                <td class="right">
+		    <math><mrow><mtext>FSD</mtext>
+		    <mo>=</mo> <msup><mtext>FCD</mtext><mtext>(x)</mtext></msup>
+                    {%if plan.StandOut >= 0 %} <mo>+</mo> <mtext>H</mtext> {% endif %}
+		    <mo>+</mo> <mtext>SIO</mtext> </mrow></math> </td></tr>
+            <tr><td>{% trans 'Equiv Diameter (cm)' %}:</td>
+                <td>{{ plan.Dequiv|floatformat:"3" }}  </td>
+                <td class="right">
+                  <math><mrow><msub><mi>D</mi><mtext>eq</mtext></msub></mrow></math> = F(L, W)</td></tr>
+            <tr><td>{% trans 'Equiv Diameter at Calib. Position (cm)' %}:</td>
+                <td>{{ plan.DequivCalib|floatformat:"3" }}  </td>
+                <td class="right"><math><mrow><msubsup><mi>D</mi><mtext>eq</mtext><mtext>(cal)</mtext></msubsup>
+                <mo>=</mo> <msub><mi>D</mi><mtext>eq</mtext></msub> <mo>&times;</mo> <mtext>FCD/FSD</mtext> </mrow></math> </td></tr>
+            <tr><td>{% trans 'Equiv Diameter at Medium Surface (cm)' %}:</td>
+                <td>{{ plan.DequivSurface|floatformat:"3" }}  </td>
+                <td class="right">
+                  <math><mrow><msubsup><mi>D</mi><mtext>eq</mtext><mtext>(s)</mtext></msub></mrow></math> =
+		  F(L, W, H, SIO,<math><mrow><msup><mtext>FCD</mtext><mtext>(x)</mtext></msup></mrow></math>)</td></tr>
+            {% else %}
+            <tr><td>{% trans 'StandIn(-)/StandOut(+) (cm)' %}: </td>
+                <td>{{ plan.StandOut|floatformat:2 }}</td>
+                <td class="right">SIO</td></tr>
+            <tr><td>{% trans 'Focal Surface Distance (cm)' %}:</td>
+                <td>{{ plan.FSD|floatformat:"2"}}</td>
+                <td class="right">
+		    <math><mrow><mtext>FSD</mtext>
+		    <mo>=</mo> <msup><mtext>FCD</mtext><mtext>(x)</mtext></msup>
+		    <mo>+</mo> <mtext>SIO</mtext> </mrow></math> </td></tr>
+            <tr><td>{% trans 'Equiv Diameter (cm)' %}:</td>
+                <td>{{ plan.Dequiv|floatformat:"2" }}  </td>
+                <td class="right">
+                  <math><mrow><msub><mi>D</mi><mtext>eq</mtext></msub></mrow></math> = F(L, W)</td></tr>
+            <tr><td>{% trans 'Equiv Diameter at Calib. Position (cm)' %}:</td>
+                <td>{{ plan.DequivCalib|floatformat:"2" }}  </td>
+                <td class="right"><math><mrow><msubsup><mi>D</mi><mtext>eq</mtext><mtext>(cal)</mtext></msubsup>
+                <mo>=</mo> <msub><mi>D</mi><mtext>eq</mtext></msub> <mo>&times;</mo> <mtext>FCD/FSD</mtext> </mrow></math> </td></tr>
+            <tr><td>{% trans 'Equiv Diameter at Medium Surface (cm)' %}:</td>
+                <td>{{ plan.DequivSurface|floatformat:"2" }}  </td>
+                <td class="right"><math><mrow><msup><mi>D</mi><mtext>(eq)</mtext></msup></mrow></math>
+                  = F(<math><mrow><msup><mi>D</mi><mtext>(x)</mtext></msup></mrow></math>, SIO)</td></tr>
+            {% endif %}
+            <tr><td>{% trans 'Inverse Square Factor' %}:</td>
+                <td>{{ plan.ISF|floatformat:3 }}     </td>
+                <td class="right">ISF = <math><mrow><msup><mtext>(FSD/FCDx)</mtext><mtext>-2</mtext></msup></mrow></math> </td></tr>
+            <tr><td>{% if plan.SpecifyROF %}{% trans 'User Specified ' %}{% endif %}{% trans 'Relative Exposure Factor' %}:</td>
+                <td>{{ plan.ROF|floatformat:3 }}</td>
+                <td class="right">REF</td></tr> <!-- = F(Filter, Cone, Dequiv^(calib))</td></tr> -->
+            {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+            <tr><th>{% trans 'Air Kerma Rate in Air at Surface (cGy/min)' %}:</th>
+                <th>{{ plan.KR_air|floatformat:3 }}</th>
+            {% else %}
+            <tr><th>{% trans 'Air Kerma in Air per MU at Surface (cGy/MU)' %}:</th>
+                <th>{{ plan.KR_air|floatformat:3 }}</th>
+            {% endifequal %}
+                <th class="right"><math><mrow><msub><mi>K</mi><mtext>air</mtext></msub>
+                <mo>=</mo> <msubsup><mi>K</mi><mtext>air</mtext><mtext>(cal)</mtext></msubsup>
+                <mo>&times;</mo> <mtext>ISF</mtext> <mo>&times;</mo> <mtext>REF</mtext> </mrow></math> </th></tr>
+            <tr><td>{% trans 'Back Scattering Factor for Water (Bw)' %}:</td>
+                <td>{{ plan.BSF_wat|floatformat:3 }}</td>
+                <td class="right">BSF</td></tr> <!-- = F(Filter, FSD, Dequiv)</td></tr> -->
+	    {% ifnotequal plan.Cone.ConeEnd 'Open' %}
+	    <tr><td>{% trans 'BSF Correction Factor for Cone End' %}:</td>
+		<td>{{ plan.BSF_ConeEnd|floatformat:3 }}</td>
+		<td class="right">BSFcc</td></tr>
+	    {% endifnotequal %}
+            <tr><td>{% trans 'Mass Abs. Coeff. (Water to Air in Air)' %}:</td>
+                <td>{{ plan.MassAbs_WatAir_air|floatformat:3 }}</td>
+                <td class="right"><math><mrow>
+		<mtext>[</mtext>
+		<msubsup>
+			<mtext>(&mu;&sol;&rho;)</mtext>
+			<mtext>air</mtext>
+			<mtext>wat</mtext>
+		</msubsup>
+		<msub>
+		    <mtext>]</mtext>
+		    <mtext>air</mtext>
+		</msub>
+		</mrow></math></td></tr>
+
+            {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+            <tr><th>{% trans 'Dose Rate at Water Surface (cGy/min)' %}:</th>
+                <th>{{ plan.DR_wat|floatformat:3 }}</th>
+            {% else %}
+            <tr><th>{% trans 'Dose per MU at Water Surface (cGy/MU)' %}:</th>
+                <th>{{ plan.DR_wat|floatformat:3 }}</th>
+            {% endifequal %}
+                <th class="right"><math><mrow><msub><mi>D</mi><mtext>wat</mtext></msub>
+		<mo>=</mo> <msub><mi>K</mi><mtext>air</mtext></msub>
+                <mo>&times;</mo> <mtext>BSF</mtext> <mo>&times;</mo>
+		{% ifnotequal plan.Cone.ConeEnd 'Open' %}
+		<mtext>BSFcc</mtext><mo>&times;</mo>
+		{% endifnotequal %}
+		<mtext>[</mtext>
+		<msubsup>
+			<mtext>(&mu;&sol;&rho;)</mtext>
+			<mtext>air</mtext>
+			<mtext>wat</mtext>
+		</msubsup>
+		<msub>
+			<mtext>]</mtext>
+			<mtext>air</mtext>
+		</msub></mrow></math></th></tr>
+            
+            <tr><td>{% trans 'Destination Medium' %}:</td>
+                <td>{{ plan.TargetTissue }}</td>
+                <td class="right"></td></tr>
+            <tr><td>{% trans 'Mass Abs. Coeff. (Med. to Water in Air)' %}:</td>
+                <td>{{ plan.C_MedWat|floatformat:3 }}</td>
+                <td class="right"><math><mrow>
+		<mtext>[</mtext>
+		<msubsup>
+			<mtext>(&mu;&sol;&rho;)</mtext>
+			<mtext>wat</mtext>
+			<mtext>med</mtext>
+		</msubsup>
+		<msub>
+			<mtext>]</mtext>
+			<mtext>air</mtext>
+		</msub></mrow></math></td></tr>
+            <tr><td>{% trans 'BSF Ratio, Medium to Water (Bmed/Bw)' %}:</td>
+                <td>{{ plan.B_MedWat|floatformat:3 }}</td>
+                <td class="right"><math><mrow>
+		<msubsup>
+			<mtext>B</mtext>
+			<mtext>wat</mtext>
+			<mtext>med</mtext>
+		</msubsup>
+                </mrow></math></td></tr><!-- (=B_med/B_wat)</td></tr> -->
+            {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+            <tr><th>{% trans 'Dose Rate at Medium Surface (cGy/min)' %}:</th>
+                <th>{{ plan.DR_med|floatformat:3 }}</th>
+            {% else %}
+            <tr><th>{% trans 'Dose per MU at Medium Surface (cGy/MU)' %}:</th>
+                <th>{{ plan.DR_med|floatformat:3 }}</th>
+            {% endifequal %}
+                <th class="right"><math><mrow><msub><mi>D</mi><mtext>med</mtext></msub>
+                <mo>=</mo>
+                <msub><mi>D</mi><mtext>wat</mtext></msub>
+                <mo>&times;</mo>
+		<mtext>[</mtext>
+                <msubsup>
+			<mtext>(&mu;&sol;&rho;)</mtext>
+			<mtext>wat</mtext>
+			<mtext>med</mtext>
+		</msubsup>
+		<msub>
+			<mtext>]</mtext>
+			<mtext>air</mtext>
+		</msub>
+                <mo>&times;</mo>
+                <msubsup>
+			<mtext>B</mtext>
+			<mtext>wat</mtext>
+			<mtext>med</mtext>
+		</msubsup>
+                </th></tr>
+            <tr><td>{% trans 'Total Dose (cGy)' %}: </td>
+                <td>{{plan.TotalDose }}</td>
+                <td class="right">D</td></tr>
+            <tr><td>{% trans 'Fractions' %}: </td>
+                <td>{{ plan.Fractions }}</td>
+                <td class="right">f</td></tr>
+            <tr><td>{% trans 'Dose per Fraction (cGy)' %}:</td>
+                <td>{{ plan.DosePerFrac|floatformat:"-3" }}</td>
+                <td class="right">d = D/f</td></tr>
+            <tr><td>{% trans 'Percentage Depth Dose (%)' %}:</td>
+                <td>{{ plan.PDD|floatformat:"-3" }}</td>
+                <td class="right">PDD</td></tr>
+            {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+            <tr id="final-result"><th>{% trans 'Fractional Treatment Time (min)' %}:</th>
+                <th><span class="emphasize">{{ plan.TxTime|floatformat:3 }}</span>  </th>
+            {% else %}
+            <tr id="final-result"><th>{% trans 'MU Delivery per Fraction (MU)' %}:</th>
+                <th><span class="emphasize">{{ plan.TxTime|floatformat:1 }}</span>  </th>
+            {% endifequal %}
+                <th class="right"><math><mrow><mtext>t = 100</mtext> <mo>&times;</mo>
+                <mtext>d</mtext><mo>/</mo><mtext>(</mtext>
+		<msub><mi>D</mi><mtext>med</mtext></msub><mo>&times;</mo>
+		<mtext>PDD)</mtext><mo>+</mo><mtext>&delta;t</mtext>
+		</mrow></math></th></tr>
+        </table>
+<!--
+<medium>If not specified, units are: Length -- cm, Kerma/Dose -- cGy, Time -- min</medium>
+-->
+        
+        <br />
+        <br />
+	
+	
+    {% ifequal plan.PlanStatus 'Active' %}
+	
+	<strong>{% trans 'PHYSICS APPROVAL' %}</strong><br /><br />
+	<form action="" method="post" id="authform">{% csrf_token %}
+        <div>
+	    {{ authform.as_p }}
+	</div>
+	{% ifnotequal plan.ApprvStatus 'Approved' %}
+          <div class="submit-group">
+            <div class="submit-row">
+               <input type="submit" name="approval_submit" value="&nbsp; {% trans 'Approve' %} &nbsp;" />
+	       <!--
+               <input type="submit" name="planning_submit" value="&nbsp; Edit Plan &nbsp;" />
+	       -->
+            </div>
+          </div>
+	{% else %}
+	  <div class="submit-group">
+	       <div class="left-button">
+		<input type="submit" name="unapprv_submit" value="&nbsp; {% trans 'Unapprove' %} &nbsp;" />
+	       </div>
+	  </div>
+        {% endifnotequal%}
+	</form>
+      
+    {% else %}
+	
+	{% trans 'Plan Status' %}: <em>{{ plan.PlanStatus }}</em>
+	
+    {% endifequal %}
+    
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    </div>
+    
+    </form>
+    
+{% endblock %}

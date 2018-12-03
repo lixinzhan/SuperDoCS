@@ -1,0 +1,108 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}page title{% endblock %}</title>
+    <style type="text/css">
+    {% block css-style %}
+        @page {
+                size: {{pagesize}};
+                margin: 2cm;
+                margin-bottom: 2.5cm;
+                @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 1.5cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                height: 1.5cm;
+                }
+        }
+        #header {    /* The title and logo part */
+            /* background: purple; /*url('{{ STATIC_URL }}/img/header_corporate.gif') 0 -80px repeat-x; */ /*15px 15px no-repeat;*/
+        }
+        #header h1 {  /* the font of the title/banner */
+            margin: 0;
+            /*margin-left: 75px;*/
+            padding-top: 20px; /* */
+            font-size: 22px; /*300%; /*260%;*/
+            font-weight: bold;
+            text-transform: capitalize;
+            text-align: center;
+            color: white; /*#6f389b; /*#eeeeec;*/
+            font-family: Verdana,Geneva,Futura,Arial;
+            min-width: 810px;
+        }
+        #main-content {
+            padding-top: 30px;
+            font-size: 100%;
+        }
+        .align-center {
+            text-align: center;
+        }
+        .align-right {
+            text-align: right;
+        }
+        #result-table{
+            font-size: 120%;
+        }
+        #result-table th, #result-table tr {
+            padding: 2px;
+            border-color: purple;
+        }
+        #result-table th {
+            text-align: left;
+            color: purple;
+            font-size: 120%;
+        }
+        #result-table caption {
+            font-size: 150%;
+            font-weight: bold;
+            font-family: Arial, "Courier New", Times, serif;
+            padding: 0;
+            margin: 0;
+            margin-top: 25px;
+        }
+    {%endblock%}    
+    </style>
+</head>
+
+
+
+<body>
+<div>
+
+{%block page_header%}
+<div id="header">
+    <h1 id="site-name">
+        {% trans 'SuperDoCS' %} ({% trans 'Ver.' %} {{ settings.VERSION }})
+    </h1>
+</div>
+{%endblock%}
+
+<div id="main-content">
+{%block content%}
+{%endblock%}
+</div>
+
+</div>
+
+
+
+<div id="footerContent">
+{%block page_foot%}
+<hr/>
+<div class="align-center">
+(c) 2014-2018, Lixin Zhan @GRRCC. All Rights Reserved.
+</div>
+<div class="align-right">
+    <pdf:pagenumber>
+</div>
+{%endblock%}
+</div>
+</body>
+</html>

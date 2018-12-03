@@ -1,0 +1,89 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}page title{% endblock %}</title>
+  <link rel="stylesheet" href="{% static "css/base.css" %}">
+  <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{% block stylesheet_ie %}{% static "css/ie.css" %}{% endblock %}" /><![endif]-->
+  
+  {% block extrastyle %}
+  {% endblock %}
+  
+  {% block javascript %}
+  {% endblock %}
+  
+  {% block extrahead %}
+  {% endblock %}
+
+</head>
+
+<!--------------------------------------------------------------------------------->
+
+<body>
+
+<div id="page">
+    {% block generalbar %}
+    {% endblock %}
+	
+    <div id="header">
+	{% block branding %}
+	{% endblock %}
+
+	{% block site_tabs %}
+	{% endblock %}
+    </div> <!-- header -->    
+
+    <div id="dummybar"></div> <!-- to help positioning the prompt bar -->
+    {% block promptbar %}
+    {% endblock %}
+    
+    <hr class="fulllength" />
+    
+    <!-- Container -->
+    <div id="body">
+        {% if messages %}
+	    <ul class="messagelist">
+		{% for message in messages %}
+		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	    </ul>
+        {% endif %}
+	
+	<div id="main-content">
+	  <!--
+	    <div id="portlet">
+		{% block sidenavigation %}
+		{% endblock %}
+	    </div>
+	  -->
+	    <!-- Content -->
+	    <div id="content">
+		{% block pretitle %}{% endblock %}
+		{% block content_title %}
+		    {% if title %}
+			<h1>{{ title }}</h1>
+		    {% endif %}
+		{% endblock %}
+		
+		{% block content %}
+		    {% block object-tools %}{% endblock %}
+		    {{ content }}
+		{% endblock %}
+		
+		{% block sidebar %}{% endblock %}
+		<br class="clear" />
+	    </div>
+	    <!-- END Content -->
+		
+	</div> <!-- main content -->
+	
+    </div> <!-- div body -->
+    <!-- END Container -->
+    
+    <br />
+    {% block footer %}<div id="footer"></div>{% endblock %}
+</div> <!-- id = page -->
+</body>
+</html>

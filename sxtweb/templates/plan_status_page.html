@@ -1,0 +1,56 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+{% block head %}
+   {% trans 'SuperDoCS' %}
+{% endblock %}
+
+{% block promptbar %}
+<div id="promptbar">
+    {% include "action_dropdown_menu.html" %}
+</div>
+{% endblock %}
+
+
+{% block qa_link %}
+    <a href="/plan_qa/{{ planid }}/" title={% trans "Plan QA" %}>
+        <span>{% trans "PLAN QA" %}</span>
+    </a>
+{% endblock %}
+
+{% block plan_link %}
+    <a href="/plan/{{ planid }}/" title={% trans "Planning" %}>
+        <span>{% trans "PLANNING" %}</span>
+    </a>
+{% endblock %}
+
+
+{% block content %}
+
+   {% if statusform.errors %}
+       <p style="color:red;">
+           Please correct the error{{ statusform.errors|pluralize }} below.
+       </p>
+   {% endif %}
+   
+   <form action="" method="post">{% csrf_token %}
+      <div id="content-setup">
+         <div class="block">
+            <table id="setup-table" summary="">
+               <caption>{% trans 'Plan Status' %}</caption>
+               {{ statusform.as_table }}
+            </table>            
+            
+            <br /> <br />
+            
+            <input type="submit" name="change_submit" value="&nbsp; {% trans 'Change' %} &nbsp;" />
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <input type="submit" name="cancel_submit" value="&nbsp; {% trans 'Cancel' %} &nbsp;" />
+      </div>   <!-- content-setup -->
+      
+      <br />
+   </form>
+{% endblock %}
+
