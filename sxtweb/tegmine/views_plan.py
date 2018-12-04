@@ -15,16 +15,16 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
-from protocols.AAPM_TG61.CMedWat import CMedWat
-from protocols.AAPM_TG61.BSF_Wat import BSF_Wat
-from protocols.AAPM_TG61.BSF_CloseCone import BSF_CloseCone
-from protocols.AAPM_TG61.BSF_BoneWat import BSF_BoneWat
-from protocols.AAPM_TG61.Mu_WatAir_air import Mu_WatAir_air
+from protocols.TG61.CMedWat import CMedWat
+from protocols.TG61.BSF_Wat import BSF_Wat
+from protocols.TG61.BSF_CloseCone import BSF_CloseCone
+from protocols.TG61.BSF_BoneWat import BSF_BoneWat
+from protocols.TG61.Mu_WatAir_air import Mu_WatAir_air
 
+from common.errcode import ErrorCode
 from .models import *
 from .forms import *
 from .curve_fitting import getROF
-from .errcode import ErrorCode
 from .plancalc import *
 
 @csrf_protect        

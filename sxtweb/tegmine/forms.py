@@ -1,10 +1,11 @@
 from django import forms
-from .models import *
-from .choices import *
 import datetime
 import numpy as np
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+
+from common.choices import *
+from .models import *
 
 class AuthForm(forms.Form):
     username = forms.CharField(label=_("Username"))

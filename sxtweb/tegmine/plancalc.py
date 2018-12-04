@@ -5,13 +5,13 @@ import numpy as np
 from django.conf import settings
 from .models import *
 from .forms import *
-from protocols.AAPM_TG61.CMedWat import CMedWat
-from protocols.AAPM_TG61.BSF_Wat import BSF_Wat
-from protocols.AAPM_TG61.BSF_CloseCone import BSF_CloseCone
-from protocols.AAPM_TG61.BSF_BoneWat import BSF_BoneWat
-from protocols.AAPM_TG61.Mu_WatAir_air import Mu_WatAir_air
+from protocols.TG61.CMedWat import CMedWat
+from protocols.TG61.BSF_Wat import BSF_Wat
+from protocols.TG61.BSF_CloseCone import BSF_CloseCone
+from protocols.TG61.BSF_BoneWat import BSF_BoneWat
+from protocols.TG61.Mu_WatAir_air import Mu_WatAir_air
 from .curve_fitting import getROF
-from .errcode import ErrorCode
+from common.errcode import ErrorCode
 
 def copyPlanSetup(plan,oldplan):
     plan.PlanName          = oldplan.PlanName + '_copy'
