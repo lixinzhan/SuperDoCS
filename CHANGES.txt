@@ -1,0 +1,18 @@
+This file briefly records the important changes that affect the DB schema, and the steps to upgrade the DB.
+
+
+*** 20181203 ***:
+
+Changes were made to DB schema. In comparison with V1.x, two new apps were added to orgnize the structure: resources and xcalib. To upgrade from 1.x, changes below should be manually applied to the DB:
+
+Rename machine, filter, cone, chamber, electrometer, doctor to resources_***
+Rename measuremenetset, outputfactor, calibration to calib_***
+Make changes to django_content_type table to match the changes above.
+
+Commands: 
+
+sqlite3 sxt.db
+.tables
+alter table a rename to table b;
+update django_content_type set app_label='resources' where id='8'
+
