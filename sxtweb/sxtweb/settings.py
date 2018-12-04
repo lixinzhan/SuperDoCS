@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     # User applications
     'tegmine',
     'resources',
+    'xcalib',
 )
 
 # A sample logging configuration. The only tangible logging

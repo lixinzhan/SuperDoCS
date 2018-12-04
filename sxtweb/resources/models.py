@@ -56,14 +56,6 @@ class ELECTROMETER(models.Model):
     def __unicode__(self):
         return self.ElectrometerName
     
-class MEASUREMENTSET(models.Model):
-    Electrometer = models.ForeignKey(ELECTROMETER, on_delete=models.CASCADE)
-    Chamber = models.ForeignKey(CHAMBER, on_delete=models.CASCADE)
-    def __unicode__(self):
-        return u'%s + %s' % (self.Electrometer.ElectrometerName, self.Chamber.ChamberName)
-    class Meta:
-        verbose_name_plural = "Measurement Sets"        
-
 class FILTER(models.Model):
     FilterCode = models.CharField(max_length=2, unique=True,verbose_name=_("Filter Code"))
     FilterName = models.CharField(max_length=64,unique=True,verbose_name=_("Filter Name"))
