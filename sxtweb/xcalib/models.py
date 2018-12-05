@@ -38,10 +38,11 @@ class CALIBRATION(models.Model):
                                          default="in-Air",
                                          choices=CALIBRATION_METHOD_CHOICES,
                                          verbose_name=_('Calibration Method'))
+    Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
     Pressure = models.FloatField(verbose_name=_("Pressure (mm Hg)"))
     Temperature = models.FloatField(verbose_name=_("Temperature (Celsius)"))    
     FDD = models.FloatField(verbose_name=_("Focal Detector Dist. (cm)"))
-    IrradiationTime = models.FloatField(verbose_name=_("Beam Duration (min or MU)"))
+    BeamDuration = models.FloatField(verbose_name=_("Beam Duration (min or MU)"))
     V_std = models.FloatField(default=300,verbose_name=_("Standard Voltage"))
     M_std = models.FloatField(verbose_name=_("Reading Average (for V_std)"))
     V_opp = models.FloatField(default=-300,verbose_name=_("Opposite Voltage"))
@@ -49,8 +50,8 @@ class CALIBRATION(models.Model):
     V_low = models.FloatField(default=150,verbose_name=_("Low Voltage"))
     M_low = models.FloatField(verbose_name=_("Reading Average (for V_low)"))
             
-    MeasurementDateTime = models.DateTimeField(verbose_name=_("Calib. Measurement"))
-    MeasuredByUser = models.CharField(max_length=32,verbose_name=_('Measured By User'))
+    MeasurementDate = models.DateField(verbose_name=_("Measured On"))
+    MeasuredByUser = models.CharField(max_length=32,verbose_name=_('Measured By'))
     LastModifiedDateTime = models.DateTimeField(auto_now=True)
     LastModifiedByUser = models.CharField(max_length=32,
                                           verbose_name=_('Last Modified By User')) # default to current user in views.py

@@ -41,6 +41,10 @@ MAX_ENTRY_CHOICES = (
     ('50', '50'),
     ('100','100'),
 )
+STATUS_CHOICES = (
+    ('Active', _('Active')),
+    ('Disabled', _('Disabled')),
+)
 HW_STATUS_CHOICES = (
     ('Active', _('Active')),
     ('Inactive', _('Inactive')),
