@@ -13,12 +13,59 @@ from protocols.TG61.BSF_CloseCone import BSF_CloseCone
 from common.choices import *
 from resources.models import *
 
-
-class MEASUREMENTSET(models.Model):
+class LOCALSTANDARD(models.Model):
+    LocalStandardId = models.CharField(max_length=32,unique=True,verbose_name=_('Local Standard ID'))    
     Electrometer = models.ForeignKey(ELECTROMETER, on_delete=models.CASCADE)
     Chamber = models.ForeignKey(CHAMBER, on_delete=models.CASCADE)
+    HVLUnit = models.CharField(max_length=16, default='mm Al',
+                               choices=HVL_UNIT_CHOICES,verbose_name=_("HVL Unit"))
+    HVL = models.FloatField(verbose_name=_("Calibration HVL"))
+    Nx = models.FloatField(default=0.0, blank=True, verbose_name=_("Nx (R/rdg)"))
+    Nk = models.FloatField(default=0.0, verbose_name=_("Nk (cGy/rdg)"))
+    Status = models.CharField(max_length=32, choices=STATUS_CHOICES)
+    CalibrationDate = models.DateField()
+    CalibratedBy = models.CharField(max_length=32, verbose_name=_("Calibrated By"), choices=CALIB_INST_CHOICES)
+    Comment = models.TextField(max_length=256,blank=True)    
+
     def __unicode__(self):
-        return u'%s + %s' % (self.Electrometer.ElectrometerName, self.Chamber.ChamberName)
+        return '%s %s' % (self.HVL, self.HVLUnit)
+    class Meta:
+        verbose_name_plural = "Local Standards"        
+
+class MEASUREMENTSET(models.Model):
+    MeasurementSetId = models.CharField(max_length=32, unique=True, verbose_name=_("Meas Set Id"))
+    Electrometer = models.ForeignKey(ELECTROMETER, on_delete=models.CASCADE)
+    Chamber = models.ForeignKey(CHAMBER, on_delete=models.CASCADE)
+    LocalStandard = models.ForeignKey(LOCALSTANDARD, on_delete=models.CASCADE)
+    Filter = models.ForeignKey(FILTER, on_delete=models.CASCADE)
+    Cone = models.ForeignKey(CONE,verbose_name=_('Applicator'), on_delete=models.CASCADE)
+    M_LS = models.FloatField(default=0.0, verbose_name=_("Local Std Rdg"))
+    M_MS = models.FloatField(default=0.0, verbose_name=_("Current Set Rdg"))
+    XCalFactor = models.FloatField(default=0.0) # cross calib factor against local std.
+    Nx = models.FloatField(default=0.0, blank=True, verbose_name=_("Nx (R/rdg)"))
+    Nk = models.FloatField(default=0.0, blank=True, verbose_name=_("Nk (cGy/rdg)"))
+    Status = models.CharField(max_length=32, choices=STATUS_CHOICES)
+    CalibrationDate = models.DateField()
+    CalibratedByUser = models.CharField(max_length=32)
+    Comment = models.TextField(max_length=256,blank=True)    
+
+    def save(self, *args, **kwargs):
+        if not license_is_valid():
+            return
+        if self.LocalStandard.HVLUnit==self.Filter.HVLUnit:
+            tmphvl = self.Filter.HVL
+        else:
+            tmphvl = HVLAlCu.convertHVLUnit(self.Filter.HVL, self.Filter.HVLUnit)
+        if math.fabs(1.0-self.LocalStandard.HVL/tmphvl)>0.05:
+            return
+        self.XCalFactor = self.M_LS/self.M_MS
+        self.Nx = LocalStandard.Nx * self.XCalFactor
+        self.Nk = LocalStandard.Nk * self.XCalFactor
+        super(MEASUREMENTSET, self).save(*args, **kwargs) # Call the "real" save() method.
+
+    def __unicode__(self):
+        return '%s + %s' % (self.Electrometer.ElectrometerName, self.Chamber.ChamberName)
+
     class Meta:
         verbose_name_plural = "Measurement Sets"        
 
@@ -26,23 +73,18 @@ class CALIBRATION(models.Model):
     CalibName = models.CharField(max_length=32,unique=True,verbose_name=_('ID'))    
     Filter = models.ForeignKey(FILTER, on_delete=models.CASCADE)
     Cone = models.ForeignKey(CONE,verbose_name=_('Applicator'), on_delete=models.CASCADE)
-    LocalStandard = models.ForeignKey(MEASUREMENTSET, related_name="%(app_label)s_%(class)s_LocalStandard",
-                                      verbose_name=_('Local Standard Measurement Set'), on_delete=models.CASCADE)
-    Nx = models.FloatField(default=0.0, blank=True, verbose_name=_("Nx (R/rdg)"))
-    Nk = models.FloatField(default=0.0, verbose_name=_("Nk (cGy/rdg)"))
-    MeasurementSet = models.ForeignKey(MEASUREMENTSET, related_name="%(app_label)s_%(class)s_MeasurementSet",
-                                       verbose_name=_('Measurement Set'), on_delete=models.CASCADE)
-    XcalFactor = models.FloatField(default=0.0) # cross calib factor against local std.
-    Active = models.BooleanField(default=True)
     CalibrationMethod = models.CharField(max_length=32,
                                          default="in-Air",
                                          choices=CALIBRATION_METHOD_CHOICES,
                                          verbose_name=_('Calibration Method'))
     Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
+    MeasurementSet = models.ForeignKey(MEASUREMENTSET, related_name="%(app_label)s_%(class)s_MeasurementSet",
+                                       verbose_name=_('Measurement Set'), on_delete=models.CASCADE)
+    FDD = models.FloatField(verbose_name=_("Focal Detector Dist. (cm)"))
     Pressure = models.FloatField(verbose_name=_("Pressure (mm Hg)"))
     Temperature = models.FloatField(verbose_name=_("Temperature (Celsius)"))    
-    FDD = models.FloatField(verbose_name=_("Focal Detector Dist. (cm)"))
     BeamDuration = models.FloatField(verbose_name=_("Beam Duration (min or MU)"))
+
     V_std = models.FloatField(default=300,verbose_name=_("Standard Voltage"))
     M_std = models.FloatField(verbose_name=_("Reading Average (for V_std)"))
     V_opp = models.FloatField(default=-300,verbose_name=_("Opposite Voltage"))

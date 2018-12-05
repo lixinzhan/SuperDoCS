@@ -23,6 +23,9 @@ SHAPE_CHOICES = (
     ('Rectangle', _('Rectangle/Square')),
     # ('UserSpecified', _('UserSpecified')),
 )
+CALIB_INST_CHOICES = (
+    ('NRC', _('NRC')),
+)
 CALIBRATION_METHOD_CHOICES = (
     ('in-Air', _('TG61 in-Air method')),
 #    ('in-Phantom', 'TG61 in-Phantom method'),
