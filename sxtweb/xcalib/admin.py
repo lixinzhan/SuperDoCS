@@ -1,30 +1,31 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.contrib import admin
 
 from .models import *
 
-
-class CalibrationAdmin(admin.ModelAdmin):
-    list_display = ('CalibName','Filter','Cone','CalibrationMethod','DR_Air','MeasurementDateTime','Active')
-    # date_hierarchy = 'MeasurementDateTime'
-    fieldsets = [
-        (None, {'fields': ['CalibName','Filter','Cone','LocalStandard',
-                           'Nx','Nk','MeasurementSet','XcalFactor','Active',
-                           'CalibrationMethod','Pressure','Temperature','FDD','IrradiationTime','P_stem',
-                           'V_std','M_std','V_opp','M_opp','V_low','M_low','MeasurementDateTime',
-                           'MeasuredByUser','LastModifiedByUser','Comment']}),
-        ('Calibration Result Review (For QA purpose only)',
-                {'fields': ['P_tp','P_pol','P_ion','P_isf','MassAbs_WatAir_air',
-                            'BSF_Wat','DR_Air','DR_Water'], 'classes': ['collapse']})
-    ]
-    #exclude=('P_elec', 'P_stem', 'P_tp', 'P_pol', 'P_ion', 'P_isf',
-    #         'MassAbs_WatAir_air', 'BSF_Wat', 'DR_Air', 'DR_Water')
-admin.site.register(CALIBRATION, CalibrationAdmin)
-
-class OutputFactorAdmin(admin.ModelAdmin):
-    list_display = ('ROFName','Filter','Cone')
-admin.site.register(OUTPUTFACTOR,OutputFactorAdmin)
-
+# admin.site.register(LOCALSTANDARD)
 admin.site.register(MEASUREMENTSET)
+
+class OUTPUTFACTORAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['OutputFactorId', 'Filter', 'Cone', 'ConeFactor']}),
+        ('Fitting Related', {'fields': ['DequivMax', 'DequivMin', 'CutoutThickness', 'FitMethod']}),
+        ('Fitting Parameters for Sauver\'s Equation', {'fields': ['P','S','L','U','N']}),
+        ('Parameters for Customized Curve Fitting', {'fields': ['A','B','C','D','E','F','G']}),
+    ]
+admin.site.register(OUTPUTFACTOR, OUTPUTFACTORAdmin)
+
+class CALIBRATIONAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,  {'fields':['CalibrationId', 'Filter', 'Cone', 'CalibrationMethod','Status']}),
+        ('Measurements', {'fields':['MeasurementSet','FDD','BeamDuration', 
+        ('Pressure','Temperature'), 
+        ('V_std', 'M_std'), ('V_opp', 'M_opp'), ('V_low', 'M_low'),
+        'MeasurementDate', 'MeasuredByUser']}),
+        ('Comments', {'fields': ['Comment']}),
+        ('Results', {'fields': [('P_elec','P_stem','P_tp'),('P_pol','P_ion','P_isf'),
+        ('MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd'),('DR_Air','DR_Water')]}),
+    ]
+    readonly_fields = ('P_elec','P_stem','P_tp','P_pol','P_ion','P_isf',
+        'MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd','DR_Air','DR_Water')
+admin.site.register(CALIBRATION, CALIBRATIONAdmin)
+
