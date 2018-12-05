@@ -30,3 +30,5 @@ from 1.x series to create a new schema.
 LocalStandard and MeasurementSet created/revised in xcalib.
 
 Considering the migration break, will go directly to Python 3 then.
+
+Made the changes to Python 3.
