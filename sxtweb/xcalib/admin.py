@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import *
 
-# admin.site.register(LOCALSTANDARD)
+admin.site.register(LOCALSTANDARD)
 admin.site.register(MEASUREMENTSET)
 
 # class OUTPUTFACTORAdmin(admin.ModelAdmin):

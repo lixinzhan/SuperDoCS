@@ -22,3 +22,11 @@ python manage.py migrate --fake
 For this step, code is tagged as: Apps_resources_xcalib_added.
 
 
+*** 20180205 ***
+
+Lots of problems in changing the schema. Hence will break the migration path 
+from 1.x series to create a new schema.
+
+LocalStandard and MeasurementSet created/revised in xcalib.
+
+Considering the migration break, will go directly to Python 3 then.
