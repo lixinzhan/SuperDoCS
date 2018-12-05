@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 import os
 
 class BSF_BoneWat:
@@ -16,7 +16,7 @@ class BSF_BoneWat:
     def _readFilePartTo_(self, fh):
         linenumber = 0
         line=fh.readline().strip()
-        while line <> 'BEGIN':
+        while line != 'BEGIN':
             linenumber = linenumber + 1
             line=fh.readline().strip()
 
@@ -61,7 +61,7 @@ class BSF_BoneWat:
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
-        print self.BSFTable
+        print(self.BSFTable)
 
     def getValue(self, SSD, DFLD, HVL, HVLUnit):
         '''Calculate Bw for a SSD, DFLD, and HVL value.'''
@@ -71,18 +71,18 @@ class BSF_BoneWat:
         elif HVLUnit == 'mm Cu':
             tabhvl = self.HVL_Cu
         else:
-            raise LookupError, 'E0120' #'Incorrect HVL Unit'
+            raise LookupError('E0120') #'Incorrect HVL Unit'
         
         # Table XI of TG-61 gives field size in square. The input field size
         # is in circle. Convert the circle to equivalent square to get the factor.
         FLD = np.sqrt(np.pi)*DFLD/2.0
         
         if HVL<np.min(tabhvl) or HVL>np.max(tabhvl):
-            raise ValueError, 'E0121' #'BSF_BoneWat: HVL Out of Range'
+            raise ValueError('E0121') #'BSF_BoneWat: HVL Out of Range'
         if FLD<np.min(self.FLD) or FLD>np.max(self.FLD):
-            raise ValueError, 'E0122' #'BSF_BoneWat: FLD Out of Range'
+            raise ValueError('E0122') #'BSF_BoneWat: FLD Out of Range'
         if SSD<np.min(self.SSD) or SSD>np.max(self.SSD):
-            raise ValueError, 'E0123' #'BSF_BoneWat: SSD Out of Range'
+            raise ValueError('E0123') #'BSF_BoneWat: SSD Out of Range'
         
         coord = np.resize([[[[a,b,c] for c in self.FLD] \
                             for b in tabhvl] \

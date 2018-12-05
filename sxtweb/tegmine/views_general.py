@@ -1,7 +1,7 @@
 # Create your views here.
 import math
 import datetime
-import urlparse
+import urllib.parse
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -36,7 +36,7 @@ def main_page(request, template_name='main_page.html',
     if request.method == "POST":
         form = authentication_form(data=request.POST)
         if form.is_valid():
-            netloc = urlparse.urlparse(redirect_to)[1]
+            netloc = urllib.parse.urlparse(redirect_to)[1]
 
             # Use default setting if redirect_to is empty
             if not redirect_to:

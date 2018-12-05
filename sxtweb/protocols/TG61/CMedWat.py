@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 from protocols.TG61.HVLAlCu import HVLAlCu
 #from HVLAlCu import HVLAlCu
 import os.path
@@ -18,7 +18,7 @@ class CMedWat:
         self.ColumnMap = {}
         for line in fh:
             line = line.strip()
-            if len(line)>0 and line[0] <> '#':
+            if len(line)>0 and line[0] != '#':
                 self.CMWTable.append(line.split())
         fh.close()
 
@@ -27,9 +27,9 @@ class CMedWat:
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
-        print(self.CMWTable)
+        print((self.CMWTable))
         print('Another Table')
-        print(self.ColumnMap)
+        print((self.ColumnMap))
 
     def getValue(self, HVLValue, HVLUnit, Material, IntpSpace='Logrithm'):
         '''Calculate CMW for a Material under X-ray of HVL.'''
@@ -57,12 +57,12 @@ class CMedWat:
                   for i in range(len(self.CMWTable))
                   if self.CMWTable[i][0]=='Cu'], dtype=np.float)
         else:
-            raise LookupError, 'E0110' #'CMedWat: Can Not Find HVL Material'
+            raise LookupError('E0110') #'CMedWat: Can Not Find HVL Material'
 
         # self.xytable = xytable # for debugging only.
 
         if HVLValue<np.min(xytable[:,0]) or HVLValue>np.max(xytable[:,0]):
-            raise ValueError, 'E0111' #'CMedWat: HVL Out of Range'
+            raise ValueError('E0111') #'CMedWat: HVL Out of Range'
         
         ## Perform cubic spline interpolation
         if IntpSpace=='Logrithm':
@@ -82,8 +82,8 @@ if __name__ == '__main__':
     try:
         cmw = CMedWat()
         cmw.getValue(5.1,'mm Cu', 'Lung')
-    except ValueError, what:
-        print what[0]
+    except ValueError as what:
+        print(what[0])
         
 #Table = CMedWatTable("C:\Documents and Settings\lzhan\Desktop\SXT\Data\CMedWat.dat")
     cmw.showTables()
