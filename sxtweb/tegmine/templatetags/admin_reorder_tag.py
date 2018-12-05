@@ -70,7 +70,7 @@ def admin_reorder(context, token):
     if "app_list" in context:
         # sort the app list
         order = SortedDict(settings.ADMIN_REORDER)
-        context["app_list"].sort(key=lambda app: sort(order.keys(), 
+        context["app_list"].sort(key=lambda app: sort(list(order.keys()), 
         	app["app_url"].strip("/").split("/")[-1]))
         for i, app in enumerate(context["app_list"]):
             # sort the model list for each app

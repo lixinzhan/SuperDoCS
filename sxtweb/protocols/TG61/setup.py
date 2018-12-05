@@ -12,7 +12,7 @@ ext_modules = 	[Extension("BSF_Wat",["BSF_Wat.py"]),
 		 Extension("Mu_WatAir_wat",["Mu_WatAir_wat.py"])
 		]
 
-print ext_modules
+print(ext_modules)
 
 setup(
 	name = 'django views module',

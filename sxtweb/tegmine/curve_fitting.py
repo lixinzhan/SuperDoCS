@@ -9,11 +9,11 @@ def getROF(ROFTable, Dequiv, HasCutout=False, CutoutThickness=0):
     # make sure DequivCalib is in the commissioned cutout range.
     # here, DequivMax and DequivMin are the cutout equiv. diameter range    # at the calibration position.
     if HasCutout and Dequiv < ROFTable.DequivMin:
-        raise ValueError, 'E1001' # cutout too small
+        raise ValueError('E1001') # cutout too small
     if HasCutout and Dequiv > ROFTable.DequivMax:
-        raise ValueError, 'E1002' # cutout too big
+        raise ValueError('E1002') # cutout too big
     if HasCutout and CutoutThickness != ROFTable.CutoutThickness:
-        raise ValueError, 'E1003' # incorrect cutout thickness
+        raise ValueError('E1003') # incorrect cutout thickness
             
     if not HasCutout:
         return ROFTable.ConeFactor
@@ -32,6 +32,6 @@ def getROF(ROFTable, Dequiv, HasCutout=False, CutoutThickness=0):
     elif ROFTable.FitMethod == 'Customized':
         ROF = CustomizedROF(ROFTable, Dequiv)
     else:
-        raise LookupError, 'E1000' # unknown fitting method
+        raise LookupError('E1000') # unknown fitting method
         
     return ROF

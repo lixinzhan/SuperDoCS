@@ -2,7 +2,7 @@ import numpy as np
 #from mpl_toolkits.mplot3d import axes3d
 #import matplotlib.pyplot as plt
 import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 
 class HVLAlCu:
     def __init__(self):
@@ -117,9 +117,9 @@ class HVLAlCu:
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
         print('Al HVL Table')
-        print(self.AlHVLTable)
+        print((self.AlHVLTable))
         print('Cu HVL Table')
-        print(self.CuHVLTable)
+        print((self.CuHVLTable))
 
     def getHVL(self, Eeff, HVLUnit = 'mm Al', IntpSpace='Logrithm'):
         '''Obtain HVL value from Effective Energy

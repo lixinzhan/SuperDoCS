@@ -1,6 +1,6 @@
 import numpy as np
 #import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 import os
 from protocols.TG61.HVLAlCu import HVLAlCu
 from bisect import *
@@ -19,11 +19,12 @@ class BSF_Wat:
             = self._readFilePartTo_(fh)
         self.SSD3,self.DFLD3,self.HVL3,self.HVLMaterial3, self.BwTable3 \
             = self._readFilePartTo_(fh)
+        fh.close()
 
     def _readFilePartTo_(self, fh):
         linenumber = 0
         line=fh.readline().strip()
-        while line <> 'BEGIN':
+        while line != 'BEGIN':
             linenumber = linenumber + 1
             line=fh.readline().strip()
 
@@ -71,7 +72,7 @@ class BSF_Wat:
         
         # check HVL Unit
         if HVLUnit not in ('mm Al', 'mm Cu'):
-            raise ValueError, 'E0103' # 'BSF_Wat: Wrong HVL Unit!'
+            raise ValueError('E0103') # 'BSF_Wat: Wrong HVL Unit!'
         
         # convert HVL Unit if needed
         if (HVLUnit == 'mm Al' and HVL > 8.0) or \
@@ -97,7 +98,7 @@ class BSF_Wat:
             tabhvl = self.HVL3
             tabbw = self.BwTable3
         else:
-            raise ValueError, 'E0104' # 'BSF_Wat: Value Error!'
+            raise ValueError('E0104') # 'BSF_Wat: Value Error!'
 
         ##
         ## Linear interpolation using scipy but gives inconsistent result on
@@ -117,13 +118,13 @@ class BSF_Wat:
 
         # make sure no strange result returned for any point out of table boundary.
         if SSD<min(tabssd) or SSD>max(tabssd):
-            raise ValueError, 'E0100' #'BSF_Wat: SSD Out of Range!'
+            raise ValueError('E0100') #'BSF_Wat: SSD Out of Range!'
             #return np.nan
         if DFLD<min(tabdfld) or DFLD>max(tabdfld):
-            raise ValueError, 'E0101' #'BSF_Wat: DFLD Out of Range!'
+            raise ValueError('E0101') #'BSF_Wat: DFLD Out of Range!'
             #return np.nan
         if HVL<min(tabhvl) or HVL>max(tabhvl):
-            raise ValueError, 'E0102' #'BSF_Wat: HVL Out of Range!'
+            raise ValueError('E0102') #'BSF_Wat: HVL Out of Range!'
             #return np.nan
                 
         # make sure boundary values can be handled as well.

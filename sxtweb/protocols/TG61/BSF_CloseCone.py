@@ -1,6 +1,6 @@
 import numpy as np
 #import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 import os
 from bisect import *
 
@@ -13,11 +13,12 @@ class BSF_CloseCone:
         fh = open(FileName)
         self.FLD,self.HVL_Al,self.HVL_Cu, self.BSFTable \
             = self._readFilePartTo_(fh)
+        fh.close()
 
     def _readFilePartTo_(self, fh):
         linenumber = 0
         line=fh.readline().strip()
-        while line <> 'BEGIN':
+        while line != 'BEGIN':
             linenumber = linenumber + 1
             line=fh.readline().strip()
 
@@ -58,7 +59,7 @@ class BSF_CloseCone:
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
-        print self.BSFTable
+        print(self.BSFTable)
 
     def getValue(self, DFLD, HVL, HVLUnit):
         '''Calculate Bw for a SSD, DFLD, and HVL value.'''
@@ -68,7 +69,7 @@ class BSF_CloseCone:
         elif HVLUnit == 'mm Cu':
             tabhvl = self.HVL_Cu
         else:
-            raise LookupError, 'E0120' #'Incorrect HVL Unit'
+            raise LookupError('E0120') #'Incorrect HVL Unit'
         
         # For out of boundary data, extropolate using their nearest neighbour.
         if HVL < np.min(tabhvl):

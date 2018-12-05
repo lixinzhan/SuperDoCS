@@ -149,10 +149,10 @@ def calcTxPlan(plan, errlist):
             #if plan.CutoutRequired:
             try:
                 plan.ROF=getROF(ROFEntry,plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
-            except ValueError, err:
+            except ValueError as err:
                 plan.ROF = 0
                 errlist.append(err[0]) #'Cutout Out of Commissioned Range. '
-            except LookupError, err:
+            except LookupError as err:
                 plan.ROF = 0
                 errlist.append(err[0]) #'Unknown Cutout REF Fitting Method. '
             except:
@@ -179,7 +179,7 @@ def calcTxPlan(plan, errlist):
         plan.BSF_wat = bsf.getValue(plan.FSD, plan.DequivSurface,
                                 plan.Filter.Filter.HVL,
                                 plan.Filter.Filter.HVLUnit)
-    except ValueError, err:
+    except ValueError as err:
         plan.BSF_wat = 0.0
         errlist.append(err[0]) #'Bw: FLD/HVL/FSD Out of Range. '
     if plan.Cone.ConeEnd=="Open":
@@ -216,10 +216,10 @@ def calcTxPlan(plan, errlist):
             cmw = CMedWat()
             plan.C_MedWat = cmw.getValue(plan.Filter.Filter.HVL,
                                      plan.Filter.Filter.HVLUnit, medium)
-        except LookupError, err:
+        except LookupError as err:
             plan.C_MedWat = 0
             errlist.append(err[0]) #'CMedWat: Incorrect HVL Unit or Incorrect Material. '
-        except ValueError, err:
+        except ValueError as err:
             plan.C_MedWat = 0
             errlist.append(err[0]) #'CMedWat: HVL Out of Range. '
             
@@ -229,7 +229,7 @@ def calcTxPlan(plan, errlist):
                 plan.B_MedWat = bmw.getValue(plan.FSD, plan.DequivSurface,
                                          plan.Filter.Filter.HVL,
                                          plan.Filter.Filter.HVLUnit)
-            except ValueError, err:
+            except ValueError as err:
                 plan.B_MedWat = 0
                 errlist.append(err[0]) #'BSF_BoneWat: FLD/SSD/HVL Out of Table Range. '
             except:

@@ -66,52 +66,52 @@ class BSF_Wat_Test(TestCase):
         #
         
         # case 1
-        self.assertRaisesRegexp(ValueError, 'E0100',
+        self.assertRaisesRegex(ValueError, 'E0100',
                                 bsf.getValue,SSD=1.49, DFLD=10.0, HVL=1.0, HVLUnit='mm Al')
         # case 2
-        self.assertRaisesRegexp(ValueError, 'E0101',
+        self.assertRaisesRegex(ValueError, 'E0101',
                                 bsf.getValue,SSD=10.0, DFLD=0.99, HVL=1.0, HVLUnit='mm Al')
         # case 3
-        self.assertRaisesRegexp(ValueError, 'E0102',
+        self.assertRaisesRegex(ValueError, 'E0102',
                                 bsf.getValue,SSD=10.0, DFLD=10.0, HVL=0.039, HVLUnit='mm Al')
         # case 4
-        self.assertRaisesRegexp(ValueError, 'E0103',
+        self.assertRaisesRegex(ValueError, 'E0103',
                                 bsf.getValue,SSD=10.0, DFLD=10.0, HVL=1.0, HVLUnit='mm A')
         # case 5
-        self.assertRaisesRegexp(ValueError, 'E0102',
+        self.assertRaisesRegex(ValueError, 'E0102',
                                 bsf.getValue,SSD=9.99, DFLD=10.0, HVL=4.01, HVLUnit='mm Al')
         ## case 6   # automatically convert mm Al to mm Cu. Not exception raised.
         #self.assertRaisesRegexp(ValueError, 'E0103',
         #                        bsf.getValue,SSD=20.0, DFLD=10.0, HVL=8.01, HVLUnit='mm Al')
         # case 7
-        self.assertRaisesRegexp(ValueError, 'E0100',
+        self.assertRaisesRegex(ValueError, 'E0100',
                                 bsf.getValue,SSD=100.01, DFLD=10.0, HVL=1.0, HVLUnit='mm Al')
         # case 8
-        self.assertRaisesRegexp(ValueError, 'E0101',
+        self.assertRaisesRegex(ValueError, 'E0101',
                                 bsf.getValue,SSD=50.0, DFLD=23.1, HVL=1.0, HVLUnit='mm Al')
         # case 9
-        self.assertRaisesRegexp(ValueError, 'E0102',
+        self.assertRaisesRegex(ValueError, 'E0102',
                                 bsf.getValue,SSD=50.0, DFLD=10.0, HVL=0.039, HVLUnit='mm Al')
         ## case 10 # automatic HVL unit convert. No error raised
         #self.assertRaisesRegexp(ValueError, 'E0102',
         #                        bsf.getValue,SSD=50.0, DFLD=10.0, HVL=8.01, HVLUnit='mm Al')
         # case 11
-        self.assertRaisesRegexp(ValueError, 'E0104',
+        self.assertRaisesRegex(ValueError, 'E0104',
                                 bsf.getValue,SSD=9.99, DFLD=10.0, HVL=0.5, HVLUnit='mm Cu')
         # case 12
-        self.assertRaisesRegexp(ValueError, 'E0101',
+        self.assertRaisesRegex(ValueError, 'E0101',
                                 bsf.getValue,SSD=50.0, DFLD=0.99, HVL=0.5, HVLUnit='mm Cu')
         # case 13
-        self.assertRaisesRegexp(ValueError, 'E0101',
+        self.assertRaisesRegex(ValueError, 'E0101',
                                 bsf.getValue,SSD=50.0, DFLD=23.1, HVL=0.5, HVLUnit='mm Cu')
         ## case 14 # automatic HVL unit conversion. No error raised.
         #self.assertRaisesRegexp(ValueError, 'E0102',
         #                        bsf.getValue,SSD=50.0, DFLD=10.0, HVL=0.09, HVLUnit='mm Cu')
         # case 15
-        self.assertRaisesRegexp(ValueError, 'E0102',
+        self.assertRaisesRegex(ValueError, 'E0102',
                                 bsf.getValue,SSD=50.0, DFLD=10.0, HVL=5.01, HVLUnit='mm Cu')
         # case 16
-        self.assertRaisesRegexp(ValueError, 'E0103',
+        self.assertRaisesRegex(ValueError, 'E0103',
                                 bsf.getValue,SSD=50.0, DFLD=10.0, HVL=1.0, HVLUnit='mm C')
         
     def test_interpolation(self):

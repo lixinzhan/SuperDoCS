@@ -2,7 +2,6 @@
 # See http://djangosnippets.org/snippets/847/
 # for the original posted code.
 #
-from django.utils.encoding import force_unicode
 from django import template
 
 register = template.Library()

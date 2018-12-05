@@ -2,7 +2,7 @@
 import math
 import datetime
 import numpy as np
-import urlparse
+import urllib.parse
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, Http404

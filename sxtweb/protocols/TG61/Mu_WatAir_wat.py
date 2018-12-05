@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 import os
 
 class MuWatAirTable:
@@ -15,14 +15,14 @@ class MuWatAirTable:
         MWATable = []
         for line in fh:
             line = line.strip()
-            if len(line)>0 and line[0] <> '#':
+            if len(line)>0 and line[0] != '#':
                 MWATable.append(line.split())
         fh.close()
         self.MWATable = np.array(MWATable, dtype=np.float)
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
-        print(self.MWATable)
+        print((self.MWATable))
 
     def getMWAValue(self, HVLMaterial, HVLValue, IntpSpace='Logrithm'):
         '''Calculate MWA for a HVL value.'''
@@ -35,7 +35,7 @@ class MuWatAirTable:
             HVLmin = 0.1
             HVLmax = 5.0
         else:
-            print 'Incorrent HVLMaterial. Check Plese!'
+            print('Incorrent HVLMaterial. Check Plese!')
 
         if min(HVLValue)<HVLmin or max(HVLValue)>HVLmax:
             return np.nan  # just use it for out of boundary checking.

@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.interpolate as intp
-from StringIO import StringIO
+from io import StringIO
 import os
 
 class Mu_WatAir_air:
@@ -14,13 +14,13 @@ class Mu_WatAir_air:
         self.MuTable = []
         for line in fh:
             line = line.strip()
-            if len(line)>0 and line[0] <> '#':
+            if len(line)>0 and line[0] != '#':
                 self.MuTable.append(line.split())
         fh.close()
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
-        print(self.MuTable)
+        print((self.MuTable))
 
     def getValue(self, HVLUnit, HVLValue, IntpSpace='Logrithm'):
         '''Calculate CMW for a Material under X-ray of HVL.'''
@@ -35,7 +35,7 @@ class Mu_WatAir_air:
                   for i in range(len(self.MuTable))
                   if self.MuTable[i][0]=='Cu'], dtype=np.float)
         else:
-            raise LookupError, 'Incorrect HVLUnit.'
+            raise LookupError('Incorrect HVLUnit.')
 
         # self.xytable = xytable # for debugging only.
         
