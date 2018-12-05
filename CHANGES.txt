@@ -16,3 +16,6 @@ sqlite3 sxt.db
 alter table a rename to table b;
 update django_content_type set app_label='resources' where id='8'
 
+For this step, code is tagged as: Apps_resources_xcalib_added.
+
+
