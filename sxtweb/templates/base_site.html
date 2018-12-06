@@ -108,7 +108,7 @@
         </li>
         {% else %} {%if user|in_group:"Physicists" %}
         <li {% ifequal site_tab "admin" %} class="selected" {% endifequal %}>
-            <a href="/commission/" title={% trans "Commission" %}>
+            <a href="/admin/" title={% trans "Commission" %}>
                <span>{% trans "COMMISSION" %}</span>
             </a> </li> {% endif %}
         {% endif %}

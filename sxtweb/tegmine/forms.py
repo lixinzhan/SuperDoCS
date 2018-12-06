@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 from common.choices import *
 from .models import *
+from xcalib.models import *
 
 class AuthForm(forms.Form):
     username = forms.CharField(label=_("Username"))
@@ -136,7 +137,7 @@ class TreatmentPlanForm(forms.ModelForm):
         active_filter = FILTER.objects.filter(Status__exact='Active'
                                               ).filter(Machine__in=active_machine)
         self.fields['Filter'].queryset = \
-            CALIBRATION.objects.filter(Active__exact=True
+            NOMINALCALIBRATION.objects.filter(Status__exact='Active' #Active__exact=True
                                        ).filter(Filter__in=active_filter)
         self.fields['Cone'].queryset = \
             CONE.objects.filter(Status__exact='Active'

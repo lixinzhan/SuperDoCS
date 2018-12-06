@@ -22,6 +22,7 @@ from protocols.TG61.BSF_BoneWat import BSF_BoneWat
 from protocols.TG61.Mu_WatAir_air import Mu_WatAir_air
 
 from common.errcode import ErrorCode
+from xcalib.models import *
 from .models import *
 from .forms import *
 from .curve_fitting import getROF
@@ -30,9 +31,6 @@ from .plancalc import *
 @csrf_protect        
 @login_required
 def plan_search_page(request):
-    if not license_is_valid(): # don't use LICENSE_VALID
-        return HttpResponseRedirect(license_page)
-
     form = PlanSearchForm(request.POST or None)
     planlist = []
     planpage = []
@@ -137,8 +135,6 @@ def plan_status_page(request, planid):
 @csrf_protect
 @login_required
 def plan_qa_page(request, planid):
-    if not license_is_valid():
-        return HttpResponseRedirect(license_page)
 
     access = 'read'
     
