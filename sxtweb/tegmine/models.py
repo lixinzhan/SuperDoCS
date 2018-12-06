@@ -16,7 +16,6 @@ from xcalib.models import *
 # The real model difinations start from here.
 #
 
-
 class TREATMENTPLAN(models.Model):
     PlanName = models.CharField(max_length=64)
 
@@ -32,7 +31,7 @@ class TREATMENTPLAN(models.Model):
     TargetTissue = models.CharField(max_length=16,
                                     choices=MEDIUM_CHOICES)
 
-    Filter = models.ForeignKey(CALIBRATION, #limit_choices_to={'Active':True},
+    Filter = models.ForeignKey(NOMINALCALIBRATION, #limit_choices_to={'Active':True},
                                verbose_name=_('Filter'), on_delete=models.CASCADE)
     Cone = models.ForeignKey(CONE,verbose_name=_('Applicator'), on_delete=models.CASCADE)
     CutoutRequired = models.BooleanField(default=False)

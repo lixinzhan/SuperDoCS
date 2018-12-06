@@ -27,13 +27,13 @@ class LOCALSTANDARD(models.Model):
     CalibratedBy = models.CharField(max_length=32, verbose_name=_("Calibrated By"), choices=CALIB_INST_CHOICES)
     Comment = models.TextField(max_length=256,blank=True)    
 
-    def __unicode__(self):
-        return '%s %s' % (self.HVL, self.HVLUnit)
+    def __str__(self):
+        return '%s' % (self.LocalStandardId)
     class Meta:
         verbose_name_plural = "Local Standards"        
 
 class MEASUREMENTSET(models.Model):
-    MeasurementSetId = models.CharField(max_length=32, unique=True, verbose_name=_("Meas Set Id"))
+    MSetName = models.CharField(max_length=32, verbose_name=_("Meas Set Name"))
     Electrometer = models.ForeignKey(ELECTROMETER, on_delete=models.CASCADE)
     Chamber = models.ForeignKey(CHAMBER, on_delete=models.CASCADE)
     LocalStandard = models.ForeignKey(LOCALSTANDARD, on_delete=models.CASCADE)
@@ -47,24 +47,23 @@ class MEASUREMENTSET(models.Model):
     Status = models.CharField(max_length=32, choices=STATUS_CHOICES)
     CalibrationDate = models.DateField()
     CalibratedByUser = models.CharField(max_length=32)
+    Note = models.CharField(max_length=128, blank=True)
     Comment = models.TextField(max_length=256,blank=True)    
 
     def save(self, *args, **kwargs):
-        if not license_is_valid():
-            return
-        if self.LocalStandard.HVLUnit==self.Filter.HVLUnit:
-            tmphvl = self.Filter.HVL
-        else:
-            tmphvl = HVLAlCu.convertHVLUnit(self.Filter.HVL, self.Filter.HVLUnit)
-        if math.fabs(1.0-self.LocalStandard.HVL/tmphvl)>0.05:
-            return
+        # if self.LocalStandard.HVLUnit==self.Filter.HVLUnit:
+        #     tmphvl = self.Filter.HVL
+        # else:
+        #     tmphvl = HVLAlCu.convertHVLUnit(self.Filter.HVL, self.Filter.HVLUnit)
+        # if math.fabs(1.0-self.LocalStandard.HVL/tmphvl)>0.05:
+        #     self.Note='too much differece in HVL'
         self.XCalFactor = self.M_LS/self.M_MS
-        self.Nx = LocalStandard.Nx * self.XCalFactor
-        self.Nk = LocalStandard.Nk * self.XCalFactor
-        super(MEASUREMENTSET, self).save(*args, **kwargs) # Call the "real" save() method.
+        self.Nx = self.LocalStandard.Nx * self.XCalFactor
+        self.Nk = self.LocalStandard.Nk * self.XCalFactor
+        super(MEASUREMENTSET,self).save(*args, **kwargs) # Call the "real" save() method.
 
-    def __unicode__(self):
-        return '%s + %s' % (self.Electrometer.ElectrometerName, self.Chamber.ChamberName)
+    def __str__(self):
+        return '%s: %s + %s' % (self.MSetName, self.Electrometer.ElectrometerName, self.Chamber.ChamberName)
 
     class Meta:
         verbose_name_plural = "Measurement Sets"        
@@ -113,8 +112,6 @@ class CALIBRATION(models.Model):
     DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface'))
     
     def save(self, *args, **kwargs):
-        if not license_is_valid():
-            return
         self.P_tp = 760.0 * (self.Temperature+273.2)/(self.Pressure*295.2)
         self.P_isf = (self.FDD/self.Cone.FSD)**2
         
@@ -152,14 +149,14 @@ class CALIBRATION(models.Model):
         Mcorr = math.fabs(self.M_std) * self.P_isf * self.P_tp * self.P_pol * \
                 self.P_ion * self.P_elec
         W_e = 0.876  # (W/e)_air: 0.00876 Gy/R. Here we use 0.876 cGy/R
-        if not self.Nx:
-            self.Nx = 0.0
-        if (math.fabs(self.Nk)!=0.0): # if Nk is provided, use Nk.
-            Kerma = Mcorr * self.XcalFactor * self.Nk * self.P_stem
+        # if not self.Nx:
+        #     self.Nx = 0.0
+        if (math.fabs(self.MeasurementSet.Nk)!=0.0): # if Nk is provided, use Nk.
+            Kerma = Mcorr * self.MeasurementSet.Nk * self.P_stem
         else: # otherwise, use Nx
-            Kerma = Mcorr * self.XcalFactor * self.Nx * W_e * self.P_stem
+            Kerma = Mcorr * self.MeasurementSet.Nx * W_e * self.P_stem
         
-        self.DR_Air = Kerma/(self.IrradiationTime - self.Filter.EndEffect)
+        self.DR_Air = Kerma/(self.BeamDuration - self.Filter.EndEffect)
         self.DR_Water = self.DR_Air*self.MassAbs_WatAir_air*self.BSF_Wat*self.BSF_ConeEnd
         
         super(CALIBRATION, self).save(*args, **kwargs) # Call the "real" save() method.
@@ -172,7 +169,7 @@ class CALIBRATION(models.Model):
     #                                self.Filter.Energy,
     #                                str(self.MeasurementDateTime,)[:10],
     #                                self.CalibName)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s -- %s, %s %s, %d kV, %g mA (%s)' % (
             self.Filter.FilterCode,
             self.Filter.Machine.MachineCode,
@@ -219,11 +216,30 @@ class OUTPUTFACTOR(models.Model):
     F = models.FloatField(default=0)
     G = models.FloatField(default=0)
     
-    def __unicode__(self):
+    def __str__(self):
         return 'ROF for %s with %s -- %s' %(self.Filter.Filter.FilterName,
                                             self.Cone.ConeName,
                                             self.ROFName)
 
     class Meta:
         verbose_name_plural = _("Output Factors")        
+
+class NOMINALCALIBRATION(models.Model):
+    NCalibName = models.CharField(max_length=32,unique=True,verbose_name=_('Nominal Calib. Name'))    
+    Filter = models.ForeignKey(FILTER, on_delete=models.CASCADE)
+    Cone = models.ForeignKey(CONE, on_delete=models.CASCADE)
+    Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
+    DR_Air = models.FloatField(default=0.0,verbose_name=_('Air Kerma Rate in Air'))
+    DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface'))
+    LastModifiedDateTime = models.DateTimeField(auto_now=True)
+    LastModifiedByUser = models.CharField(max_length=32,
+                                          verbose_name=_('Last Modified By User')) # default to current user in views.py
+    Comment = models.TextField(max_length=512,blank=True)   
+
+    def __str__(self):
+        return '%s: %d' % (self.NCalibName, self.DR_Air)
+
+    class Meta:
+        verbose_name = _('Nominal Calibration')
+
 

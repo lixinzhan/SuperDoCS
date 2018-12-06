@@ -18,7 +18,7 @@ class DOCTOR(models.Model):
     FirstName = models.CharField(max_length=64,verbose_name=_('First Name'))
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
-    def __unicode__(self):
+    def __str__(self):
         return '%s, %s' % (self.LastName, self.FirstName)
 
 class MACHINE(models.Model):
@@ -32,7 +32,7 @@ class MACHINE(models.Model):
     Description = models.TextField(max_length=512,blank=True)
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
-    def __unicode__(self):
+    def __str__(self):
         return self.MachineName
     
     class Meta:
@@ -44,7 +44,7 @@ class CHAMBER(models.Model):
     SerialNumber = models.CharField(max_length=64,unique=True,verbose_name=_("Serial Number"))
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
-    def __unicode__(self):
+    def __str__(self):
         return self.ChamberName
 
 class ELECTROMETER(models.Model):
@@ -53,7 +53,7 @@ class ELECTROMETER(models.Model):
     SerialNumber = models.CharField(max_length=64,unique=True,verbose_name=_("Serial Number"))
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
-    def __unicode__(self):
+    def __str__(self):
         return self.ElectrometerName
     
 class FILTER(models.Model):
@@ -75,7 +75,7 @@ class FILTER(models.Model):
     #    return '%s, %s (%s %s, %d kV)' % \
     #        (self.Machine.MachineName, self.FilterName, \
     #         self.NominalHVL, self.HVLUnit, self.Energy)
-    def __unicode__(self):
+    def __str__(self):
         return '%s -- %s, %s %s, %d kV, %g mA' % (
             self.FilterCode,
             self.Machine.MachineCode,
@@ -133,7 +133,7 @@ class CONE(models.Model):
             return '%dx%d'% (self.Breadth, self.Breadth)
         return '%dx%d' % (self.Breadth, self.Width)
         
-    def __unicode__(self):
+    def __str__(self):
         return '%s -- %s, %s, FCD %d' % (
             self.ConeCode,
             self.Machine.MachineCode,

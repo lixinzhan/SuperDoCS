@@ -12,6 +12,8 @@ from protocols.TG61.BSF_BoneWat import BSF_BoneWat
 from protocols.TG61.Mu_WatAir_air import Mu_WatAir_air
 from .curve_fitting import getROF
 from common.errcode import ErrorCode
+from common.choices import *
+# from xcalib import *
 
 def copyPlanSetup(plan,oldplan):
     plan.PlanName          = oldplan.PlanName + '_copy'
@@ -100,7 +102,7 @@ def calcTxPlan(plan, errlist):
     # Just use the P_stem_air for calibration (1.0 actually)
     # Field change may result in the change of P_stem_air,
     # but we assume no change for cylindrical ion chamber.
-    P_stem_air = plan.Filter.P_stem
+    # P_stem_air = plan.Filter.P_stem
             
     if plan.CutoutRequired:
         if plan.CutoutShape=='Oval':
@@ -169,7 +171,7 @@ def calcTxPlan(plan, errlist):
         
     # Air Kerma rate at target surface
     # plan.KR_air = plan.KR_air_CalibCone * plan.Filter.P_stem * plan.ISF * plan.ROF
-    plan.KR_air = plan.KR_air_CalibCone * plan.Filter.P_stem * plan.ISF * plan.ROF
+    plan.KR_air = plan.KR_air_CalibCone * plan.ISF * plan.ROF
             
     # get backscattering factor and mass absorption coefficient
     # Note plan.Filter is actually pointing to class Calibration.
@@ -244,6 +246,6 @@ def calcTxPlan(plan, errlist):
     plan.TxTime = plan.DosePerFrac/plan.DR_med + plan.Filter.Filter.EndEffect
     plan.CalculateDateTime = datetime.datetime.now
     plan.SXTCalcVersion = settings.VERSION
-    plan.DoseCalibDate = datetime.datetime.date(plan.Filter.MeasurementDateTime)
+    plan.DoseCalibDate = datetime.datetime.date(plan.Filter.LastModifiedDateTime)
 
     return plan.TxTime
