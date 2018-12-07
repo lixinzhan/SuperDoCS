@@ -32,7 +32,7 @@ ext_modules = [
 
 setup(
 	name = 'sxtweb',
-	version='1.0',
+	version='2.0',
 	description='SuperDoCS',
 	author='Lixin Zhan',
 	author_email='lixinzhan@gmail.com',

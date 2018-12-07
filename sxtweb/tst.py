@@ -5,4 +5,4 @@ setup_environ(settings)
 
 from xcalc.models import *
 
-print INSTITUTION_CODE
+print(INSTITUTION_CODE)
