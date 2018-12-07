@@ -17,11 +17,11 @@ SITE=${PACKAGE}_${VERSION}
 mkdir -p ${SITE}
 mkdir -p ${SITE}/sxtweb
 mkdir -p ${SITE}/protocols/AAPM_TG61/Data
-mkdir -p ${SITE}/tegmine/templatetags
+mkdir -p ${SITE}/xcalc/templatetags
 
 #echo "Enter the INSTITUTION_CODE this build is for: "
 #read institut
-#sed "s/^INSTITUTION_CODE\ =.*/INSTITUTION_CODE\ =\ \'${institut}\'/" tegmine/models.py > tegmine/models_2build.py
+#sed "s/^INSTITUTION_CODE\ =.*/INSTITUTION_CODE\ =\ \'${institut}\'/" xcalc/models.py > xcalc/models_2build.py
 
 # prepare binary and static files
 python setup.py build_ext --inplace 
@@ -29,9 +29,9 @@ python manage.py collectstatic
 
 cp -rf etc media static templates ${SITE}
 cp -rf manage.py ${SITE}
-cp -rf tegmine/UserCodes ${SITE}/tegmine/
-cp -rf tegmine/static ${SITE}/tegmine/
-cp -rf tegmine/templatetags ${SITE}/tegmine/
+cp -rf xcalc/UserCodes ${SITE}/xcalc/
+cp -rf xcalc/static ${SITE}/xcalc/
+cp -rf xcalc/templatetags ${SITE}/xcalc/
 cp -rf protocols/AAPM_TG61/Data ${SITE}/protocols/AAPM_TG61/
 
 cp sxtweb/__init__.py ${SITE}/sxtweb/
@@ -43,8 +43,8 @@ cp sxtweb/wsgi.py ${SITE}/sxtweb/
 cp sxtweb/sxt.db ${SITE}/sxtweb/
 mv sxtweb/*.so ${SITE}/sxtweb/
 
-cp tegmine/__init__.py ${SITE}/tegmine/
-mv tegmine/*.so ${SITE}/tegmine/
+cp xcalc/__init__.py ${SITE}/xcalc/
+mv xcalc/*.so ${SITE}/xcalc/
 
 mv protocols/AAPM_TG61/*.so ${SITE}/protocols/AAPM_TG61/
 cp protocols/AAPM_TG61/__init__.py ${SITE}/protocols/AAPM_TG61/
