@@ -32,3 +32,8 @@ LocalStandard and MeasurementSet created/revised in xcalib.
 Considering the migration break, will go directly to Python 3 then.
 
 Made the changes to Python 3.
+
+
+*** 20180206 ***
+
+Migrated to Py3 and got a working copy.
