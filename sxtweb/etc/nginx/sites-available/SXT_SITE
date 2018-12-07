@@ -1,0 +1,21 @@
+server {
+    # listen 80;
+    server_name ${SXT_SITE};
+    rewrite ^/(.*) https://$server_name$request_uri? permanent;
+}
+server {
+    listen 443;
+    server_name ${SXT_SITE};
+
+    ssl on;
+    ssl_certificate /etc/ssl/certs/${SXT_SITE}.crt;
+    ssl_certificate_key /etc/ssl/private/${SXT_SITE}.key;
+    
+    access_log /var/log/nginx/${SXT_SITE}/access.log;
+    error_log /var/log/nginx/${SXT_SITE}/errors.log;
+    
+    location / {
+        proxy_pass http://127.0.0.1:8080/;
+        include    /etc/nginx/proxy.conf;
+    }
+}

@@ -1,0 +1,72 @@
+.side-nav {
+    float: left;
+    width: 200px;
+    white-space: normal;
+    border: solid;
+    position: relative;
+}
+.side-nav ul {
+    list-style: square;
+}
+.side-nav ul li ul {
+    list-style: circle;
+    padding-left: 16px;
+}
+
+.content-main {
+    padding-left: 220px;
+}
+
+.warning, .warning-general, .warning-caution, .warning-radiation, .warning-highvoltage {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-top: 2px;
+    padding-bottom: 10px;
+    padding-left: 80px;
+    padding-right: 20px;
+    /* background: grey; */
+    font-style: italic;
+    height: 60px;
+}
+.warning-general {
+    background-image: url(../img/help_warning_general.png);
+    background-repeat: no-repeat;
+    background-size: 70px;
+}
+.warning-radiation {
+    background-image: url(../img/help_warning_radiation.png);
+    background-repeat: no-repeat;
+    background-size: 70px;
+}
+
+table#contact {
+    font-size: medium;
+    alignment-adjust: central;
+    margin-left: 50px;
+}
+table#contact strong {
+    color: #6c3482;
+    font-weight: bold;
+    font-size: large;
+}
+table#contact tr {
+    font-size: medium;
+    padding-top: 5px;
+}
+table#contact p {
+    padding-top: 5px;
+}
+table#contact td {
+    font-size: small;
+    column-width: 500px;
+    margin-left: 50px;
+}
+table#contact br {
+    padding-bottom: 20px;
+    margin-bottom: 5px;
+}
+em.red {
+    color: red;
+}
