@@ -47,7 +47,6 @@ class MEASUREMENTSET(models.Model):
     Status = models.CharField(max_length=32, choices=STATUS_CHOICES)
     CalibrationDate = models.DateField()
     CalibratedByUser = models.CharField(max_length=32)
-    Note = models.CharField(max_length=128, blank=True)
     Comment = models.TextField(max_length=256,blank=True)    
 
     def save(self, *args, **kwargs):
@@ -107,9 +106,12 @@ class CALIBRATION(models.Model):
 
     MassAbs_WatAir_air = models.FloatField(default=0.0,verbose_name=_("Mass Abs. Coeff. (Water to Air in Air)"))
     BSF_Wat = models.FloatField(default=0.0, verbose_name=_("Back Scattering Factor for Water"))
-    BSF_ConeEnd = models.FloatField(default=0.0, verbose_name=_("BSF Correction Factor for Close-Ended Cone"))
-    DR_Air = models.FloatField(default=0.0,verbose_name=_('Air Kerma Rate in Air'))
-    DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface'))
+    BSF_ConeEnd = models.FloatField(default=0.0, 
+                                verbose_name=_("BSF Correction Factor for Close-Ended Cone"))
+    DR_Air = models.FloatField(default=0.0,blank=True,
+                                verbose_name=_('Air Kerma Rate in Air'))
+    DR_Water = models.FloatField(default=0.0,blank=True,
+                                verbose_name=_('Dose Rate at Water Surface'))
     
     def save(self, *args, **kwargs):
         self.P_tp = 760.0 * (self.Temperature+273.2)/(self.Pressure*295.2)
@@ -229,8 +231,8 @@ class NOMINALCALIBRATION(models.Model):
     Filter = models.ForeignKey(FILTER, on_delete=models.CASCADE)
     Cone = models.ForeignKey(CONE, on_delete=models.CASCADE)
     Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
-    DR_Air = models.FloatField(default=0.0,verbose_name=_('Air Kerma Rate in Air'))
-    DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface'))
+    DR_Air = models.FloatField(default=0.0,verbose_name=_('Air Kerma Rate in Air (cGy/MU or cGy/min)'))
+    DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface (cGy/MU or cGy/min)'))
     LastModifiedDateTime = models.DateTimeField(auto_now=True)
     LastModifiedByUser = models.CharField(max_length=32,
                                           verbose_name=_('Last Modified By User')) # default to current user in views.py
