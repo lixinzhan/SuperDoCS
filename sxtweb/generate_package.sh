@@ -8,7 +8,7 @@ GCC_VER=`gcc -v 2>&1 | tail -1 | awk '{print $3}'`
 GLIBC_VER=`ldd --version | head -1 | awk -F\) '{print $2}' | awk '{print $1}'`
 PYTHON_VER=`python -V 2>&1 | awk '{print $2}'`
 #CYTHON_VER=`cython -V 2>&1 | awk '{print $3}'`
-DJANGO_VER=`python -c 'import django; print django.get_version()'`
+DJANGO_VER=`python -c 'import django; print(django.get_version())'`
 
 PACKAGE="SuperDoCS"
 VERSION=`grep VERSION sxtweb/version.py | awk -F\' '{print $2}'`
@@ -16,7 +16,7 @@ SITE=${PACKAGE}_${VERSION}
 
 mkdir -p ${SITE}
 mkdir -p ${SITE}/sxtweb
-mkdir -p ${SITE}/protocols/AAPM_TG61/Data
+mkdir -p ${SITE}/protocols/TG61/Data
 mkdir -p ${SITE}/xcalc/templatetags
 
 #echo "Enter the INSTITUTION_CODE this build is for: "
@@ -32,7 +32,7 @@ cp -rf manage.py ${SITE}
 cp -rf xcalc/UserCodes ${SITE}/xcalc/
 cp -rf xcalc/static ${SITE}/xcalc/
 cp -rf xcalc/templatetags ${SITE}/xcalc/
-cp -rf protocols/AAPM_TG61/Data ${SITE}/protocols/AAPM_TG61/
+cp -rf protocols/TG61/Data ${SITE}/protocols/TG61/
 
 cp sxtweb/__init__.py ${SITE}/sxtweb/
 cp sxtweb/settings.py ${SITE}/sxtweb/
@@ -46,8 +46,8 @@ mv sxtweb/*.so ${SITE}/sxtweb/
 cp xcalc/__init__.py ${SITE}/xcalc/
 mv xcalc/*.so ${SITE}/xcalc/
 
-mv protocols/AAPM_TG61/*.so ${SITE}/protocols/AAPM_TG61/
-cp protocols/AAPM_TG61/__init__.py ${SITE}/protocols/AAPM_TG61/
+mv protocols/TG61/*.so ${SITE}/protocols/TG61/
+cp protocols/TG61/__init__.py ${SITE}/protocols/TG61/
 cp protocols/__init__.py ${SITE}/protocols/
 
 cp ssl_keygen.sh ssl_key_install.sh ${SITE}
