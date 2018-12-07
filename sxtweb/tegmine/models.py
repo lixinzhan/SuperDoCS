@@ -80,7 +80,7 @@ class TREATMENTPLAN(models.Model):
     ApprovedBy = models.CharField(max_length=32, blank=True)
     ApprvDateTime = models.DateTimeField(auto_now_add=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return '%s (%s, %s): %d/%d, %s' % \
                 (self.PlanName,
                  self.LastName,
