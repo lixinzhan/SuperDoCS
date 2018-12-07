@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 from django.apps import AppConfig
 
 
 class XcalibConfig(AppConfig):
     name = 'xcalib'
-    verbose_name = "Calibration"
+    verbose_name = "System Calibration"

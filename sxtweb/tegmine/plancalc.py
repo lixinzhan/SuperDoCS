@@ -97,7 +97,7 @@ def getPlanFormData(plan,planform):
 
 def calcTxPlan(plan, errlist):
     conecalib = plan.Filter.Cone # The Calibration Cone. plan.Filter <--> Calibration
-    dr = CALIBRATION.objects.get(id=plan.Filter.id)
+    dr = NOMINALCALIBRATION.objects.get(id=plan.Filter.id)
     
     # Just use the P_stem_air for calibration (1.0 actually)
     # Field change may result in the change of P_stem_air,

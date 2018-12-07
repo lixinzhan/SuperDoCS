@@ -177,11 +177,8 @@ if not DEBUG:
 
 # For re-ordering the display in Admin and Commission
 ADMIN_REORDER = (
-    ("tegmine", ("Machine", "Filter", "Cone",
-             "Chamber", "Electrometer", "MeasurementSet", "Doctor")),
-#             "Calibration", "OutputFactor",
-#             "Doctor", "TreatmentPlan")),
-    ("resources", ("Calibration", "OutputFactor", "TreatmentPlan")),
+    ('tegmine', ('TREATMENTPLAN')),
+    ('resources', ('MACHINE', 'FILTER', 'CONE', 'ELECTROMETER', 'CHAMBER', 'DOCTOR')),
+    ('xcalib', ('LOCALSTANDARD', 'MEASUREMENTSET', 'OUTPUTFACTOR', 
+                'CALIBRATION', 'NOMINALCALIBRATION')),
 )
-
-

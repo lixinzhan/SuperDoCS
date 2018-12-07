@@ -42,7 +42,8 @@
     <div id="plan_qa">
         <table id="qa-table">
          <caption>
-            {{plan.LastName}}, {{plan.FirstName}} ({{plan.PatientId}}): {{ plan.PlanName }}
+            {{plan.LastName}}, {{plan.FirstName}} ({{plan.PatientId}}): 
+            {{ plan.PlanName }} ({{ plan.ApprvStatus }})
          </caption>
             <tr><td>{% trans 'Filter' %}: </td>
                <td>{{plan.Filter.Filter}}</td><td class="right"></td></tr>
