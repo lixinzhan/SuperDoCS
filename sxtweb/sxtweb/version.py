@@ -1,7 +1,7 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '1.0' # Version
+VERSION = '2.0' # Version
 
 #
 # Format: DB-CALC-TEMPL
@@ -9,7 +9,7 @@ VERSION = '1.0' # Version
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D17-C35-T73'
+REVISION = 'D20-C100-T100'
 
 #
 # DB Schema Revision
@@ -17,6 +17,9 @@ REVISION = 'D17-C35-T73'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 2.0: 2018-12-07
+#   Big change to DB Schema. Resources, Calibration, and Calculation are fully separated.
+#   It is not compatible with DB Schema 1.x any more.
 # 1.2: 2012-12-20
 #   Cone shape is included now. ROF is still based on Equiv. Diameter.
 # 1.1: 2012-12-20
@@ -25,7 +28,7 @@ REVISION = 'D17-C35-T73'
 # 1.0: 2012-11-20
 #   First creation of this entry based on Ver. 1.0b4.
 #
-DB_SCHEMA='1.2'
+DB_SCHEMA='2.0'
 
 #
 # Copyright Information.

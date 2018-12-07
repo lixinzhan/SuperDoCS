@@ -3,6 +3,6 @@ from sxtweb import settings
 
 setup_environ(settings)
 
-from tegmine.models import *
+from xcalc.models import *
 
 print INSTITUTION_CODE

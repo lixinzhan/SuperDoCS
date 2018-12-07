@@ -28,7 +28,7 @@ href="{% load admin_static %}{{ STATIC_URL }}admin/css/dashboard.css" />
         <table summary="{% blocktrans with app.name as name %}Models available in the {{ name }} application.{% endblocktrans %}">
         <caption>
 <!--          <a href="{{ app.app_url }}" class="section"> -->
-            {% ifequal app.name 'Tegmine' %}
+            {% ifequal app.name 'Xcalc' %}
                {% trans "SuperDoCS" %}
             {% else %}
                {% blocktrans with app.name as name %}

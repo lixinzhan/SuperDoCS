@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.views.generic import RedirectView
 import django.contrib.auth.views as auth_views
-from tegmine.views import *
+from xcalc.views import *
 
 
 # Uncomment the next two lines to enable the admin:

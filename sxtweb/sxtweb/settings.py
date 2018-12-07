@@ -111,9 +111,9 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
-                'tegmine.context_processors.sxt_version',
-                'tegmine.context_processors.sxt_copyright',
-                'tegmine.context_processors.sxt_admin',
+                'xcalc.context_processors.sxt_version',
+                'xcalc.context_processors.sxt_copyright',
+                'xcalc.context_processors.sxt_admin',
             ],
         },
     },
@@ -132,7 +132,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     # User applications
-    'tegmine',
+    'xcalc',
     'resources',
     'xcalib',
 )
@@ -177,7 +177,7 @@ if not DEBUG:
 
 # For re-ordering the display in Admin and Commission
 ADMIN_REORDER = (
-    ('tegmine', ('TREATMENTPLAN')),
+    ('xcalc', ('TREATMENTPLAN')),
     ('resources', ('MACHINE', 'FILTER', 'CONE', 'ELECTROMETER', 'CHAMBER', 'DOCTOR')),
     ('xcalib', ('LOCALSTANDARD', 'MEASUREMENTSET', 'OUTPUTFACTOR', 
                 'CALIBRATION', 'NOMINALCALIBRATION')),
