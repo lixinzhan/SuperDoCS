@@ -26,6 +26,9 @@ class MuWatAirTable:
 
     def getMWAValue(self, HVLMaterial, HVLValue, IntpSpace='Logrithm'):
         '''Calculate MWA for a HVL value.'''
+        HVLmax=np.nan
+        HVLmin=np.nan
+        xcolumn=np.nan
         if HVLMaterial == 'Al':
             xcolumn = 1
             HVLmin = 2.9
@@ -35,7 +38,7 @@ class MuWatAirTable:
             HVLmin = 0.1
             HVLmax = 5.0
         else:
-            print('Incorrent HVLMaterial. Check Plese!')
+            print('Incorrent HVLMaterial. Check Please!')
 
         if min(HVLValue)<HVLmin or max(HVLValue)>HVLmax:
             return np.nan  # just use it for out of boundary checking.
