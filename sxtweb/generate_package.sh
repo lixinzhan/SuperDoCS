@@ -18,6 +18,9 @@ mkdir -p ${SITE}
 mkdir -p ${SITE}/sxtweb
 mkdir -p ${SITE}/protocols/TG61/Data
 mkdir -p ${SITE}/xcalc/templatetags
+mkdir -p ${SITE}/common
+mkdir -p ${SITE}/xcalib
+mkdir -p ${SITE}/resources
 
 #echo "Enter the INSTITUTION_CODE this build is for: "
 #read institut
@@ -41,12 +44,21 @@ sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py > ${SITE}/sxtweb/local.py
 cp sxtweb/urls.py ${SITE}/sxtweb/
 cp sxtweb/wsgi.py ${SITE}/sxtweb/
 cp sxtweb/sxt.db ${SITE}/sxtweb/
-mv sxtweb/*.so ${SITE}/sxtweb/
+cp sxtweb/*.so ${SITE}/sxtweb/
+
+cp common/__init__.py ${SITE}/common/
+cp common/*.so ${SITE}/common/
 
 cp xcalc/__init__.py ${SITE}/xcalc/
-mv xcalc/*.so ${SITE}/xcalc/
+cp xcalc/*.so ${SITE}/xcalc/
 
-mv protocols/TG61/*.so ${SITE}/protocols/TG61/
+cp xcalib/__init__.py ${SITE}/xcalib/
+cp xcalib/*.so ${SITE}/xcalib/
+
+cp resources/__init__.py ${SITE}/resources/
+cp resources/*.so ${SITE}/resources/
+
+cp protocols/TG61/*.so ${SITE}/protocols/TG61/
 cp protocols/TG61/__init__.py ${SITE}/protocols/TG61/
 cp protocols/__init__.py ${SITE}/protocols/
 

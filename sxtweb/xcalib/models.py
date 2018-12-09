@@ -239,7 +239,7 @@ class NOMINALCALIBRATION(models.Model):
     Comment = models.TextField(max_length=512,blank=True)   
 
     def __str__(self):
-        return '%s: %d' % (self.NCalibName, self.DR_Air)
+        return '%s: %.2f' % (self.NCalibName, self.DR_Air)
 
     class Meta:
         verbose_name = _('Nominal Calibration')

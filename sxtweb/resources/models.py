@@ -71,12 +71,8 @@ class FILTER(models.Model):
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     LastModifiedByUser = models.CharField(max_length=32,verbose_name=_('Last Modified By User'))
 
-    #def __unicode__(self):
-    #    return '%s, %s (%s %s, %d kV)' % \
-    #        (self.Machine.MachineName, self.FilterName, \
-    #         self.NominalHVL, self.HVLUnit, self.Energy)
     def __str__(self):
-        return '%s -- %s, %s %s, %d kV, %g mA' % (
+        return '%s -- %s, %s %s, %f kV, %g mA' % (
             self.FilterCode,
             self.Machine.MachineCode,
             self.NominalHVL,
@@ -134,7 +130,7 @@ class CONE(models.Model):
         return '%dx%d' % (self.Breadth, self.Width)
         
     def __str__(self):
-        return '%s -- %s, %s, FCD %d' % (
+        return '%s -- %s, %s, FCD %f' % (
             self.ConeCode,
             self.Machine.MachineCode,
             self.getConeShape(),
