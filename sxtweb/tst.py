@@ -1,8 +1,10 @@
-from django.core.management import setup_environ
-from sxtweb import settings
+import os
+import django
 
-setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sxtweb.settings")
 
-from xcalc.models import *
+# django.setup()
 
-print(INSTITUTION_CODE)
+from django.conf import settings
+
+print(settings.INSTITUTE)
