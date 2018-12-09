@@ -21,7 +21,7 @@ SITE_ID = 1
 SITE_NAME = 'Grand River Regional Cancer Centre' 
 INSTITUTE = SITE_NAME
 
-ALLOWED_HOSTS = ['192.168.17.129', '127.0.0.1', 'localhost', '[::1]' ]
+ALLOWED_HOSTS = ['192.168.17.134', '127.0.0.1', 'localhost', '[::1]' ]
 
 
 # Local time zone for this installation. Choices can be found here:
