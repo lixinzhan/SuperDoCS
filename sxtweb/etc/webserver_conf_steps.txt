@@ -1,0 +1,57 @@
+Steps for setting up server based on Apache2
+
+1. sudo apt install apache2
+
+
+2. Copy file
+
+cd ${PACKAGE}/etc/apache2/sites-available
+cp SUPERDOCS_Apache2SSL /etc/apache2/sites-available/
+
+
+3. replace string
+
+vi www/etc/apache2/sites-available/SUPERDOCS_Apache2SSL
+
+:%s/${SUPERDOCS_SITE}/superdocs.ca/g
+
+
+4. set permission
+
+cd /etc/apache2/sites-available
+sudo chown -R root:root superdocs.ca
+
+
+5. enable site
+
+cd /etc/apache2/sites-enabled
+sudo rm default
+ln -s /etc/apache2/sites-available/SUPERDOCS_Apache2SSL .
+
+6. specify log location
+
+cd /var/log/apache2
+sudo mkdir superdocs.ca
+sudo chown -R root:adm superdocs.ca
+
+7. install SSL certificate
+
+ssl_key_generate.sh
+ssh_key_install.sh
+
+8. mod-ssl, mod-rewrite
+
+sudo a2enmod ssl
+sudo a2enmod rewrite
+
+9. restart service
+
+sudo systemctl restart apache2
+
+
+
+
+
+
+
+

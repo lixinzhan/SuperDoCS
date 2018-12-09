@@ -1,6 +1,6 @@
-# for ${SUPERDOCS_SITE}
+# for superdocs.ca
 <VirtualHost *:80>
-    ServerName ${SUPERDOCS_SITE}
+    ServerName superdocs.ca
 
     Alias /media/ /export/www/sxtweb/media/
     Alias /static/ /export/www/sxtweb/static/
@@ -18,11 +18,11 @@
     </Directory>
 
     LogLevel info
-    ErrorLog /var/log/apache2/${SUPERDOCS_SITE}/errors.log
-    CustomLog /var/log/apache2/${SUPERDOCS_SITE}/access.log combined
+    ErrorLog /var/log/apache2/superdocs.ca/errors.log
+    CustomLog /var/log/apache2/superdocs.ca/access.log combined
 
-    WSGIDaemonProcess ${SUPERDOCS_SITE} processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
-    WSGIProcessGroup ${SUPERDOCS_SITE}
+    WSGIDaemonProcess superdocs.ca processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
+    WSGIProcessGroup superdocs.ca
     WSGIScriptAlias / /export/www/sxtweb/sxtweb/wsgi.py
     WSGIApplicationGroup %{GLOBAL}
 
@@ -41,9 +41,9 @@
 
 </VirtualHost>
 
-# for ${SUPERDOCS_SITE} ssl
+# for superdocs.ca ssl
 <VirtualHost *:443>
-    ServerName ${SUPERDOCS_SITE}
+    ServerName superdocs.ca
 
     Alias /media/ /export/www/sxtweb/media/
     Alias /static/ /export/www/sxtweb/static/
@@ -61,11 +61,11 @@
     </Directory>
 
     LogLevel info
-    ErrorLog /var/log/apache2/${SUPERDOCS_SITE}/errors.log
-    CustomLog /var/log/apache2/${SUPERDOCS_SITE}/access.log combined
+    ErrorLog /var/log/apache2/superdocs.ca/errors.log
+    CustomLog /var/log/apache2/superdocs.ca/access.log combined
 
-    # WSGIDaemonProcess ${SUPERDOCS_SITE} processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
-    WSGIProcessGroup ${SUPERDOCS_SITE}
+    # WSGIDaemonProcess superdocs.ca processes=2 threads=15 display-name=%{GROUP} python-path=/export/www/sxtweb
+    WSGIProcessGroup superdocs.ca
     WSGIScriptAlias / /export/www/sxtweb/sxtweb/wsgi.py
     WSGIApplicationGroup %{GLOBAL}
 
@@ -78,8 +78,8 @@
     
     # SSL stuff
     SSLEngine On
-    SSLCertificateFile /etc/ssl/certs/${SUPERDOCS_SITE}.crt
-    SSLCertificateKeyFile /etc/ssl/private/${SUPERDOCS_SITE}.key
+    SSLCertificateFile /etc/ssl/certs/superdocs.ca.crt
+    SSLCertificateKeyFile /etc/ssl/private/superdocs.ca.key
     <LOCATION />
         SSLRequireSSL On
         SSLVerifyClient none

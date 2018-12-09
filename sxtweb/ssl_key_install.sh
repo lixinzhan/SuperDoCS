@@ -10,4 +10,4 @@ sudo chown root:root /etc/ssl/certs/${SUPERDOCS_SITE}.crt
 sudo chown root:ssl-cert /etc/ssl/private/${SUPERDOCS_SITE}.key
 sudo chmod 644 /etc/ssl/certs/${SUPERDOCS_SITE}.crt
 sudo chmod 640 /etc/ssl/private/${SUPERDOCS_SITE}.key
-sudo rm -rf OpenSSL
+# sudo rm -rf OpenSSL
