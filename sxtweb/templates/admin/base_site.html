@@ -1,7 +1,9 @@
 {% extends "admin/base.html" %}
 {% load i18n admin_reorder_tag %}
+{% load i18n static %}
 
 {% block title %}{{ title }} | {% trans 'SuperDoCS' %}{% endblock %}
+{% block stylesheet %}{% static "admin/css/base_admin.css" %}{% endblock %}
 
 {% block branding %}
 {% admin_reorder %}
