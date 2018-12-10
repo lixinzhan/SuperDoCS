@@ -18,12 +18,12 @@
 <div id="promptbar">
     <div id="bar-prompt">
         {% if user.is_active %}
-        {% trans 'Welcome to SuperDoCS, you can now <a href="/plan/current/">
-           Create a New Treatment Plan</a>' %}
+        {% trans 'Welcome to SuperDoCS, you can now' %}
+           <a href="/plan/new/">{% trans 'Create a New Treatment Plan' %}</a>
         {% trans 'or' %}
         <a href="/plansearch/">{% trans 'Search an Existing Plan for Editing/QA' %}</a>
         {% else %}
-        {% trans 'Please <a href="/">LOGIN</a> first' %}
+        {% trans 'Please' %} <a href="/">{% trans 'LOGIN' %}</a> {% trans 'first' %}
         {% endif %}
     </div>
 </div>

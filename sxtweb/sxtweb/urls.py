@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^plan_export/csv/(\w+)$', csv_export_page,name='csv_export_page'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
     # url(r'^commission/', include(admin.site.urls)),
