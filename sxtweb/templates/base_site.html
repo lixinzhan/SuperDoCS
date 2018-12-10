@@ -128,7 +128,8 @@
     <div id="bar-prompt">
     {% ifequal site_tab 'home' %}
         {% if user.is_active %}
-        {% trans 'Welcome to SuperDoCS, you can now <a href="/plan/current/">Create a New Treatment Plan</a>' %}
+        {% trans 'Welcome to SuperDoCS, you can now' %}
+        <a href="/plan/new/">{% trans 'Create a New Treatment Plan' %}</a>
         {% trans 'or' %}
         <a href="/plansearch/">{% trans 'Search an Existing Plan for Editing/QA' %}</a>
         {% else %}
