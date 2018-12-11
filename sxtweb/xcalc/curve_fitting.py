@@ -1,5 +1,23 @@
 import numpy as np
-from .UserCodes.rof_customize import CustomizedROF
+from .UserCodes.rof_customize import CustomizedCutoutROF
+
+def getCutoutFactor(ROFTable, Dequiv):
+    if ROFTable.FitMethod == 'Default':
+        P  = ROFTable.P
+        S  = ROFTable.S
+        L = ROFTable.L
+        N  = ROFTable.N
+        U = ROFTable.U
+        x  = Dequiv   # * 15 / 15.2
+        CutoutROF = P * x**N / (L**N+x**N) + S * (1.0-np.exp(-U*x))
+
+    elif ROFTable.FitMethod == 'Customized':
+        CutoutROF = CustomizedCutoutROF(ROFTable, Dequiv)
+    else:
+        raise LookupError('E1000') # unknown fitting method
+        
+    return CutoutROF
+    
 
 def getROF(ROFTable, Dequiv, HasCutout=False, CutoutThickness=0):
     ''' ROFTable: Table in DB contains ConeFactor and ROF fitting parameters
@@ -17,21 +35,6 @@ def getROF(ROFTable, Dequiv, HasCutout=False, CutoutThickness=0):
             
     if not HasCutout:
         return ROFTable.ConeFactor
-    
-    # get ROF based on the fitting method, default or customer provided.
-    if ROFTable.FitMethod == 'Default':
-        P  = ROFTable.P
-        S  = ROFTable.S
-        L = ROFTable.L
-        N  = ROFTable.N
-        U = ROFTable.U
-        x  = Dequiv   # * 15 / 15.2
-        ROF = ROFTable.ConeFactor * (
-                P * x**N / (L**N+x**N) + S * (1.0-np.exp(-U*x))
-            )
-    elif ROFTable.FitMethod == 'Customized':
-        ROF = CustomizedROF(ROFTable, Dequiv)
-    else:
-        raise LookupError('E1000') # unknown fitting method
-        
-    return ROF
+
+    return ROFTable.ConeFactor * getCutoutFactor(ROFTable, Dequiv)
+

@@ -1,10 +1,16 @@
 import numpy as np
 
-def CustomizedROF(ROFTable, Dequiv):
-    ''' ROFTable: Table in DB contains ConeFactor and ROF fitting parameters
+def CustomizedCutoutROF(ROFTable, Dequiv):
+    ''' ROFTable: Table in DB contains ConeFactor and 
+            CutoutROF fitting parameters: A, B, C, D, E, F, G.
+
         Dequiv: Equivalent Diameter (Cutout End if HasCutout)
+
+        Users can implement the fitting equation here.
+        Otherwise, the cutout factor is default to 1.0 for all cutouts,
+        which should result in the change of final results < 1.0% in most cases.
     '''
 
-    ROF=1.0
+    CutoutROF=1.0
     
-    return ROF
+    return CutoutROF

@@ -1,6 +1,14 @@
+import os
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sxtweb.settings")
+
+from django.conf import settings
+
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
+
+#print(settings.INSTITUTE)
 
 ext_modules = [
         Extension("sxtweb.version",["sxtweb/version.py"]),
@@ -43,7 +51,7 @@ ext_modules = [
 
 setup(
 	name = 'sxtweb',
-	version='2.0',
+	version=settings.VERSION,
 	description='SuperDoCS',
 	author='Lixin Zhan',
 	author_email='lixinzhan@gmail.com',
