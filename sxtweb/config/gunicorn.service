@@ -1,0 +1,18 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+# WorkingDirectory=/var/www/SuperDoCS_2.0-Alpha1
+WorkingDirectory=$CWD
+ExecStart=/home/lzhan/env-python3-django-1.11/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          sxtweb.wsgi:application
+[Install]
+WantedBy=multi-user.target
+
