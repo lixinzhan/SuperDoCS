@@ -41,7 +41,6 @@ cp -rf protocols/TG61/Data ${SITE}/protocols/TG61/
 
 cp sxtweb/__init__.py ${SITE}/sxtweb/
 cp sxtweb/settings.py ${SITE}/sxtweb/
-cp sxtweb/version.py ${SITE}/sxtweb/
 sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py > ${SITE}/sxtweb/local.py
 cp sxtweb/urls.py ${SITE}/sxtweb/
 cp sxtweb/wsgi.py ${SITE}/sxtweb/

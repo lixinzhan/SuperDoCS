@@ -8,7 +8,8 @@ User=www-data
 Group=www-data
 WorkingDirectory=/home/lzhan/SuperDoCS/sxtweb
 ExecStart=/home/lzhan/SuperDoCS/sxtweb/.env/bin/gunicorn \
-          --access-logfile - \
+          --access-logfile /home/lzhan/SuperDoCS/sxtweb/log/access.log \
+          --access-logfile /home/lzhan/SuperDoCS/sxtweb/log/access.log \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
           sxtweb.wsgi:application
