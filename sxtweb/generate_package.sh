@@ -30,8 +30,10 @@ mkdir -p ${SITE}/resources
 python setup.py build_ext --inplace 
 python manage.py collectstatic
 
-cp -rf etc media static templates ${SITE}
+cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
+cp -rf www-configure.sh ${SITE}
+cp -rf config ${SITE}
 cp -rf xcalc/UserCodes ${SITE}/xcalc/
 cp -rf xcalc/static ${SITE}/xcalc/
 cp -rf xcalc/templatetags ${SITE}/xcalc/

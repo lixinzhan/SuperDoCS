@@ -6,9 +6,8 @@ After=network.target
 [Service]
 User=www-data
 Group=www-data
-# WorkingDirectory=/var/www/SuperDoCS_2.0-Alpha1
-WorkingDirectory=$CWD
-ExecStart=/home/lzhan/env-python3-django-1.11/bin/gunicorn \
+WorkingDirectory=/home/lzhan/SuperDoCS/sxtweb
+ExecStart=/home/lzhan/SuperDoCS/sxtweb/.env/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
