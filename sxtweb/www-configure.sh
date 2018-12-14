@@ -26,19 +26,19 @@ sudo add-apt-repository universe
 if [[ $(dpkg -l python3-dev | grep '^ii') = *python3-dev* ]]; then
     echo "python3-dev was previously installed!"
 else
-    echo sudo apt install python3-dev
+    echo sudo apt install -y python3-dev
 fi
 
 if [[ $(dpkg -l nginx | grep '^ii') == *python3-venv* ]]; then
     echo "python3-venv was previously installed!"
 else
-    sudo apt install python3-venv
+    sudo apt install -y python3-venv
 fi
 
 if [[ $(dpkg -l nginx | grep '^ii') == *nginx* ]]; then
     echo "nginx was previously installed!"
 else
-    sudo apt install nginx
+    sudo apt install -y nginx
 fi
 
 
@@ -71,8 +71,8 @@ sudo ln -s $CWD/config/gunicorn.service /etc/systemd/system/
 
 sed -i "s:listen.*:listen $PORT;:g" config/superdocs_nginx.conf
 sed -i "s:server_name.*:server_name $HOSTNAME 127.0.0.1;:g" config/superdocs_nginx.conf
-sed -i "s:alias.*media;:alias $CWD/media;:g" config/superdocs_nginx.conf
-sed -i "s:alias.*static;:alias $CWD/static;:g" config/superdocs_nginx.conf
+sed -i "s:alias.*media;:alias $CWD/media/;:g" config/superdocs_nginx.conf
+sed -i "s:alias.*static;:alias $CWD/static/;:g" config/superdocs_nginx.conf
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo rm -f /etc/nginx/sites-enabled/superdocs_nginx.conf
 sudo rm -f /etc/nginx/sites-available/superdocs_nginx.conf
