@@ -32,13 +32,13 @@ fi
 if [[ $(dpkg -l nginx | grep '^ii') == *python3-venv* ]]; then
     echo "python3-venv was previously installed!"
 else
-    echo sudo apt install python3-venv
+    sudo apt install python3-venv
 fi
 
 if [[ $(dpkg -l nginx | grep '^ii') == *nginx* ]]; then
     echo "nginx was previously installed!"
 else
-    echo sudo apt install nginx
+    sudo apt install nginx
 fi
 
 
