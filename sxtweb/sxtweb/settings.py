@@ -170,10 +170,12 @@ LOGGING = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 if not DEBUG:
-    # for security and https connection.
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+    SESSION_COOKIE_SECURE = False
+    # for security and https connection. 
+    # I am commenting below for non-secure conections.
+    #SESSION_COOKIE_SECURE = True
+    #CSRF_COOKIE_SECURE = True
+    #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
 # For re-ordering the display in Admin and Commission
 ADMIN_REORDER = (

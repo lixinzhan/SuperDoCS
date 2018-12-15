@@ -7,16 +7,16 @@ PRJ=$(basename $CWD)
 ENV=$(pwd)/.env
 PORT=8000
 HOSTNAME=$(ip route get 1 | awk '{print $7;exit}' | head -1)
-UID=$(id -u)
-GID=$(id -g)
+USRID=$(id -u)
+GRPID=$(id -g)
 
-echo CWD:  $CWD
-echo PRJ:  $PRJ
-echo ENV:  $ENV
-echo PORT: $PORT
-echo HOST: $HOSTNAME
-echo UID:  $UID
-echo GID:  $GID
+echo CWD:   $CWD
+echo PRJ:   $PRJ
+echo ENV:   $ENV
+echo PORT:  $PORT
+echo HOST:  $HOSTNAME
+echo USRID: $USRID
+echo GRPID: $GRPID
 
 # add universe.
 sudo add-apt-repository universe
@@ -41,19 +41,32 @@ else
     sudo apt install -y nginx
 fi
 
+# create log files
+if [ ! -d log ]; then
+    mkdir log
+fi
+if [ ! -e log/access.log ]; then
+    touch log/access.log
+fi
+if [ ! -e log/error.log ]; then
+    touch log/error.log
+fi
 
 # seup virtual environment
-sudo chown -R $UID:$GID .
+sudo chown -R $USRID:$GRPID .
 python3 -m venv .env
 source .env/bin/activate
 pip install -r config/requirements.txt
 deactivate
 echo "Setting up virtual environment done!"
+echo
 
 # stop services gunicorn and nginx
 sudo systemctl stop gunicorn.socket
+echo "Services gunicorn stopped!"
 sudo systemctl stop nginx
-echo "Services gunicorn and nginx stopped!"
+echo "Services nginx stopped!"
+echo
 
 #
 # setup services for gunicorn and nginx.
@@ -71,8 +84,8 @@ sudo ln -s $CWD/config/gunicorn.service /etc/systemd/system/
 
 sed -i "s:listen.*:listen $PORT;:g" config/superdocs_nginx.conf
 sed -i "s:server_name.*:server_name $HOSTNAME 127.0.0.1;:g" config/superdocs_nginx.conf
-sed -i "s:alias.*media;:alias $CWD/media/;:g" config/superdocs_nginx.conf
-sed -i "s:alias.*static;:alias $CWD/static/;:g" config/superdocs_nginx.conf
+sed -i "s:alias.*media/;:alias $CWD/media/;:g" config/superdocs_nginx.conf
+sed -i "s:alias.*static/;:alias $CWD/static/;:g" config/superdocs_nginx.conf
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo rm -f /etc/nginx/sites-enabled/superdocs_nginx.conf
 sudo rm -f /etc/nginx/sites-available/superdocs_nginx.conf

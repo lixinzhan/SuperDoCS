@@ -21,9 +21,6 @@ mkdir -p ${SITE}/xcalc/templatetags
 mkdir -p ${SITE}/common
 mkdir -p ${SITE}/xcalib
 mkdir -p ${SITE}/resources
-mkdir -p ${SITE}/log
-touch ${SITE}/access.log
-touch ${SITE}/error.log
 
 #echo "Enter the INSTITUTION_CODE this build is for: "
 #read institut
