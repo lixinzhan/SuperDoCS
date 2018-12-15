@@ -18,6 +18,13 @@ echo HOST:  $HOSTNAME
 echo USRID: $USRID
 echo GRPID: $GRPID
 
+# First check Linux version: Debian/Ubuntu or Redhat/CentOS.
+if [[ $(apt -v | head -1) -ne "apt" ]]; then
+    echo "Your system is not Debian/Ubuntu based."
+    echo "This setup script is not supporting your OS yet."
+    exit
+fi
+
 # add universe.
 sudo add-apt-repository universe
 
