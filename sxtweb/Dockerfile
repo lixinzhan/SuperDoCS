@@ -1,34 +1,23 @@
 # start from an official image
 FROM ubuntu:18.04
 
-# add packages
-RUN apt-get update
-RUN apt-get -y install python3 python3-dev
-RUN apt-get -y install python3-django
-RUN apt-get -y install python3-docutils
-RUN apt-get -y install python3-numpy
-RUN apt-get -y install python3-scipy
-RUN apt-get -y install python3-xhtml2pdf
-RUN apt-get -y install cython3
-RUN apt-get -y install gunicorn3
-
 # setup environment variables
 ENV prj SuperDoCS
 ENV ver 2.0-Alpha1
 
+# add packages
+RUN apt-get update && \
+    apt-get -y install python3 python3-dev python3-django \
+                       python3-docutils python3-numpy python3-scipy \
+                       python3-xhtml2pdf gunicorn3
+
 # Copy package file
-COPY SuperDoCS_2.0-Alpha1*.tar.gz /var/www/
+COPY ${prj}_${ver}*.tar.gz /var/www/
 WORKDIR /var/www/
-RUN tar zxvf SuperDoCS_2.0-Alpha1*.tar.gz
+RUN tar zxvf ${prj}_${ver}*.tar.gz
 
 # location of the project
-#WORKDIR /var/www/SuperDoCS_2.0-Alpha1/config
-
-# install requirements
-#RUN pip3 install -r requirements.txt
-
-# location of the project
-WORKDIR /var/www/SuperDoCS_2.0-Alpha1/
+WORKDIR /var/www/${prj}_${ver}/
 
 # expose port 8000
 EXPOSE 8000
