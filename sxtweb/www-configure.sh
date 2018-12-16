@@ -111,6 +111,6 @@ sudo systemctl enable nginx
 echo "Services nginx started!"
 
 echo
-echo "Web server for SuperDoCS done! Please check by visiting http://$HOSTNAME:8000/ :)"
+echo "Web server for SuperDoCS done! Please check by visiting http://$HOSTNAME:$PORT/ :)"
 echo
 
