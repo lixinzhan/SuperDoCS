@@ -6,25 +6,27 @@ networks:
 
 services:
   superdocs:
+    env_file: docker-compose.env
     build: .
     volumes:
-      - sxt_vol:/var/www/SXTSITE/sxtweb
-      - static_vol:/var/www/SXTSITE/static
-      - media_vol:/var/www/SXTSITE/media
-      - usercodes_vol:/var/www/SXTSITE/xcalc/UserCodes
-      - nginxconf_vol:/var/www/SXTSITE/config/nginx_conf.d
+      - sxt_vol:/var/www/$${SXTSITE}/sxtweb
+      - static_vol:/var/www/$${SXTSITE}/static
+      - media_vol:/var/www/$${SXTSITE}/media
+      - usercodes_vol:/var/www/$${SXTSITE}/xcalc/UserCodes
+      - nginxconf_vol:/var/www/$${SXTSITE}/config/nginx_conf.d
 #    ports:
 #      - "8000:8000"
     networks:
       - sxt_network
 
   nginx:
-    image: "nginx:1.15"
+    image: "nginx"
+    env_file: docker-compose.env
     ports:
       - "80:80"
     volumes:
-      - static_vol:/var/www/SXTSITE/static
-      - media_vol:/var/www/SXTSITE/media
+      - static_vol:/var/www/$${SXTSITE}/static
+      - media_vol:/var/www/$${SXTSITE}/media
       - nginxconf_vol:/etc/nginx/conf.d
     networks:
       - sxt_network

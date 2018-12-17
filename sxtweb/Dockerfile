@@ -6,14 +6,18 @@ LABEL maintainer: Lixin Zhan
 
 # setup environment variables
 ENV prj SuperDoCS
-ENV ver 2.0-Alpha1
-ENV prjroot /var/www/SuperDoCS_2.0-Alpha1
+ENV prj SuperDoCS
+ENV prjroot SuperDoCS_2.0-Alpha1
 
 # add packages
-RUN apt-get update && \
-    apt-get -y install python3 python3-dev python3-django \
-                       python3-docutils python3-numpy python3-scipy \
-                       python3-xhtml2pdf gunicorn3
+RUN apt-get update && apt-get install -y \
+    gunicorn3 \
+    python3 \
+    python3-django \
+    python3-docutils \
+    python3-numpy \
+    python3-xhtml2pdf \
+&& rm -rf /var/lib/apt/lists/*
 
 # Copy package file
 ADD ${prj}_${ver}*.tar.gz /var/www/
