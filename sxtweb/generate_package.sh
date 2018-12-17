@@ -13,6 +13,7 @@ DJANGO_VER=`python -c 'import django; print(django.get_version())'`
 PACKAGE="SuperDoCS"
 VERSION=`grep VERSION sxtweb/version.py | awk -F\' '{print $2}'`
 SITE=${PACKAGE}_${VERSION}
+PRJ=${PACKAGE}
 
 mkdir -p ${SITE}
 mkdir -p ${SITE}/sxtweb
@@ -34,20 +35,27 @@ cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
 cp -rf www-configure.sh ${SITE}
 
+##########################################################################################
+#
+# docker related.
+#
 sed -i "s:^ENV prj .*:ENV prj ${PACKAGE}:g" Dockerfile
-sed -i "s:^ENV ver .*:ENV prj ${VERSION}:g" Dockerfile
-sed -i "s:^ENV prjroot .*:ENV prjroot /var/www/${SITE}:g" Dockerfile
+sed -i "s:^ENV ver .*:ENV ver ${VERSION}:g" Dockerfile
+sed -i "s:^ENV prjroot .*:ENV prjroot /var/www/${PRJ}:g" Dockerfile
 cp -rf Dockerfile ${SITE}
 
-sed -i "s|sxt_vol:/var.*|sxt_vol:/var/www/${SITE}/sxtweb|g" docker-compose.yml
-sed -i "s|static_vol:/var.*|static_vol:/var/www/${SITE}/static|g" docker-compose.yml
-sed -i "s|media_vol:/var.*|media_vol:/var/www/${SITE}/media|g" docker-compose.yml
-sed -i "s|usercodes_vol:/var.*|usercodes_vol:/var/www/${SITE}/xcalc/UserCodes|g" docker-compose.yml
-sed -i "s|nginxconf_vol:/var.*|nginxconf_vol:/var/www/${SITE}/config/nginx_conf.d|g" docker-compose.yml
+sed -i "s|sxt_vol:/var.*|sxt_vol:/var/www/${PRJ}/sxtweb|g" docker-compose.yml
+sed -i "s|static_vol:/var.*|static_vol:/var/www/${PRJ}/static|g" docker-compose.yml
+sed -i "s|media_vol:/var.*|media_vol:/var/www/${PRJ}/media|g" docker-compose.yml
+sed -i "s|usercodes_vol:/var.*|usercodes_vol:/var/www/${PRJ}/xcalc/UserCodes|g" docker-compose.yml
+sed -i "s|nginxconf_vol:/var.*|nginxconf_vol:/var/www/${PRJ}/config/nginx_conf.d|g" docker-compose.yml
 sed -i "s|nginxconf_vol:/etc.*|nginxconf_vol:/etc/nginx/conf.d|g" docker-compose.yml
 cp -rf docker-compose.yml ${SITE}
+#
+# docker related done.
+#
+##########################################################################################
 
-sed -i "s:SXTSITE:${SITE}:g" config/nginx_conf.d/superdocs_nginx.conf 
 cp -rf config ${SITE}
 cp -rf xcalc/UserCodes ${SITE}/xcalc/
 cp -rf xcalc/static ${SITE}/xcalc/
