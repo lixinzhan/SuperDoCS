@@ -1,9 +1,13 @@
 # start from an official image
 FROM ubuntu:18.04
 
+# Information
+LABEL maintainer: Lixin Zhan
+
 # setup environment variables
 ENV prj SuperDoCS
 ENV ver 2.0-Alpha1
+ENV prjroot /var/www/SuperDoCS_2.0-Alpha1
 
 # add packages
 RUN apt-get update && \
@@ -12,15 +16,17 @@ RUN apt-get update && \
                        python3-xhtml2pdf gunicorn3
 
 # Copy package file
-COPY ${prj}_${ver}*.tar.gz /var/www/
-WORKDIR /var/www/
-RUN tar zxvf ${prj}_${ver}*.tar.gz
-
-# location of the project
-WORKDIR /var/www/${prj}_${ver}/
+ADD ${prj}_${ver}*.tar.gz /var/www/
 
 # expose port 8000
 EXPOSE 8000
+
+# volume
+VOLUME ["${prjroot}/sxtweb", "${prjroot}/static", "${prjroot}/media", \
+        "${prjroot}/config/nginx_config.d", "${prjroot}/xcalc/UserCodes"]
+
+# location of the project
+WORKDIR ${prjroot}
 
 # define the default command to run when starting the container
 CMD ["gunicorn3", "--bind", ":8000", "sxtweb.wsgi:application"]
