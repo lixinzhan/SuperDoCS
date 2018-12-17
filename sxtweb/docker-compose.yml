@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  sxt_network:
+    driver: bridge
+
+services:
+  superdocs:
+    build: .
+    volumes:
+      - sxt_vol:/var/www/SuperDoCS_2.0-Alpha1/sxtweb
+      - static_vol:/var/www/SuperDoCS_2.0-Alpha1/static
+      - media_vol:/var/www/SuperDoCS_2.0-Alpha1/media
+      - usercodes_vol:/var/www/SuperDoCS_2.0-Alpha1/xcalc/UserCodes
+      - nginxconf_vol:/var/www/SuperDoCS_2.0-Alpha1/config/nginx_conf.d
+#    ports:
+#      - "8000:8000"
+    networks:
+      - sxt_network
+
+  nginx:
+    image: "nginx:1.15"
+    ports:
+      - "80:80"
+    volumes:
+      - static_vol:/var/www/SuperDoCS_2.0-Alpha1/static
+      - media_vol:/var/www/SuperDoCS_2.0-Alpha1/media
+      - nginxconf_vol:/etc/nginx/conf.d
+    networks:
+      - sxt_network
+    depends_on:
+      - superdocs
+
+volumes:
+  static_vol:
+  media_vol:
+  sxt_vol:
+  usercodes_vol:
+  nginxconf_vol:
+
