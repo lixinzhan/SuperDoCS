@@ -6,8 +6,8 @@ LABEL maintainer: Lixin Zhan
 
 # setup environment variables
 ENV prj SuperDoCS
-ENV prj SuperDoCS
-ENV prjroot /var/www/SuperDoCS_2.0-Alpha1
+ENV ver 2.0-Alpha1
+ENV prjroot /var/www/SuperDoCS
 
 # add packages
 RUN apt-get update && apt-get install -y \
@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
 
 # Copy package file
 ADD ${prj}_${ver}*.tar.gz /var/www/
+RUN mv /var/www/${prj}_${ver} ${prjroot}
 
 # expose port 8000
 EXPOSE 8000
