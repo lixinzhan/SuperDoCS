@@ -33,7 +33,13 @@ python manage.py collectstatic
 cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
 cp -rf www-configure.sh ${SITE}
+cp -rf Dockerfile ${SITE}
+sed -i "s:^ENV prj .*:ENV prj ${PACKAGE}:g" ${SITE}/Dockerfile
+sed -i "s:^ENV ver .*:ENV prj ${VERSION}:g" ${SITE}/Dockerfile
+sed -i "s:^ENV prjroot .*:ENV prj ${SITE}:g" ${SITE}/Dockerfile
+sed "s:SXTSITE:${SITE}:g" docker-compose.yml > ${SITE}/docker-compose.yml
 cp -rf config ${SITE}
+sed -i "s:SXTSITE:${SITE}:g" ${SITE}/config/nginx_conf.d/superdocs_nginx.conf 
 cp -rf xcalc/UserCodes ${SITE}/xcalc/
 cp -rf xcalc/static ${SITE}/xcalc/
 cp -rf xcalc/templatetags ${SITE}/xcalc/
