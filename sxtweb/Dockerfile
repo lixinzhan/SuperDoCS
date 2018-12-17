@@ -7,7 +7,7 @@ LABEL maintainer: Lixin Zhan
 # setup environment variables
 ENV prj SuperDoCS
 ENV prj SuperDoCS
-ENV prjroot SuperDoCS_2.0-Alpha1
+ENV prjroot /var/www/SuperDoCS_2.0-Alpha1
 
 # add packages
 RUN apt-get update && apt-get install -y \
@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     python3-django \
     python3-docutils \
     python3-numpy \
+    python3-scipy \
     python3-xhtml2pdf \
 && rm -rf /var/lib/apt/lists/*
 
@@ -27,7 +28,7 @@ EXPOSE 8000
 
 # volume
 VOLUME ["${prjroot}/sxtweb", "${prjroot}/static", "${prjroot}/media", \
-        "${prjroot}/config/nginx_config.d", "${prjroot}/xcalc/UserCodes"]
+        "${prjroot}/config/nginx_conf.d", "${prjroot}/xcalc/UserCodes"]
 
 # location of the project
 WORKDIR ${prjroot}
