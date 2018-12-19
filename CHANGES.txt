@@ -22,7 +22,7 @@ python manage.py migrate --fake
 For this step, code is tagged as: Apps_resources_xcalib_added.
 
 
-*** 20180205 ***
+*** 20181205 ***
 
 Lots of problems in changing the schema. Hence will break the migration path 
 from 1.x series to create a new schema.
@@ -34,6 +34,18 @@ Considering the migration break, will go directly to Python 3 then.
 Made the changes to Python 3.
 
 
-*** 20180206 ***
+*** 20181206 ***
 
 Migrated to Py3 and got a working copy.
+
+
+*** 20181211 ***
+
+First release of Alpha version. 
+
+
+*** 20181218 ***
+
+Script and docker installation implemented.
+
+
