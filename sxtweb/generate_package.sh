@@ -34,6 +34,7 @@ python manage.py collectstatic
 cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
 cp -rf www-configure.sh ${SITE}
+cp -rf ../LICENSE ${SITE}
 
 ##########################################################################################
 #
