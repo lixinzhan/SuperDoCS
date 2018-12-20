@@ -1,8 +1,5 @@
 import numpy as np
-#from mpl_toolkits.mplot3d import axes3d
-#import matplotlib.pyplot as plt
 import scipy.interpolate as intp
-from io import StringIO
 
 class HVLAlCu:
     def __init__(self):
