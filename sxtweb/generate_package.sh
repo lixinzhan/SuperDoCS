@@ -6,9 +6,9 @@ OS_VER=`lsb_release -a 2>&1 | grep "Release" | awk '{print $2}'`
 HW_PLATFORM=`uname -i`
 GCC_VER=`gcc -v 2>&1 | tail -1 | awk '{print $3}'`
 GLIBC_VER=`ldd --version | head -1 | awk -F\) '{print $2}' | awk '{print $1}'`
-PYTHON_VER=`python -V 2>&1 | awk '{print $2}'`
-#CYTHON_VER=`cython -V 2>&1 | awk '{print $3}'`
-DJANGO_VER=`python -c 'import django; print(django.get_version())'`
+PYTHON_VER=`python3 -V 2>&1 | awk '{print $2}'`
+#CYTHON_VER=`cython3 -V 2>&1 | awk '{print $3}'`
+DJANGO_VER=`python3 -c 'import django; print(django.get_version())'`
 
 PACKAGE="SuperDoCS"
 VERSION=`grep VERSION sxtweb/version.py | awk -F\' '{print $2}'`
@@ -28,8 +28,8 @@ mkdir -p ${SITE}/resources
 #sed "s/^INSTITUTION_CODE\ =.*/INSTITUTION_CODE\ =\ \'${institut}\'/" xcalc/models.py > xcalc/models_2build.py
 
 # prepare binary and static files
-python setup.py build_ext --inplace 
-python manage.py collectstatic
+python3 setup.py build_ext --inplace 
+python3 manage.py collectstatic
 
 cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
