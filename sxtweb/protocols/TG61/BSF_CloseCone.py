@@ -1,6 +1,6 @@
 import numpy as np
 #import scipy.interpolate as intp
-from io import StringIO
+from io import BytesIO
 import os
 from bisect import *
 
@@ -55,7 +55,7 @@ class BSF_CloseCone:
                 print('End of File')
 
         return fld,hvl_Al, hvl_Cu, \
-               np.resize( np.genfromtxt(StringIO(thisentry),dtype='f'),(mx,my) )            
+               np.resize( np.genfromtxt(BytesIO(thisentry.encode()),dtype='f'),(mx,my) )            
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''

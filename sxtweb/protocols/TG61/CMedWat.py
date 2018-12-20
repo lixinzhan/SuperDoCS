@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.interpolate as intp
-from io import StringIO
 from protocols.TG61.HVLAlCu import HVLAlCu
 #from HVLAlCu import HVLAlCu
 import os.path

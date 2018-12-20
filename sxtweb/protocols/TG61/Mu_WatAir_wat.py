@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.interpolate as intp
-from io import StringIO
 import os
 
 class MuWatAirTable:
