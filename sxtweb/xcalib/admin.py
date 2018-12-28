@@ -15,6 +15,7 @@ class LOCALSTANDARDAdmin(admin.ModelAdmin):
         ('Calibration Results', {'fields': ['Nk', 'Nx']}),
         ('Misc Information', {'fields': ['CalibratedBy', 'CalibrationDate','Comment']}),
     ]
+    list_display = ('LocalStandardId', 'Electrometer', 'Chamber', 'HVL', 'HVLUnit', 'Nk')
 admin.site.register(LOCALSTANDARD, LOCALSTANDARDAdmin)
 
 #########################################################
@@ -46,7 +47,12 @@ class MEASUREMENTSETAdmin(admin.ModelAdmin):
          ('Misc Information', {'fields': ['CalibratedByUser', 'CalibrationDate', 'Comment']}),
          ('Results', {'fields': ['XCalFactor', 'Nk', 'Nx']}),
      ]
+     def Cross_Calib_Factor(self, obj):
+         return "%.3f" % obj.XCalFactor
+     def Nk_Calibd(self, obj):
+         return "%.3f" % obj.Nk
      readonly_fields = ('XCalFactor', 'Nk', 'Nx')
+     list_display = ('MSetName', 'Electrometer', 'Chamber', 'Cross_Calib_Factor', 'Nk_Calibd')
 
 admin.site.register(MEASUREMENTSET, MEASUREMENTSETAdmin)
 
@@ -58,6 +64,7 @@ class OUTPUTFACTORAdmin(admin.ModelAdmin):
         ('Fitting Parameters for Sauver\'s Equation', {'fields': ['P','S','L','U','N']}),
         ('Parameters for Customized Curve Fitting', {'fields': ['A','B','C','D','E','F','G']}),
     ]
+    list_display = ('ROFName', 'Filter', 'Cone', 'ConeFactor', 'FitMethod')
 admin.site.register(OUTPUTFACTOR, OUTPUTFACTORAdmin)
 
 #########################################################
@@ -89,6 +96,11 @@ class CALIBRATIONAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ('P_elec','P_stem','P_tp','P_pol','P_ion','P_isf',
         'MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd') #,'DR_Air','DR_Water')
+    def Air_Kerma_Rate(self, obj):
+        return "%.3f" % obj.DR_Air
+    def Dose_Rate_in_Water(self, obj):
+        return "%.3f" % obj.DR_Water
+    list_display = ('CalibName', 'Filter', 'Cone', 'Status', 'Air_Kerma_Rate', 'Dose_Rate_in_Water')
 admin.site.register(CALIBRATION, CALIBRATIONAdmin)
 
 
@@ -96,7 +108,8 @@ admin.site.register(CALIBRATION, CALIBRATIONAdmin)
 class NOMINALCALIBRATIONForm(forms.ModelForm):
     class Meta:
         model = NOMINALCALIBRATION
-        fields = '__all__'
+        exclude = ['DR_Water']
+        # fields = '__all__'
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         try:
@@ -104,10 +117,13 @@ class NOMINALCALIBRATIONForm(forms.ModelForm):
         except:
             self.dr_unit = 'cGy/MU or cGy/min'
         self.fields['DR_Air'].label = _('Air Kerma Rate in Air') + ' (' + self.dr_unit+')'
-        self.fields['DR_Water'].label = _('Dose Rate at Water Surface') + ' (' + self.dr_unit + ')'
+        # self.fields['DR_Water'].label = _('Dose Rate at Water Surface') + ' (' + self.dr_unit + ')'
 
 class NOMINALCALIBRATIONAdmin(admin.ModelAdmin):
     form = NOMINALCALIBRATIONForm
+    def Air_Kerma_Rate(self, obj):
+        return "%.3f" % obj.DR_Air
+    list_display = ('NCalibName', 'Filter', 'Cone', 'Status', 'Air_Kerma_Rate')
 
 admin.site.register(NOMINALCALIBRATION, NOMINALCALIBRATIONAdmin)
 
