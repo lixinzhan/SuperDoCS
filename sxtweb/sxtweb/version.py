@@ -1,7 +1,7 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '2.0-Alpha2' # Version
+VERSION = '2.0-Alpha3' # Version
 
 #
 # Format: DB-CALC-TEMPL
