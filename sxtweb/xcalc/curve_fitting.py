@@ -3,21 +3,37 @@ from .UserCodes.rof_customize import CustomizedCutoutROF
 
 def getCutoutFactor(ROFTable, Dequiv):
     if ROFTable.FitMethod == 'Default':
-        P  = ROFTable.P
-        S  = ROFTable.S
-        L = ROFTable.L
-        N  = ROFTable.N
+        P = ROFTable.P
+        S = ROFTable.S
         U = ROFTable.U
-        x  = Dequiv
+        L = ROFTable.L
+        N = ROFTable.N
+        x = Dequiv
         CutoutROF = P * x**N / (L**N+x**N) + S * (1.0-np.exp(-U*x))
     elif ROFTable.FitMethod == 'Exponential':
-        P  = ROFTable.P
-        S  = ROFTable.S
-        L = ROFTable.L
-        N  = ROFTable.N
+        P = ROFTable.P
+        S = ROFTable.S
         U = ROFTable.U
-        x  = Dequiv
-        CutoutROF = P + S * (1.0-np.exp(-U*x+L))
+        x = Dequiv
+        CutoutROF = P + S * (1.0-np.exp(-U*x))
+    elif ROFTable.FitMethod == 'Polynomial2':
+        P = ROFTable.P
+        S = ROFTable.S
+        U = ROFTable.U
+        x = Dequiv
+        CutoutROF = P + S*x + U*x**2 
+    elif ROFTable.FitMethod == 'Polynomial3':
+        P = ROFTable.P
+        S = ROFTable.S
+        U = ROFTable.U
+        L = ROFTable.L
+        x = Dequiv
+        CutoutROF = P + S*x + U*x**2 + L*x**3
+    elif ROFTable.FitMethod == 'Linear':
+        P = ROFTable.P
+        S = ROFTable.S
+        x = Dequiv
+        CutoutROF = P + S*x
     elif ROFTable.FitMethod == 'Customized':
         CutoutROF = CustomizedCutoutROF(ROFTable, Dequiv)
     else:
