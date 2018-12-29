@@ -8,9 +8,16 @@ def getCutoutFactor(ROFTable, Dequiv):
         L = ROFTable.L
         N  = ROFTable.N
         U = ROFTable.U
-        x  = Dequiv   # * 15 / 15.2
+        x  = Dequiv
         CutoutROF = P * x**N / (L**N+x**N) + S * (1.0-np.exp(-U*x))
-
+    elif ROFTable.FitMethod == 'Exponential':
+        P  = ROFTable.P
+        S  = ROFTable.S
+        L = ROFTable.L
+        N  = ROFTable.N
+        U = ROFTable.U
+        x  = Dequiv
+        CutoutROF = P + S * (1.0-np.exp(-U*x+L))
     elif ROFTable.FitMethod == 'Customized':
         CutoutROF = CustomizedCutoutROF(ROFTable, Dequiv)
     else:
