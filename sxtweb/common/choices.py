@@ -69,6 +69,10 @@ APPRV_STATUS_CHOICES = (
 )
 CURVE_FITTING_CHOICES = (
     ('Default', _('Default')),
+    ('Exponential', _('Exponential')),
+    ('Polynomial2', _('Polynomial2')),
+    ('Polynomial3', _('Polynomial3')),
+    ('Linear', _('Linear')),
     ('Customized',  _('Customized')),
 )
 CONE_END_CHOICES = (
