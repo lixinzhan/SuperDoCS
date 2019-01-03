@@ -16,6 +16,14 @@ def getCutoutFactor(ROFTable, Dequiv):
         U = ROFTable.U
         x = Dequiv
         CutoutROF = P + S * (1.0-np.exp(-U*x))
+    elif ROFTable.FitMethod == 'Hill':
+        P = ROFTable.P
+        S = ROFTable.S
+        U = ROFTable.U
+        L = ROFTable.L
+        N = ROFTable.N
+        x = Dequiv
+        CutoutROF = P * x**N / (L**N+x**N)
     elif ROFTable.FitMethod == 'Polynomial2':
         P = ROFTable.P
         S = ROFTable.S
