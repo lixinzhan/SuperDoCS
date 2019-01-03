@@ -61,7 +61,7 @@ class OUTPUTFACTORAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['ROFName', 'Filter', 'Cone', 'ConeFactor']}),
         ('Fitting Related', {'fields': ['DequivMax', 'DequivMin', 'CutoutThickness', 'FitMethod']}),
-        ('Fitting Parameters for Sauver\'s Equation', {'fields': ['P','S','L','U','N']}),
+        ('Fitting Parameters for Builtin Fitting Options', {'fields': ['P','S','U','L','N']}),
         ('Parameters for Customized Curve Fitting', {'fields': ['A','B','C','D','E','F','G']}),
     ]
     list_display = ('ROFName', 'Filter', 'Cone', 'ConeFactor', 'FitMethod')

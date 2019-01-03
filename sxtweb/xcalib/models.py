@@ -239,7 +239,13 @@ class NOMINALCALIBRATION(models.Model):
     Comment = models.TextField(max_length=512,blank=True)   
 
     def __str__(self):
-        return '%s: %.2f' % (self.NCalibName, self.DR_Air)
+        if (self.Filter.Machine.OutputControl == 'MU'): 
+            DRUnit = 'cGy/MU'
+        elif (self.Filter.Machine.OutputControl == 'min'):
+            DRUnit = 'cGy/min'
+        else:
+            DRUnit = 'Unknown'
+        return '%s -- %.2f %s, %s' % (self.Filter.FilterCode, self.DR_Air, DRUnit, self.NCalibName)
 
     class Meta:
         verbose_name = _('Nominal Calibration')

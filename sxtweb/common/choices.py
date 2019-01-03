@@ -68,8 +68,9 @@ APPRV_STATUS_CHOICES = (
     ('UnApproved',_('UnApproved')),   # unset previous physics approval status.
 )
 CURVE_FITTING_CHOICES = (
-    ('Default', _('Default')),
+    ('Default', _('Hill-Exponential')),
     ('Exponential', _('Exponential')),
+    ('Hill', _('Hill')),
     ('Polynomial2', _('Polynomial2')),
     ('Polynomial3', _('Polynomial3')),
     ('Linear', _('Linear')),
