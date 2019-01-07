@@ -61,6 +61,7 @@ cp -rf config ${SITE}
 cp -rf xcalc/UserCodes ${SITE}/xcalc/
 cp -rf xcalc/static ${SITE}/xcalc/
 cp -rf xcalc/templatetags ${SITE}/xcalc/
+cp -rf xcalib/static ${SITE}/xcalib/
 cp -rf protocols/TG61/Data ${SITE}/protocols/TG61/
 
 cp sxtweb/__init__.py ${SITE}/sxtweb/
