@@ -76,19 +76,37 @@ class CALIBRATION(models.Model):
                                          choices=CALIBRATION_METHOD_CHOICES,
                                          verbose_name=_('Calibration Method'))
     Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
-    MeasurementSet = models.ForeignKey(MEASUREMENTSET, related_name="%(app_label)s_%(class)s_MeasurementSet",
-                                       verbose_name=_('Measurement Set'), on_delete=models.CASCADE)
+
+    MeasurementSet = models.ForeignKey(MEASUREMENTSET, 
+                                       related_name="%(app_label)s_%(class)s_MeasurementSet",
+                                       verbose_name=_('Measurement Set'), 
+                                       on_delete=models.CASCADE)
+    P_elec = models.FloatField(default=1.0) # 1.0 if Electrometer-Chamber Calibrated together
+    P_stem = models.FloatField(default=1.0,
+                               verbose_name=_('Stem Factor')) # 1.0 by default for stem correction
+
     FDD = models.FloatField(verbose_name=_("Focal Detector Dist. (cm)"))
+    P_isf = models.FloatField(default=0.0, verbose_name=_('Inverse Square Factor'))
+
     Pressure = models.FloatField(verbose_name=_("Pressure (mm Hg)"))
     Temperature = models.FloatField(verbose_name=_("Temperature (Celsius)"))    
-    BeamDuration = models.FloatField(verbose_name=_("Beam Duration (min or MU)"))
+    P_tp = models.FloatField(default=0.0)
 
+    BeamDuration = models.FloatField(verbose_name=_("Beam Duration"))
+    DurationUnit = models.CharField(max_length=16, default="MU", 
+                                    choices=OUTPUT_CONTROL_CHOICES,
+                                    verbose_name=_('Duration Unit'))
+
+    Has_Pion_Ppol = models.BooleanField(default=False)
     V_std = models.FloatField(default=300,verbose_name=_("Standard Voltage"))
     M_std = models.FloatField(verbose_name=_("Reading Average (for V_std)"))
     V_opp = models.FloatField(default=-300,verbose_name=_("Opposite Voltage"))
     M_opp = models.FloatField(verbose_name=_("Reading Average (for V_opp)"))
     V_low = models.FloatField(default=150,verbose_name=_("Low Voltage"))
     M_low = models.FloatField(verbose_name=_("Reading Average (for V_low)"))
+    P_pol = models.FloatField(default=0.0)
+    P_ion = models.FloatField(default=0.0)
+
             
     MeasurementDate = models.DateField(verbose_name=_("Measured On"))
     MeasuredByUser = models.CharField(max_length=32,verbose_name=_('Measured By'))
@@ -97,13 +115,6 @@ class CALIBRATION(models.Model):
                                           verbose_name=_('Last Modified By User')) # default to current user in views.py
     Comment = models.TextField(max_length=512,blank=True)    
     
-    P_elec = models.FloatField(default=1.0) # 1.0 if Electrometer-Chamber Calibrated together
-    P_stem = models.FloatField(default=1.0,verbose_name=_('Stem Factor')) # 1.0 by default for stem correction
-    P_tp = models.FloatField(default=0.0)
-    P_pol = models.FloatField(default=0.0)
-    P_ion = models.FloatField(default=0.0)
-    P_isf = models.FloatField(default=0.0)
-
     MassAbs_WatAir_air = models.FloatField(default=0.0,verbose_name=_("Mass Abs. Coeff. (Water to Air in Air)"))
     BSF_Wat = models.FloatField(default=0.0, verbose_name=_("Back Scattering Factor for Water"))
     BSF_ConeEnd = models.FloatField(default=0.0, 
