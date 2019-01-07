@@ -84,23 +84,36 @@ class CALIBRATIONForm(forms.ModelForm):
 class CALIBRATIONAdmin(admin.ModelAdmin):
     form = CALIBRATIONForm
     fieldsets = [
-        (None,  {'fields':['CalibName', 'Filter', 'Cone', 'CalibrationMethod','Status']}),
-        ('Measurements', {'fields':['MeasurementSet','FDD','BeamDuration', 
-        ('Pressure','Temperature'), 
+        (None,  {'fields':['CalibName', ('Filter', 'Cone'), 
+        ('CalibrationMethod','Status')]}),
+        ('Measurements', {'fields':['MeasurementSet', 
+        ('P_elec', 'P_stem'),
+        ('FDD','P_isf'), 
+        ('BeamDuration','DurationUnit'), 
+        ('Pressure','Temperature', 'P_tp'), 
+        'Has_Pion_Ppol',
         ('V_std', 'M_std'), ('V_opp', 'M_opp'), ('V_low', 'M_low'),
-        'MeasurementDate', 'MeasuredByUser']}),
+        ('P_pol','P_ion'),
+        ('MeasurementDate', 'MeasuredByUser')
+        ]}),
         ('Comments', {'fields': ['Comment']}),
-        ('Intermediate values', {'fields': [('P_elec','P_stem','P_tp'),('P_pol','P_ion','P_isf'),
+        ('Intermediate values', {'fields': [
         ('MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd')]}),
         ('Calibration Results', {'fields': ['DR_Air','DR_Water']})
     ]
-    readonly_fields = ('P_elec','P_stem','P_tp','P_pol','P_ion','P_isf',
-        'MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd') #,'DR_Air','DR_Water')
+    readonly_fields = ('MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd') 
+
     def Air_Kerma_Rate(self, obj):
         return "%.3f" % obj.DR_Air
     def Dose_Rate_in_Water(self, obj):
         return "%.3f" % obj.DR_Water
-    list_display = ('CalibName', 'Filter', 'Cone', 'Status', 'Air_Kerma_Rate', 'Dose_Rate_in_Water')
+    list_display = ('CalibName', 'Filter', 'Cone', 'Status', 
+                    'Air_Kerma_Rate', 'Dose_Rate_in_Water')
+    class Media:
+        js = (
+            'admin/js/jquery.min.js',
+            'admin/js/dyn_calib.js',
+            )
 admin.site.register(CALIBRATION, CALIBRATIONAdmin)
 
 
