@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    $('#id_V_std').prop("readonly", true);
+    $('#id_V_opp').prop("readonly", true);
+    $('#id_V_low').prop("readonly", true);
+
+//// Show or Hide measurements for low/opp voltages
     $('#id_Has_Pion_Ppol').is(':checked')?hideOppLow():showOppLow();
     $('#id_Has_Pion_Ppol').click(function() {
         $(this).is(':checked')?hideOppLow():showOppLow();
@@ -18,6 +23,36 @@ $(document).ready(function(){
         $('#id_M_low').parent('div').parent('div').show();
         $('#id_P_ion').prop("readonly", true);
         $('#id_P_pol').prop("readonly", true);
+    }
+
+//// Automatic calculate P_ion and Ppol
+    $('#id_M_std').change(function() {
+        updatePion();
+        updatePpol();
+    });
+    $('#id_M_opp').change(function() {
+        updatePpol();
+    });
+    $('#id_M_low').change(function() {
+        updatePion();
+    });
+    function updatePion() {
+        if ($('#id_Has_Pion_Ppol').is(':not(:checked)')) {
+            var vh = parseFloat($('#id_V_std').val());
+            var vl = parseFloat($('#id_V_low').val());
+            var mh = parseFloat($('#id_M_std').val());
+            var ml = parseFloat($('#id_M_low').val());
+            var pion = (1.0-(vh/vl)**2)/(mh/ml-(vh/vl)**2);
+            $('#id_P_ion').val(pion);
+        }
+    }
+    function updatePpol() {
+        if ($('#id_Has_Pion_Ppol').is(':not(:checked)')) {
+            var mstd = parseFloat($('#id_M_std').val());
+            var mopp = parseFloat($('#id_M_opp').val());
+            var ppol = Math.abs((mstd-mopp)/(2.0*mstd));
+            $('#id_P_pol').val(ppol);
+        }
     }
 
 //// Automatic calculation of P_isf
@@ -45,4 +80,19 @@ $(document).ready(function(){
         $('#id_P_tp').val(ptp);
         $('#id_P_tp').prop("readonly", true);
     }
+
+//// Display Units for DR_Air and DR_Water
+    var kerma = 'Air Kerma Rate in Air (cGy/';
+    var dose = 'Dose Rate at Water Surface (cGy/';
+    var punit = $('#id_DurationUnit option:selected').val();
+    var pend = '):';
+    $('label[for="id_DR_Air"]').text(kerma+punit+pend);
+    $('label[for="id_DR_Water"]').text(dose+punit+pend);
+    $('#id_DurationUnit').change(function() {
+        punit = $('#id_DurationUnit option:selected').val();
+        $('label[for="id_DR_Air"]').text(kerma+punit+pend);
+        $('label[for="id_DR_Water"]').text(dose+punit+pend);
+    });
+
 })
+
