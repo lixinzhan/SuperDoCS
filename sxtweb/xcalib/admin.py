@@ -72,20 +72,20 @@ class CALIBRATIONForm(forms.ModelForm):
     class Meta:
         model = CALIBRATION
         fields = '__all__'
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        try:
-            self.dr_unit = 'cGy/' + self.instance.Filter.Machine.OutputControl
-        except:
-            self.dr_unit = 'cGy/MU or cGy/min'
-        self.fields['DR_Air'].label = _('Air Kerma Rate in Air') + ' (' + self.dr_unit+')'
-        self.fields['DR_Water'].label = _('Dose Rate at Water Surface') + ' (' + self.dr_unit + ')'
+    #def __init__(self, *args, **kwargs):
+    #    super().__init__(*args, **kwargs)
+    #    try:
+    #        self.dr_unit = 'cGy/' + self.instance.Filter.Machine.OutputControl
+    #    except:
+    #        self.dr_unit = 'cGy/MU or cGy/min'
+    #    self.fields['DR_Air'].label = _('Air Kerma Rate in Air') + ' (' + self.dr_unit+')'
+    #    self.fields['DR_Water'].label = _('Dose Rate at Water Surface') + ' (' + self.dr_unit + ')'
 
 class CALIBRATIONAdmin(admin.ModelAdmin):
     form = CALIBRATIONForm
     fieldsets = [
-        (None,  {'fields':['CalibName', ('Filter', 'Cone'), 
-        ('CalibrationMethod','Status')]}),
+        (None,  {'fields':['CalibName', 'Filter', 'Cone', 
+        'CalibrationMethod','Status']}),
         ('Measurements', {'fields':['MeasurementSet', 
         ('P_elec', 'P_stem'),
         ('FDD','P_isf'), 

@@ -97,7 +97,8 @@ class CALIBRATION(models.Model):
                                     choices=OUTPUT_CONTROL_CHOICES,
                                     verbose_name=_('Duration Unit'))
 
-    Has_Pion_Ppol = models.BooleanField(default=False)
+    Has_Pion_Ppol = models.BooleanField(default=False,
+                        verbose_name=_('User Specify Pion Ppol'))
     V_std = models.FloatField(default=300,verbose_name=_("Standard Voltage"))
     M_std = models.FloatField(verbose_name=_("Reading Average (for V_std)"))
     V_opp = models.FloatField(default=-300,verbose_name=_("Opposite Voltage"))
@@ -128,17 +129,18 @@ class CALIBRATION(models.Model):
         self.P_tp = 760.0 * (self.Temperature+273.2)/(self.Pressure*295.2)
         self.P_isf = (self.FDD/self.Cone.FSD)**2
         
-        mp = math.fabs(self.M_std)
-        mn = math.fabs(self.M_opp)
-        self.P_pol = (mp+mn)/(2.0*mp)
+        if not self.Has_Pion_Ppol:
+            mp = math.fabs(self.M_std)
+            mn = math.fabs(self.M_opp)
+            self.P_pol = (mp+mn)/(2.0*mp)
         
-        mh = math.fabs(self.M_std)
-        ml = math.fabs(self.M_low)
-        vh = math.fabs(self.V_std)
-        vl = math.fabs(self.V_low)
-        mhl = (mh+0.0)/ml
-        vhl = (vh+0.0)/vl
-        self.P_ion = (1-vhl**2)/(mhl-vhl**2)
+            mh = math.fabs(self.M_std)
+            ml = math.fabs(self.M_low)
+            vh = math.fabs(self.V_std)
+            vl = math.fabs(self.V_low)
+            mhl = (mh+0.0)/ml
+            vhl = (vh+0.0)/vl
+            self.P_ion = (1-vhl**2)/(mhl-vhl**2)
         
         mu = Mu_WatAir_air()
         self.MassAbs_WatAir_air = mu.getValue(self.Filter.HVLUnit,
