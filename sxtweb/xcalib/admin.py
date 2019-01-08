@@ -96,12 +96,15 @@ class CALIBRATIONAdmin(admin.ModelAdmin):
         ('P_pol','P_ion'),
         ('MeasurementDate', 'MeasuredByUser')
         ]}),
-        ('Comments', {'fields': ['Comment']}),
         ('Intermediate values', {'fields': [
         ('MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd')]}),
-        ('Calibration Results', {'fields': ['DR_Air','DR_Water']})
+        ('Calibration Results', {'fields': ['DR_Air','DR_Water']}),
+        ('Comments', {'fields': ['Comment']}),
     ]
     readonly_fields = ('MassAbs_WatAir_air','BSF_Wat','BSF_ConeEnd') 
+    formfield_overrides = {
+        models.TextField: {'widget':forms.Textarea (attrs={'rows':3,'cols':80})},
+    }
 
     def Air_Kerma_Rate(self, obj):
         return "%.3f" % obj.DR_Air

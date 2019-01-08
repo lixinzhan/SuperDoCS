@@ -12,6 +12,7 @@ $(document).ready(function(){
     $('input[name="_addanother"]').hide();
     $('input[name="_continue"]').val("Calculate and Save");
 
+    //$('label[for="id_Has_Pion_Ppol"]').attr("required", true);
 
 //// Show or Hide measurements for low/opp voltages
     $('#id_Has_Pion_Ppol').is(':checked')?hideOppLow():showOppLow();
