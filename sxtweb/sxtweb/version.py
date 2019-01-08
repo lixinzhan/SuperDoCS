@@ -9,7 +9,7 @@ VERSION = '2.0-Alpha3' # Version
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D20-C100-T100'
+REVISION = 'D21-C100-T101'
 
 #
 # DB Schema Revision
@@ -17,6 +17,8 @@ REVISION = 'D20-C100-T100'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 2.1: 2019-01-07
+#   Added Has_Pion_Ppol and DurationUnit to Calibration.
 # 2.0: 2018-12-07
 #   Big change to DB Schema. Resources, Calibration, and Calculation are fully separated.
 #   It is not compatible with DB Schema 1.x any more.
@@ -28,7 +30,7 @@ REVISION = 'D20-C100-T100'
 # 1.0: 2012-11-20
 #   First creation of this entry based on Ver. 1.0b4.
 #
-DB_SCHEMA='2.0'
+DB_SCHEMA='2.1'
 
 #
 # Copyright Information.
