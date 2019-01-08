@@ -19,7 +19,7 @@ echo USRID: $USRID
 echo GRPID: $GRPID
 
 # First check Linux version: Debian/Ubuntu or Redhat/CentOS.
-if [[ $(apt -v | head -1) -ne "apt" ]]; then
+if [[ $(apt -v | head -1 | cut -d " " -f1) -ne "apt" ]]; then
     echo "Your system is not Debian/Ubuntu based."
     echo "This setup script is not supporting your OS yet."
     exit
