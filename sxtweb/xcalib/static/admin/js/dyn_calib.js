@@ -1,7 +1,17 @@
 $(document).ready(function(){
+    // Force the voltages to be readonly
     $('#id_V_std').prop("readonly", true);
     $('#id_V_opp').prop("readonly", true);
     $('#id_V_low').prop("readonly", true);
+
+    // Force correction factors to be readonly
+    $('#id_P_isf').prop("readonly", true);
+    $('#id_P_tp').prop("readonly", true);
+
+    // Hide and/or change button name
+    $('input[name="_addanother"]').hide();
+    $('input[name="_continue"]').val("Calculate and Save");
+
 
 //// Show or Hide measurements for low/opp voltages
     $('#id_Has_Pion_Ppol').is(':checked')?hideOppLow():showOppLow();
@@ -60,9 +70,8 @@ $(document).ready(function(){
         var fdd = $('#id_FDD').val();
         var fcd = $('#id_Cone option:selected').text().split("FCD")[1];
         var isf = (fdd/parseFloat(fcd))**2;
-        $('#id_P_isf').prop("readonly", false);
+        //$('#id_P_isf').prop("readonly", false);
         $('#id_P_isf').val(isf);
-        $('#id_P_isf').prop("readonly", true);
     });
 
 //// Automatic calculation of P_tp
@@ -76,9 +85,8 @@ $(document).ready(function(){
         var presr = parseFloat($('#id_Pressure').val());
         var tempr = parseFloat($('#id_Temperature').val());
         var ptp = 760.0*(tempr+273.2)/(presr*295.2);
-        $('#id_P_tp').prop("readonly", false);
+        //$('#id_P_tp').prop("readonly", false);
         $('#id_P_tp').val(ptp);
-        $('#id_P_tp').prop("readonly", true);
     }
 
 //// Display Units for DR_Air and DR_Water
@@ -92,6 +100,20 @@ $(document).ready(function(){
         punit = $('#id_DurationUnit option:selected').val();
         $('label[for="id_DR_Air"]').text(kerma+punit+pend);
         $('label[for="id_DR_Water"]').text(dose+punit+pend);
+        $('#id_DR_Air').val(0.0);
+        $('#id_DR_Water').val(0.0);
+    });
+
+//// Handling DR_Air and DR_Water
+    $('form#calibration_form :input').change(function(event) {
+        if (event.target.id=='id_CalibName') { return; }
+        if (event.target.id=='id_Comment') { return; }
+        if (event.target.id=='id_Status') { return; }
+        if (event.target.id=='id_MeasurementDate') { return; }
+        if (event.target.id=='id_MeasuredByUser') { return; }
+        if (event.target.type=='submit') { return; }
+        $('#id_DR_Air').val(0.0);
+        $('#id_DR_Water').val(0.0);
     });
 
 })
