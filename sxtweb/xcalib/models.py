@@ -258,7 +258,11 @@ class NOMINALCALIBRATION(models.Model):
             DRUnit = 'cGy/min'
         else:
             DRUnit = 'Unknown'
-        return '%s -- %.2f %s, %s' % (self.Filter.FilterCode, self.DR_Air, DRUnit, self.NCalibName)
+        # return '%s -- %.2f %s, %s' % 
+        #        (self.Filter.FilterCode, self.DR_Air, DRUnit, self.NCalibName)
+        return '%s -- %.2f %s, %g kV, %s' % (self.Filter.FilterCode, 
+                self.Filter.NominalHVL, self.Filter.HVLUnit, 
+                self.Filter.Energy, self.NCalibName)
 
     class Meta:
         verbose_name = _('Nominal Calibration')

@@ -72,13 +72,12 @@ class FILTER(models.Model):
     LastModifiedByUser = models.CharField(max_length=32,verbose_name=_('Last Modified By User'))
 
     def __str__(self):
-        return '%s -- %s, %s %s, %g kV, %g mA' % (
+        return '%s -- %s %s, %g kV, %s' % (
             self.FilterCode,
-            self.Machine.MachineCode,
             self.NominalHVL,
             self.HVLUnit,
             self.Energy,
-            self.Current)
+            self.Machine.MachineCode)
     
 class CONE(models.Model):
     ConeCode = models.CharField(max_length=2, unique=True,verbose_name=_("Applicator Code"))
@@ -130,11 +129,11 @@ class CONE(models.Model):
         return '%dx%d' % (self.Breadth, self.Width)
         
     def __str__(self):
-        return '%s -- %s, %s, FCD %g' % (
+        return '%s -- %s, FCD %g, %s' % (
             self.ConeCode,
-            self.Machine.MachineCode,
             self.getConeShape(),
-            self.FSD)
+            self.FSD,
+            self.Machine.MachineCode)
     class Meta:
         verbose_name_plural = _("Applicators")
 
