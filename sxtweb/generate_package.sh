@@ -105,7 +105,7 @@ echo "GCC Version:      ${GCC_VER}" >> ${SITE}/PLATFORM
 echo "Glibc Version:    ${GLIBC_VER}" >> ${SITE}/PLATFORM
 echo "Python Version:   ${PYTHON_VER}" >> ${SITE}/PLATFORM
 #echo "Cython Version:   ${CYTHON_VER}" >> ${SITE}/PLATFORM
-#echo "Django Version:   ${DJANGO_VER}" >> ${SITE}/PLATFORM
+echo "Django Version:   ${DJANGO_VER}" >> ${SITE}/PLATFORM
 
 tar zcvf ${PACKAGE}_${VERSION}_${OS_NAME}_${OS_VER}_${HW_PLATFORM}.tar.gz ${SITE}
 
