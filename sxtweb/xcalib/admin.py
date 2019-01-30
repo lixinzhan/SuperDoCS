@@ -42,7 +42,7 @@ class MEASUREMENTSETAdmin(admin.ModelAdmin):
      fieldsets = [
          (None, {'fields': ['MSetName', 'Electrometer', 'Chamber', 'Status']}),
          ('Calibrate Against', {'fields': ['LocalStandard']}),
-         ('Setup for X-Calib.', {'fields': ['Filter', 'Chamber']}),
+         ('Setup for X-Calib.', {'fields': ['Filter', 'Cone']}),
          ('Measurements', {'fields': ['M_LS', 'M_MS']}),
          ('Misc Information', {'fields': ['CalibratedByUser', 'CalibrationDate', 'Comment']}),
          ('Results', {'fields': ['XCalFactor', 'Nk', 'Nx']}),
