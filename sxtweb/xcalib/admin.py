@@ -52,7 +52,7 @@ class MEASUREMENTSETAdmin(admin.ModelAdmin):
      def Nk_Calibd(self, obj):
          return "%.3f" % obj.Nk
      readonly_fields = ('XCalFactor', 'Nk', 'Nx')
-     list_display = ('MSetName', 'Electrometer', 'Chamber', 'Cross_Calib_Factor', 'Nk_Calibd', 'Status')
+     list_display = ('MSetName', 'Electrometer', 'Chamber', 'Filter', 'Cross_Calib_Factor', 'Nk_Calibd', 'Status')
 
 admin.site.register(MEASUREMENTSET, MEASUREMENTSETAdmin)
 
