@@ -15,7 +15,7 @@ linux-source, python3-dev, python3, git are required.
 
 * Based on Python3 and Django 1.11.
 
-* Version 2.0 is to be released soon (The 2nd Beta release is available).
+* Version 2.0 is to be released soon (The 3nd Beta release is available).
 
 * Supports both script setup and docker installation for web services.
 
