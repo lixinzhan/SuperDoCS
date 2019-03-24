@@ -243,6 +243,7 @@ class NOMINALCALIBRATION(models.Model):
     NCalibName = models.CharField(max_length=32,unique=True,verbose_name=_('Nominal Calib. Name'))    
     Filter = models.ForeignKey(FILTER, on_delete=models.CASCADE)
     Cone = models.ForeignKey(CONE, on_delete=models.CASCADE)
+    ActualCalib = models.ForeignKey(CALIBRATION, on_delete=models.CASCADE)
     Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
     DR_Air = models.FloatField(default=0.0,verbose_name=_('Air Kerma Rate in Air (cGy/MU or cGy/min)'))
     DR_Water = models.FloatField(default=0.0,verbose_name=_('Dose Rate at Water Surface (cGy/MU or cGy/min)'))
