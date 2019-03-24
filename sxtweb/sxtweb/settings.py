@@ -151,19 +151,22 @@ LOGGING = {
         }
     },
     'handlers': {
-        'mail_admins': {
+        'file': {
+            ##'filters': ['require_debug_false'],
+            ##'class': 'django.utils.log.AdminEmailHandler'
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/django_debug.log',
+        },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
+        'django': {
+            'handlers': ['file'],
             'level': 'ERROR',
+            #'level': 'DEBUG',
             'propagate': True,
         },
-    }
+    },
 }
 
 # Expire the login session once browser closed.
