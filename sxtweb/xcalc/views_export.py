@@ -35,6 +35,8 @@ import cgi
 import csv
 import hashlib
 import platform
+import lxml.etree
+import lxml.builder
 
 #@login_required
 def pdf_export_page(request, planid):    
@@ -61,6 +63,87 @@ def pdf_export_page(request, planid):
         response['Content-Disposition'] = 'attachment; filename=%s' % fname_pdf
         return response
 
+#@login_required
+def xml_export_page(request, planid):
+    if planid=='new' or planid=='0':
+        return HttpResponseRedirect(reverse(plan_search_page))
+    
+    plan = get_object_or_404(TREATMENTPLAN, pk=planid)
+    
+    fname_xml = plan.PatientId+'_'+plan.Filter.Filter.Machine.MachineCode+'_'+planid+'.xml'
+    
+    response = HttpResponse(content_type='text/xml')
+    response['Content-Disposition'] = 'attachment; filename=%s' % fname_xml
+
+    E = lxml.builder.ElementMaker()
+    XSPEXPORT = E.XSPEXPORT
+    PLANEXPORT = E.PLANEXPORT
+
+    EXDT = E.EXPORTDATETIME
+    EXBY = E.EXPORTEDBY
+    DATAENC = E.DataEncrypted
+    PLANSRC = E.PlanSource
+    TXID = E.TreatmentId
+    PTID = E.PatientID
+    PTID2 = E.PatientSecID
+    LASTNAME = E.PatientLastName
+    FIRSTNAME = E.PatientFirstName
+    MIDNAME = E.PatientMiddleName
+    DOB = E.PatientDateOfBirth
+    SEX = E.PatientSex
+    BODYREGION = E.PatientBodyRegion
+    DIAG = E.PatientDiagnosis
+
+    DSN = E.DeviceSN
+    DOSTYPE = E.DosimetryType
+    IRRADF = E.IrradiationPerFractionAndBeam
+    NFRAC = E.NumberOfFractions
+    NBEAM = E.NumberOfBeams
+    DOSET = E.TotalDoseTargetVolume
+    DOSETB1 = E.TotalDoseBeam1
+    DOSEF = E.FractionDoseTargetVolume
+    DOSEFB1 = E.FractionDoseBeam1
+    FID = E.FilterID
+    FVOLT = E.FilterVoltage
+    FCURR = E.FilterCurrent
+    HVLTYPE = E.HVLType
+    HVL = E.HVLThickness
+    AID = E.ApplicatorID
+    ASHAPE = E.ApplicatorShape
+    ADIA = E.ApplicatorDiameter
+    ABREAD = E.ApplicatorBreadth
+    ALEN = E.ApplicatorLength
+    AWID = E.ApplicatorWidth
+    FSD = E.FocusSkinDistance
+    MD5 = E.MD5
+
+    exportdt = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+    exportedby = request.user.username
+    dataenc = 'false'
+    plansrc = 'SuperDoCS v2.0'
+    txid = plan.PlanName + '_' + planid
+    ptid = plan.PatientId
+    ptid2 = ''
+    lastname = plan.LastName
+    firstname = plan.FirstName
+    midname = plan.MiddleName
+    dob = datetime.datetime.strftime(plan.DOB,"%Y-%m-%d")
+    dsn = 'Xstrahl 200-GM0480'
+    dostype = '1'
+    irr_frac_beam = plan.Duration.tostring()
+    nfrac = plan.Fractions.tostring()
+    nbeam = '1'
+    doset = plan.TotalDose.tostring()
+    dosetb1 = plan.TotalDose.tostring()
+    dosefrac = (plan.TotalDose/plan.Fractions).tostring()
+    dosefracb1 = (plan.TotalDose/plan.Fractions).tostring()
+    fid = plan.Filter.FilterId
+    
+ 
+    
+
+
+#@login_required
 def csv_export_page(request, planid):
     if planid=='new' or planid=='0':
         return HttpResponseRedirect(reverse(plan_search_page))
