@@ -212,6 +212,20 @@ class TreatmentPlanForm(forms.ModelForm):
         if PrescriptionDepth != 0:
             raise forms.ValidationError(_('Non-ZERO depth NOT supported yet!'))
         return PrescriptionDepth
+
+    def clean_Fractions(self):
+        Fractions = self.cleaned_data['Fractions']
+        if Fractions <= 0:
+            raise forms.ValidationError(_('Fractions must be Positive Integer!'))
+        return Fractions
+
+    def clean_DOB(self):
+        DOB = self.cleaned_data['DOB']
+        if DOB > datetime.date.today():
+            raise forms.ValidationError(_('DOB cannot be in the future!'))
+        if DOB < datetime.date.today()-datetime.timedelta(days=365*150):
+            raise forms.ValidationError(_('More than 150 years old?'))
+        return DOB
     
     def clean(self):
         cleaned_data = super(TreatmentPlanForm, self).clean()
