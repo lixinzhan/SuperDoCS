@@ -257,7 +257,10 @@ def plan_edit_page(request, planid):
             planform = TreatmentPlanForm(instance=plan)
             
     try:
-        error = ErrorCode[errlist[0]] # django not supporting ugettext_lazy concatenate yet.
+        if errlist[0][:3]=='ERR':
+            error = errlist[0]
+        else:
+            error = ErrorCode[errlist[0]] # django not supporting ugettext_lazy concatenate yet.
     except: # usually out of index boundary, which means no error raised.
         error = ''
         

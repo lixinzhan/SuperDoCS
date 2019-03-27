@@ -1,7 +1,7 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '2.0-Beta3' # Version
+VERSION = '2.0-RC1' # Version
 
 #
 # Format: DB-CALC-TEMPL
@@ -35,7 +35,7 @@ DB_SCHEMA='2.1'
 #
 # Copyright Information.
 #
-COPYRIGHT = '(c) 2014-2018, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2019, Lixin Zhan @GRRCC'
 
 #
 # Make this unique, and don't share it with anybody.

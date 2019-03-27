@@ -156,30 +156,33 @@ def calcTxPlan(plan, errlist):
                                                  Status='Active')
         except:
             plan.ROF = 0
-            errlist.append('E0032')
+            errcode = 'ERR: CalibEntry '+str(CalibEntry)
+            errlist.append(errcode)
+            #errlist.append('E0032')
 
         try:   # plan.Filter is actually the calibration of a filter here.
             #ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
             ROFEntry = OUTPUTFACTOR.objects.get(Filter=CalibEntry.id, Cone=PlanConeId)
-            try:
-                plan.ROF=getROF(ROFEntry,plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
-            except ValueError as err:
-                plan.ROF = 0
-                errlist.append(err[0]) #'Cutout Out of Commissioned Range. '
-            except LookupError as err:
-                plan.ROF = 0
-                errlist.append(err[0]) #'Unknown Cutout REF Fitting Method. '
-            except:
-                plan.ROF = 0
-                errlist.append('E1004') #'Unknown Error in CurveFitting. '
-            #else:
-            #    plan.ROF = ROFEntry.ConeFactor
         except:
             plan.ROF = 0
-            errlist.append('E0033') #'Filter/Cone Combination Not Commissioned. '
+            errcode = 'ERR: '+str(ROFEntry)
+            errlist.append(errcode)
+            #errlist.append('E0033') #'Filter/Cone Combination Not Commissioned. '
+
+        try:
+            plan.ROF=getROF(ROFEntry, plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
+        except ValueError as err:
+            plan.ROF = 0
+            errlist.append(str(err)) #'Cutout Out of Commissioned Range. '
+        except LookupError as err:
+            plan.ROF = 0
+            errlist.append(str(err)) #'Unknown Cutout REF Fitting Method. '
+        except:
+            plan.ROF = 0
+            errlist.append('E1004') #'Unknown Error in CurveFitting. '
+        #else:
+        #    plan.ROF = ROFEntry.ConeFactor
         autoROF = plan.ROF
-    #else:
-    #    customROF = 
         
     # Air Kerma rate at target surface
     # plan.KR_air = plan.KR_air_CalibCone * plan.Filter.P_stem * plan.ISF * plan.ROF
@@ -195,7 +198,7 @@ def calcTxPlan(plan, errlist):
                                 plan.Filter.Filter.HVLUnit)
     except ValueError as err:
         plan.BSF_wat = 0.0
-        errlist.append(err[0]) #'Bw: FLD/HVL/FSD Out of Range. '
+        errlist.append(str(err)) #'Bw: FLD/HVL/FSD Out of Range. '
     if plan.Cone.ConeEnd=="Open":
         plan.BSF_ConeEnd = 1.0
     elif plan.Cone.ConeEnd=="PMMA3p2":
@@ -232,10 +235,10 @@ def calcTxPlan(plan, errlist):
                                      plan.Filter.Filter.HVLUnit, medium)
         except LookupError as err:
             plan.C_MedWat = 0
-            errlist.append(err[0]) #'CMedWat: Incorrect HVL Unit or Incorrect Material. '
+            errlist.append(str(err)) #'CMedWat: Incorrect HVL Unit or Incorrect Material. '
         except ValueError as err:
             plan.C_MedWat = 0
-            errlist.append(err[0]) #'CMedWat: HVL Out of Range. '
+            errlist.append(str(err)) #'CMedWat: HVL Out of Range. '
             
         if medium=='CompactBone':
             try:
@@ -245,7 +248,7 @@ def calcTxPlan(plan, errlist):
                                          plan.Filter.Filter.HVLUnit)
             except ValueError as err:
                 plan.B_MedWat = 0
-                errlist.append(err[0]) #'BSF_BoneWat: FLD/SSD/HVL Out of Table Range. '
+                errlist.append(str(err)) #'BSF_BoneWat: FLD/SSD/HVL Out of Table Range. '
             except:
                 plan.B_MedWat = 0
                 errlist.append('E0124') #'BSF_BoneWat: Unknow Error. '
