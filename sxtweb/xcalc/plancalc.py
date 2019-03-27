@@ -15,9 +15,6 @@ from common.errcode import ErrorCode
 from common.choices import *
 # from xcalib import *
 
-import logging
-logger = logging.getLogger(__name__)
-
 def copyPlanSetup(plan,oldplan):
     plan.PlanName          = oldplan.PlanName + '_copy'
     plan.PatientId         = oldplan.PatientId
@@ -150,14 +147,7 @@ def calcTxPlan(plan, errlist):
     
     if not plan.SpecifyROF:
         try:   # plan.Filter is actually the calibration of a filter here.
-            logger.error("+++--> ")
-            logger.error("+++--> Cone ID & Name: %s -- %s", plan.Cone.id, plan.Cone.ConeName)
-            logger.error("+++--> Nominal Calib ID & Name: %s -- %s", 
-                                 plan.Filter.id, plan.Filter.NCalibName)
-            logger.error("+++--> Actual Calib ID & Name: %s -- %s", 
-                                 plan.Filter.ActualCalib.id, plan.Filter.ActualCalib.CalibName)
-            ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.ActualCalib.id,Cone=plan.Cone.id)
-            logger.error("+++--> ROFEntry: %s \n", ROFEntry)
+            ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
             #if plan.CutoutRequired:
             try:
                 plan.ROF=getROF(ROFEntry,plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
