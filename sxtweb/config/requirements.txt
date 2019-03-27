@@ -6,3 +6,4 @@ scipy
 xhtml2pdf
 Cython
 gunicorn
+lxml
