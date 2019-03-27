@@ -6,7 +6,7 @@ LABEL maintainer: Lixin Zhan
 
 # setup environment variables
 ENV prj SuperDoCS
-ENV ver 2.0-RC1
+ENV ver 2.0-Beta3
 ENV prjroot /var/www/SuperDoCS
 
 # add packages
