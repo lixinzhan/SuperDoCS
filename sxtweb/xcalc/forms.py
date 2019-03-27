@@ -189,7 +189,8 @@ class TreatmentPlanForm(forms.ModelForm):
     B_MedWat = forms.FloatField(initial=0, widget=forms.HiddenInput)  # Bmed/Bwat. See Table XI and Eq. 12.
     DR_med = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Dose Rate at Medium Surface
     DosePerFrac = forms.FloatField(initial=0, widget=forms.HiddenInput)   # Dose Per Fraction
-    TxTime = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Treatment Time
+    #TxTime = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Treatment Time
+    TxTime = forms.CharField(initial='', widget=forms.HiddenInput)    # Treatment Time
     SXTCalcVersion = forms.CharField(widget=forms.HiddenInput)
     DoseCalibDate = forms.DateField(widget=forms.HiddenInput)
     ModifiedByUser = forms.CharField(widget=forms.HiddenInput)
@@ -212,6 +213,23 @@ class TreatmentPlanForm(forms.ModelForm):
         if PrescriptionDepth != 0:
             raise forms.ValidationError(_('Non-ZERO depth NOT supported yet!'))
         return PrescriptionDepth
+
+    def clean__DOB(self):
+        DOB = self.cleaned_data['DOB']
+        if DOB > datetime.date.today():
+            raise forms.ValidationError(_('DOB cannot be in the future!'))
+        if DOB < datetime.date.today()-datetime.timedelta(days=365*150):
+            raise forms.ValidationError(_('More than 150 years old?'))
+        return DOB
+
+    def clean_Fractions(self):
+        Fractions = self.cleaned_data['Fractions']
+        if Fractions <= 0:
+            raise forms.ValidationError(_('Fractions must be Positive Integer!'))
+        if Fractions > 50:
+            raise forms.ValidationError(_('More than 50 Fraction? Probably Not!'))
+        return Fractions
+
     
     def clean(self):
         cleaned_data = super(TreatmentPlanForm, self).clean()
