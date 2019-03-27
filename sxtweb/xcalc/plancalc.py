@@ -146,9 +146,21 @@ def calcTxPlan(plan, errlist):
     plan.KR_air_CalibCone = dr.DR_Air
     
     if not plan.SpecifyROF:
+        PlanFilterId = plan.Filter.Filter.id
+        PlanConeId   = plan.Cone.id
+        CalibFilterId = PlanFilterId
+        CalibConeId   = plan.Filter.Cone.id
+        try:
+            CalibEntry = CALIBRATION.objects.get(Filter=CalibFilterId,
+                                                 Cone=CalibConeId,
+                                                 Status='Active')
+        except:
+            plan.ROF = 0
+            errlist.append('E0032')
+
         try:   # plan.Filter is actually the calibration of a filter here.
-            ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
-            #if plan.CutoutRequired:
+            #ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
+            ROFEntry = OUTPUTFACTOR.objects.get(Filter=CalibEntry.id, Cone=PlanConeId)
             try:
                 plan.ROF=getROF(ROFEntry,plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
             except ValueError as err:
@@ -164,7 +176,7 @@ def calcTxPlan(plan, errlist):
             #    plan.ROF = ROFEntry.ConeFactor
         except:
             plan.ROF = 0
-            errlist.append('E0031') #'Filter/Cone Combination Not Commissioned. '
+            errlist.append('E0033') #'Filter/Cone Combination Not Commissioned. '
         autoROF = plan.ROF
     #else:
     #    customROF = 
