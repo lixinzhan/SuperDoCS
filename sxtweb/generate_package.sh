@@ -29,7 +29,7 @@ mkdir -p ${SITE}/resources
 
 # prepare binary and static files
 python3 setup.py build_ext --inplace 
-python3 manage.py collectstatic
+python3 manage.py collectstatic --noinput
 
 cp -rf media static templates ${SITE}
 cp -rf manage.py ${SITE}
