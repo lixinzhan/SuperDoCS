@@ -13,6 +13,8 @@ ErrorCode = {
     # django views
     'E0030': _('Unknown Error in views'),
     'E0031': _('Filter/Applicator set not calib\'d OR calib\'d more than once. '),
+    'E0032': _('None or more than one matching Active CALIBRATION found!'),
+    'E0033': _('No ROF found for the Filter/Applicator set!'),
     
     # --- for TG61 Data Processing --- #
     
