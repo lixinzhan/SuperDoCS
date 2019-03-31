@@ -55,6 +55,12 @@ HW_STATUS_CHOICES = (
     ('Retired', _('Retired')),
 )
 PLAN_STATUS_CHOICES = (
+    ('Active', _('Active')),
+    ('Completed', _('Completed')),  # treatment completed
+    ('Retired', _('Retired')),      # partial treatment and then new plan used.
+    ('Cancelled', _('Cancelled')),  # planned but never used.
+)
+PLAN_STATUS_CHOICES_ALL = (
     ('All', _('All')),
     ('Active', _('Active')),
     ('Completed', _('Completed')),  # treatment completed
@@ -62,6 +68,11 @@ PLAN_STATUS_CHOICES = (
     ('Cancelled', _('Cancelled')),  # planned but never used.
 )
 APPRV_STATUS_CHOICES = (
+    ('NotApproved', _('Not Apprv\'d')),
+    ('Approved',_('Approved')),
+    ('UnApproved',_('UnApproved')),   # unset previous physics approval status.
+)
+APPRV_STATUS_CHOICES_ALL = (
     ('All', _('All')),
     ('NotApproved', _('Not Apprv\'d')),
     ('Approved',_('Approved')),

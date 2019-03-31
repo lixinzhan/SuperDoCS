@@ -81,10 +81,10 @@ class PlanSearchForm(forms.Form):
     firstname = forms.CharField(label=_("First Name"), required=False)
     planname = forms.CharField(label=_("Plan Name"), required=False)
     planstatus = forms.ChoiceField(label=_("Status"),
-                                   choices=PLAN_STATUS_CHOICES,
+                                   choices=PLAN_STATUS_CHOICES_ALL,
                                    required=False)
     apprvstatus = forms.ChoiceField(label=_("Apprv"),
-                                   choices=APPRV_STATUS_CHOICES,
+                                   choices=APPRV_STATUS_CHOICES_ALL,
                                    required=False)
     orderby = forms.ChoiceField(label=_("Order"),
                               choices=ORDER_BY_CHOICES,
