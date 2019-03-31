@@ -21,14 +21,16 @@ class ConeAdmin(admin.ModelAdmin):
 admin.site.register(CONE,ConeAdmin)
 
 class ChamberAdmin(admin.ModelAdmin):
-    list_display = ('ChamberName','ChamberModel','SerialNumber')
+    list_display = ('ChamberName','ChamberModel','SerialNumber','Status')
 admin.site.register(CHAMBER, ChamberAdmin)
 
 class ElectrometerAdmin(admin.ModelAdmin):
-    list_display = ('ElectrometerName','ElectrometerModel','SerialNumber')
+    list_display = ('ElectrometerName','ElectrometerModel','SerialNumber','Status')
 admin.site.register(ELECTROMETER,ElectrometerAdmin)
 
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('StaffId','LastName','FirstName')
+    def Full_Name(self,obj):
+        return '{}, {} {}'.format(obj.LastName, obj.FirstName, obj.MiddleName)
+    list_display = ('StaffId','Full_Name', 'Status')
 admin.site.register(DOCTOR,DoctorAdmin)
 

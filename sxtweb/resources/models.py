@@ -16,6 +16,10 @@ class DOCTOR(models.Model):
     StaffId = models.CharField(max_length=16,unique=True,verbose_name=_('Staff ID'))
     LastName = models.CharField(max_length=64,verbose_name=_('Last Name'))
     FirstName = models.CharField(max_length=64,verbose_name=_('First Name'))
+    MiddleName = models.CharField(max_length=64,verbose_name=_('Middle Name'),
+                                  blank=True)
+    Status = models.CharField(max_length=32, choices=STAFF_STATUS_CHOICES, 
+                              default='Active')    
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
     def __str__(self):
@@ -26,14 +30,15 @@ class MACHINE(models.Model):
     MachineName = models.CharField(max_length=64,unique=True,verbose_name=_("Machine Name"))
     MachineModel = models.CharField(max_length=64,verbose_name=_("Machine Model"))
     SerialNumber = models.CharField(max_length=64,unique=True,verbose_name=_("Serial Number"))
-    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES)    
+    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES,
+                              default='Active')    
     OutputControl = models.CharField(max_length=16, choices=OUTPUT_CONTROL_CHOICES,
                                      verbose_name=_("Output Control"))
     Description = models.TextField(max_length=512,blank=True)
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
     def __str__(self):
-        return self.MachineName
+        return '%s -- %s' % (self.MachineCode, self.MachineName)
     
     class Meta:
         verbose_name_plural = _("X-Ray Machines")
@@ -42,6 +47,8 @@ class CHAMBER(models.Model):
     ChamberName = models.CharField(max_length=64,unique=True,verbose_name=_("Chamber Name"))
     ChamberModel = models.CharField(max_length=64,verbose_name=_("Chamber Model"))
     SerialNumber = models.CharField(max_length=64,unique=True,verbose_name=_("Serial Number"))
+    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES,
+                              default='Active')    
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
     def __str__(self):
@@ -51,6 +58,8 @@ class ELECTROMETER(models.Model):
     ElectrometerName = models.CharField(max_length=64,unique=True,verbose_name=_("Electrometer Name"))
     ElectrometerModel = models.CharField(max_length=64,verbose_name=_("Electrometer Model"))
     SerialNumber = models.CharField(max_length=64,unique=True,verbose_name=_("Serial Number"))
+    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES,
+                              default='Active')    
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     
     def __str__(self):
@@ -67,7 +76,8 @@ class FILTER(models.Model):
     NominalHVL = models.FloatField(verbose_name=_("Nominal HVL"))
     HVL = models.FloatField(verbose_name=_("Measured HVL"))
     EndEffect = models.FloatField(default=0.0,verbose_name=_("End Effect (min or MU)"))
-    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES)    
+    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES,
+                              default='Active')    
     LastModifiedDateTime = models.DateTimeField(auto_now=True)    
     LastModifiedByUser = models.CharField(max_length=32,verbose_name=_('Last Modified By User'))
 
@@ -92,7 +102,8 @@ class CONE(models.Model):
     FSD = models.FloatField(verbose_name="Focal Applicator End Dist. (cm)")
     ConeEnd = models.CharField(max_length=32,choices=CONE_END_CHOICES,
                                default="Open",verbose_name="Applicator End")
-    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES)    
+    Status = models.CharField(max_length=32, choices=HW_STATUS_CHOICES,
+                              default='Active')    
     LastModifiedDateTime = models.DateTimeField(auto_now=True)
     def getEquivDiameter(self):
         if self.Shape=='Circle':
