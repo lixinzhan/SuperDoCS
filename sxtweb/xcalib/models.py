@@ -185,15 +185,15 @@ class CALIBRATION(models.Model):
     #                                str(self.MeasurementDateTime,)[:10],
     #                                self.CalibName)
     def __str__(self):
-        return u'%s -- %s, %s %s, %d kV, %g mA (%s)' % (
+        return u'%s -- %s %s, %d kV, (%s), %s' % (
             self.Filter.FilterCode,
-            self.Filter.Machine.MachineCode,
             self.Filter.NominalHVL, self.Filter.HVLUnit,
             self.Filter.Energy,
-            self.Filter.Current,
+            #self.Filter.Current,
             #str(self.MeasurementDateTime,)[:10],
             #self.CalibName,
             self.Cone.getConeShape(),
+            self.Filter.Machine.MachineCode,
         )
 
     #class Admin:
@@ -208,6 +208,7 @@ class OUTPUTFACTOR(models.Model):
     ROFName = models.CharField(max_length=32, unique=True, verbose_name=_('ID'))    
     Filter = models.ForeignKey(CALIBRATION, verbose_name=_('Calib\'d Filter'), on_delete=models.CASCADE)
     Cone = models.ForeignKey(CONE,verbose_name=_('Applicator'), on_delete=models.CASCADE)
+    Status = models.CharField(max_length=16, default="Active",choices=STATUS_CHOICES)
     FitMethod = models.CharField(max_length=32, choices=CURVE_FITTING_CHOICES,
                                  verbose_name=_('Curve Fitting Method'))
     ConeFactor = models.FloatField(default=0,verbose_name=_('Cone Factor'))
