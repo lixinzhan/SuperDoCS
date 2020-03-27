@@ -28,7 +28,7 @@ mkdir -p ${SITE}/resources
 #sed "s/^INSTITUTION_CODE\ =.*/INSTITUTION_CODE\ =\ \'${institut}\'/" xcalc/models.py > xcalc/models_2build.py
 
 # prepare binary and static files
-python3 setup.py build_ext --inplace 
+#python3 setup.py build_ext --inplace 
 python3 manage.py collectstatic --noinput
 
 cp -rf media static templates ${SITE}
@@ -73,21 +73,21 @@ sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py > ${SITE}/sxtweb/local.py
 cp sxtweb/urls.py ${SITE}/sxtweb/
 cp sxtweb/wsgi.py ${SITE}/sxtweb/
 cp sxtweb/sxt.db ${SITE}/sxtweb/
-cp sxtweb/*.so ${SITE}/sxtweb/
+cp sxtweb/*.py ${SITE}/sxtweb/
 
 cp common/__init__.py ${SITE}/common/
-cp common/*.so ${SITE}/common/
+cp common/*.py ${SITE}/common/
 
 cp xcalc/__init__.py ${SITE}/xcalc/
-cp xcalc/*.so ${SITE}/xcalc/
+cp xcalc/*.py ${SITE}/xcalc/
 
 cp xcalib/__init__.py ${SITE}/xcalib/
-cp xcalib/*.so ${SITE}/xcalib/
+cp xcalib/*.py ${SITE}/xcalib/
 
 cp resources/__init__.py ${SITE}/resources/
-cp resources/*.so ${SITE}/resources/
+cp resources/*.py ${SITE}/resources/
 
-cp protocols/TG61/*.so ${SITE}/protocols/TG61/
+cp protocols/TG61/*.py ${SITE}/protocols/TG61/
 cp protocols/TG61/__init__.py ${SITE}/protocols/TG61/
 cp protocols/__init__.py ${SITE}/protocols/
 
