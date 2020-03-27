@@ -49,3 +49,5 @@ Now you can use http://your-ip:8000 for web site access.
 * Supports both script setup and docker installation for web services.
 
 More installation procedure can be found in the description for releases and the docker hub.
+
+(Note: Django 1.11 works with Python 2.7, 3.4-3.7, Django 2.2 works with Python 3.5-3.8)
