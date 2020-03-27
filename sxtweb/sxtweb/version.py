@@ -1,7 +1,7 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '2.0-Beta4' # Version
+VERSION = '2.0' # Version
 
 #
 # Format: DB-CALC-TEMPL
@@ -9,7 +9,7 @@ VERSION = '2.0-Beta4' # Version
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D21-C100-T101'
+REVISION = 'D22-C101-T101'
 
 #
 # DB Schema Revision
@@ -17,6 +17,8 @@ REVISION = 'D21-C100-T101'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 2.2: 2019-03-31
+#   Added Status to many tables including outputfactor.
 # 2.1: 2019-01-07
 #   Added Has_Pion_Ppol and DurationUnit to Calibration.
 # 2.0: 2018-12-07
@@ -30,12 +32,12 @@ REVISION = 'D21-C100-T101'
 # 1.0: 2012-11-20
 #   First creation of this entry based on Ver. 1.0b4.
 #
-DB_SCHEMA='2.1'
+DB_SCHEMA='2.2'
 
 #
 # Copyright Information.
 #
-COPYRIGHT = 'Copyleft 2014-2019, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2020, Lixin Zhan @GRRCC'
 
 #
 # Make this unique, and don't share it with anybody.
