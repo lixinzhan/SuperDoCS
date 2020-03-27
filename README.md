@@ -19,7 +19,9 @@ Following steps below to set up a development environment in Ubuntu 18.04:
 3. source .env-SuperDoCS/bin/active
 
 4. git clone https://github.com/lixinzhan/SuperDoCS.git
+
    git config --global user.name "Your Name"
+   
    git config --global user.email you@email
    
 5. cd SuperDoCS
