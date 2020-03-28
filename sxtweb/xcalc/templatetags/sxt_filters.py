@@ -20,7 +20,7 @@ def in_group(user,groups):
         ...
         {% endif %}
     """
-    if user and user.is_authenticated():
+    if user and user.is_authenticated:
         group_list = force_text(groups).split(',')
         return bool(user.groups.filter(name__in=group_list).values('name'))
     return False
