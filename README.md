@@ -2,15 +2,14 @@
 Superficial/Orthovoltage Dose Calculation System
 
 SuperDoCS is a Dose Calculation and Calibration System for Superficial/Orthovoltage X-ray machines. 
-It is developed based on Django platform (currently 1.11).
+It is based on the Django platform (2.x on Django-1.11 and 3.x on Django 2.2).
 
 Before setting up the development virtual environment, packages
-linux-source, python3-dev, python3, git are required.
+linux-source, python3-dev, python3 and git are required.
 
-The development of this application is based on Ubuntu. For other distros or Windows or Mac OS X,
-make your changes correspondingly.
+SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu 18.04:
 
-Following steps below to set up a development environment in Ubuntu 18.04:
+0. Ubuntu base installation (any flavors, including WSL)
 
 1. sudo apt install gcc g++ gfortran python3-dev python3-venv
 
@@ -36,17 +35,6 @@ Now you can use http://your-ip:8000 for web site access.
 
 
 **This is now also the development branch.**
-
-*Current Status:*
-
-* DB Schema changed.
-
-* Based on Python3 and Django 1.11.
-
-* Version 2.0 will be based on python 3.6 + django 1.11 (on Ubuntu 18.04)
-  Version 3.0 will be based on python 3.8 + django 2.2 (on Ubuntu 20.04)
-
-* Supports both script setup and docker installation for web services.
 
 More installation procedure can be found in the description for releases and the docker hub.
 
