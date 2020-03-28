@@ -12,7 +12,7 @@ make your changes correspondingly.
 
 Following steps below to set up a development environment in Ubuntu 18.04:
 
-1. sudo apt install gcc g++ gfortran python-dev
+1. sudo apt install gcc g++ gfortran python3-dev python3-venv
 
 2. python3 -m venv .env-SuperDoCS
 
