@@ -13,7 +13,7 @@ from django.shortcuts import render_to_response, get_object_or_404, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from .models import *
 from .forms import *
