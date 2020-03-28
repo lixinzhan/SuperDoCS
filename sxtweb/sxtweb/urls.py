@@ -9,7 +9,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', auth_views.login, name='login'),
+    url(r'^$', auth_views.LoginView, name='login'),
     url(r'^help/(\w+)/$', help_page, name='help_page'),
     url(r'^help/$',help_page, name='help_page'),
     url(r'^plansearch/$', plan_search_page, name='plan_search_page'),
@@ -20,8 +20,8 @@ urlpatterns = [
     url(r'^planstatus/$', RedirectView.as_view(url='/plansearch/')),
     url(r'^planstatus/(\w+)/$',plan_status_page,name='plan_status_page'),
 
-    url(r'^login/$', auth_views.login, name="auth_views.login"),
-    url(r'^accounts/login/$', auth_views.login, name='auth_views.login'),
+    url(r'^login/$', auth_views.LoginView, name="auth_views.login"),
+    url(r'^accounts/login/$', auth_views.LoginView, name='auth_views.login'),
     url(r'^logout/$',logout_page, name='logout_page'),
     url(r'^user/(\w+)/profile/$',profile_page, name='profile_page'),
 
