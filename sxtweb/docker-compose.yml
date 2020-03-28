@@ -8,11 +8,11 @@ services:
   superdocs:
     build: .
     volumes:
-      - sxt_vol:/var/www/SuperDoCS/sxtweb
-      - static_vol:/var/www/SuperDoCS/static
-      - media_vol:/var/www/SuperDoCS/media
-      - usercodes_vol:/var/www/SuperDoCS/xcalc/UserCodes
-      - nginxconf_vol:/var/www/SuperDoCS/config/nginx_conf.d
+      - sxt_vol:/var/www/${PRJ}/sxtweb
+      - static_vol:/var/www/${PRJ}/static
+      - media_vol:/var/www/${PRJ}/media
+      - usercodes_vol:/var/www/${PRJ}/xcalc/UserCodes
+      - nginxconf_vol:/var/www/${PRJ}/config/nginx_conf.d
 #    ports:
 #      - "8000:8000"
     networks:
@@ -23,8 +23,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - static_vol:/var/www/SuperDoCS/static
-      - media_vol:/var/www/SuperDoCS/media
+      - static_vol:/var/www/${PRJ}/static
+      - media_vol:/var/www/${PRJ}/media
       - nginxconf_vol:/etc/nginx/conf.d
     networks:
       - sxt_network
