@@ -5,9 +5,9 @@ FROM ubuntu:18.04
 LABEL maintainer: Lixin Zhan
 
 # setup environment variables
-ENV prj SuperDoCS
-ENV ver 2.0
-ENV prjroot /var/www/SuperDoCS
+ENV prj ${PACKAGE}
+ENV ver ${VERSION}
+ENV prjroot /var/www/${PRJ}
 
 # add packages
 RUN apt-get update && apt-get install -y \
