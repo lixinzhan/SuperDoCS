@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage

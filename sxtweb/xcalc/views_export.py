@@ -13,7 +13,6 @@ from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
-#from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.utils.translation import ugettext_lazy as _
