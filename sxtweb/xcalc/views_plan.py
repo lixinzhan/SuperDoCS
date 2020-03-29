@@ -14,6 +14,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 
 from protocols.TG61.CMedWat import CMedWat
 from protocols.TG61.BSF_Wat import BSF_Wat
@@ -118,7 +119,7 @@ def plan_status_page(request, planid):
                 status = statusform.cleaned_data
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(PlanStatus=status['planstatus'])
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(StatusChangedBy=status['username'])
-                TREATMENTPLAN.objects.filter(pk=plan.pk).update(StatusChangeDateTime=datetime.datetime.now())
+                TREATMENTPLAN.objects.filter(pk=plan.pk).update(StatusChangeDateTime=timezone.now())
                 plan.PlanStatus=status['planstatus'] # This is set for correct webpage display.
                 return HttpResponseRedirect(reverse(plan_edit_page,args=(planid,)))
         
@@ -152,14 +153,14 @@ def plan_qa_page(request, planid):
                 auth = authform.cleaned_data
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvStatus='Approved')
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprovedBy=auth['username'])
-                TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvDateTime=datetime.datetime.now())
+                TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvDateTime=timezone.now())
                 plan.ApprvStatus='Approved' # This is set for correct webpage display.
         elif 'unapprv_submit' in request.POST:
             if authform.is_valid():
                 auth=authform.cleaned_data
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvStatus='UnApproved')
                 TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprovedBy=auth['username'])
-                TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvDateTime=datetime.datetime.now())
+                TREATMENTPLAN.objects.filter(pk=plan.pk).update(ApprvDateTime=timezone.now())
                 plan.ApprvStatus='UnApproved' # This is set for correct webpage display.
     else:
         planform = TreatmentPlanForm(instance=plan)
@@ -239,10 +240,10 @@ def plan_edit_page(request, planid):
                 if planid=='new':
                     plan.PlanStatus = 'Active'
                     plan.StatusChangedBy = 'nobody'
-                    plan.StatusChangeDateTime = datetime.datetime.now
+                    plan.StatusChangeDateTime = timezone.now()
                     plan.ApprvStatus = 'NotApproved'
                     plan.ApprovedBy = 'nobody'
-                    plan.ApprvDateTime = datetime.datetime.now
+                    plan.ApprvDateTime = timezone.now()
     else: # not request.POST
         if planid[:4]=='new_' and planid[4:]:
             oldplanid = planid[4:]
