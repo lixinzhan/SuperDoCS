@@ -2,6 +2,7 @@ from django import forms
 import datetime
 import numpy as np
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 from common.choices import *
@@ -199,8 +200,8 @@ class TreatmentPlanForm(forms.ModelForm):
     StatusChangedBy = forms.CharField(initial='nobody',required=False,widget=forms.HiddenInput)
     ApprvStatus = forms.CharField(initial='NotApproved',required=False,widget=forms.HiddenInput)
     ApprovedBy = forms.CharField(initial='nobody',required=False,widget=forms.HiddenInput)
-    #ApprvDateTime = forms.DateTimeField(initial=datetime.datetime.now,required=False)
-    #StatusChangeDateTime = forms.DateTimeField(initial=datetime.datetime.now,required=False)
+    #ApprvDateTime = forms.DateTimeField(initial=timezone.now(),required=False)
+    #StatusChangeDateTime = forms.DateTimeField(initial=timezone.now(),required=False)
 
     class Meta:
         model = TREATMENTPLAN
@@ -216,9 +217,9 @@ class TreatmentPlanForm(forms.ModelForm):
 
     def clean__DOB(self):
         DOB = self.cleaned_data['DOB']
-        if DOB > datetime.date.today():
+        if DOB > timezone.localdate():  #datetime.date.today():
             raise forms.ValidationError(_('DOB cannot be in the future!'))
-        if DOB < datetime.date.today()-datetime.timedelta(days=365*150):
+        if DOB < timezone.localdate()-timezone.timedelta(days=365*150):
             raise forms.ValidationError(_('More than 150 years old?'))
         return DOB
 

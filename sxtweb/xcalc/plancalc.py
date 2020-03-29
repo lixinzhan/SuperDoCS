@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 
 from django.conf import settings
+from django.utils import timezone
 from .models import *
 from .forms import *
 from protocols.TG61.CMedWat import CMedWat
@@ -259,8 +260,8 @@ def calcTxPlan(plan, errlist):
     plan.DosePerFrac = plan.TotalDose / plan.Fractions
             
     plan.TxTime = plan.DosePerFrac/plan.DR_med + plan.Filter.Filter.EndEffect
-    plan.CalculateDateTime = datetime.datetime.now
+    plan.CalculateDateTime = timezone.now()
     plan.SXTCalcVersion = settings.VERSION
-    plan.DoseCalibDate = datetime.datetime.date(plan.Filter.LastModifiedDateTime)
+    plan.DoseCalibDate = timezone.localdate(plan.Filter.LastModifiedDateTime)
 
     return plan.TxTime
