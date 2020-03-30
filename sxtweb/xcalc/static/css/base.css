@@ -81,7 +81,7 @@ body {
   padding: 0px;
   font-size: 12px; /*11pt; /*12px;*/
   color: black; /*#333; /*black;*/
-  font-family: sans-serif,Arial,Verdana,"DejaVu Sans","Lucida Grande","Bitstream Vera Sans";
+  font-family: Roboto,"Lucida Grande","DejaVu Sans","Bitstream Vera Sans",sans-serif,Arial,Verdana;
   background: white url(../img/star.png) -1px -2px repeat;
   background: #99ccee; /*#3377aa; /*#804a94; /*#e0e0e0; /*#e0e0e0;*/
   height: 101%;
@@ -220,7 +220,7 @@ hr.fulllength{
   font-weight: bold;
   text-transform: capitalize;
   color: white; /*#6f389b; /*#eeeeec;*/
-  font-family: Verdana,Geneva,Futura,Arial;
+  font-family: "Roboto","Verdana","Geneva","Futura","Arial";
   min-width: 810px;
 }
 
@@ -339,7 +339,7 @@ div#dummybar {
     background: none;/* transparent;*/
     font-size: 90%;
     text-align: center;
-    font-family: futura,Arial;
+    font-family: "Roboto","futura","Arial";
     /* opacity: 0.8;*/
 }
 
@@ -615,7 +615,7 @@ td, th {
     border-bottom: 1px solid #eee;
     vertical-align: top;
     padding: 5px;
-    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+    font-family: "Roboto","Lucida Grande", Verdana, Arial, sans-serif;
 }
 
 th {
@@ -671,7 +671,7 @@ input, textarea {
     margin: 2px 0;
     padding: 2px 3px;
     vertical-align: middle;
-    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+    font-family: "Roboto","Lucida Grande", Verdana, Arial, sans-serif;
     font-weight: normal;
     font-size: 11px;
 }
