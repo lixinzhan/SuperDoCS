@@ -1,15 +1,15 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '2.0' # Version
-
+VERSION = '3.0' # Version
+DEVSTAGE = 'Alpha'  # Stage of development: Alpha, Beta, RC, Release.
 #
 # Format: DB-CALC-TEMPL
 #   DB:    db model and data entry; 
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D22-C101-T101'
+REVISION = 'D22-C101-T102'
 
 #
 # DB Schema Revision
