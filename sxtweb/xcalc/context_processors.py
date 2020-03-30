@@ -10,3 +10,6 @@ def sxt_copyright(context):
 
 def sxt_admin(context):
     return {'ADMIN': settings.ADMINS[0][0], 'ADMINEMAIL':settings.ADMINS[0][1]}
+
+def sxt_support(context):
+    return {'SUPPORTEMAIL': settings.SUPPORTEMAIL}

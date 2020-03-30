@@ -32,7 +32,7 @@
 {% if user.has_usable_password %}
 <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
 {% endif %}
-<a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+<a href="{% url 'logout_page' %}">{% trans 'Log out' %}</a>
 {% endblock %}
 
 
@@ -40,6 +40,6 @@
 
 {% block footer %}
     <div id="footer">{{ COPYRIGHT }}.
-    Please <a href="mailto:{{ ADMINEMAIL }}">contact us</a> for any questions.
+    Please <a href="mailto: {{ SUPPORTEMAIL }}">contact us</a> for any questions.
     </div>
 {% endblock %}

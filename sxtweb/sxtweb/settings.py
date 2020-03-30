@@ -114,6 +114,7 @@ TEMPLATES = [
                 'xcalc.context_processors.sxt_version',
                 'xcalc.context_processors.sxt_copyright',
                 'xcalc.context_processors.sxt_admin',
+                'xcalc.context_processors.sxt_support',
             ],
         },
     },
