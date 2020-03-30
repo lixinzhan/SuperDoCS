@@ -2,6 +2,7 @@ from django.conf import settings
 
 def sxt_version(context):
     return {'VERSION': settings.VERSION,
+            'DEVSTAGE': settings.DEVSTAGE,
             'REVISION': settings.REVISION,
             'DB_SCHEMA': settings.DB_SCHEMA}
 
