@@ -40,6 +40,12 @@ DB_SCHEMA='2.2'
 COPYRIGHT = 'Copyleft 2014-2020, Lixin Zhan @GRRCC'
 
 #
+# Support Information
+#
+SUPPORTEMAIL = 'lixinzhan@gmail.com'
+
+
+#
 # Make this unique, and don't share it with anybody.
 #
 SECRET_KEY = 'vb9rrx16ksa9km&amp;!dree#(cxga2etg9rsk^(56g@ntl0=pbxpn'
