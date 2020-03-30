@@ -20,8 +20,8 @@ urlpatterns = [
     url(r'^planstatus/$', RedirectView.as_view(url='/plansearch/')),
     url(r'^planstatus/(\w+)/$',plan_status_page,name='plan_status_page'),
 
-    url(r'^login/$', auth_views.LoginView, name="auth_views.login"),
-    url(r'^accounts/login/$', auth_views.LoginView, name='auth_views.login'),
+    url(r'^login/$', auth_views.LoginView.as_view()), #name="auth_views.login"),
+    url(r'^accounts/login/$', auth_views.LoginView.as_view()), #name='auth_views.login'),
     url(r'^logout/$',logout_page, name='logout_page'),
     url(r'^user/(\w+)/profile/$',profile_page, name='profile_page'),
 
