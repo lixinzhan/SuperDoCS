@@ -141,7 +141,7 @@
                 <td>{{ plan.ISF|floatformat:3 }}     </td>
                 <td class="right">ISF = <math><mrow><msup><mtext>(FSD/FCDx)</mtext><mtext>-2</mtext></msup></mrow></math> </td></tr>
             <tr><td>{% if plan.SpecifyROF %}{% trans 'User Specified ' %}{% endif %}{% trans 'Relative Exposure Factor' %}:</td>
-                <td>{{ plan.ROF|floatformat:3 }}</td>
+                <td>{{ plan.ROF_Exposure|floatformat:3 }}</td>
                 <td class="right">REF</td></tr> <!-- = F(Filter, Cone, Dequiv^(calib))</td></tr> -->
             {% ifequal plan.Cone.Machine.OutputControl 'min' %}
             <tr><th>{% trans 'Air Kerma Rate in Air at Surface (cGy/min)' %}:</th>

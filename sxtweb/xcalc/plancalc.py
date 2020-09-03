@@ -35,7 +35,7 @@ def copyPlanSetup(plan,oldplan):
     plan.CutoutThickness   = oldplan.CutoutThickness
     plan.StandOut          = oldplan.StandOut
     plan.SpecifyROF        = oldplan.SpecifyROF
-    plan.ROF               = oldplan.ROF
+    plan.ROF_Exposure      = oldplan.ROF_Exposure
     
     return True
 
@@ -67,7 +67,7 @@ def getPlanFormData(plan,planform):
         plan.FSD = planform.cleaned_data['FSD']
         plan.ISF = planform.cleaned_data['ISF']
         plan.SpecifyROF = planform.cleaned_data['SpecifyROF']
-        plan.ROF = planform.cleaned_data['ROF']
+        plan.ROF_Exposure = planform.cleaned_data['ROF_Exposure']
         plan.Dequiv = planform.cleaned_data['Dequiv']
         plan.DequivCalib = planform.cleaned_data['DequivCalib']
         plan.DequivSurface = planform.cleaned_data['DequivSurface']
@@ -155,7 +155,7 @@ def calcTxPlan(plan, errlist):
                                                  Cone=CalibConeId,
                                                  Status='Active')
         except:
-            plan.ROF = 0
+            plan.ROF_Exposure = 0
             errcode = 'ERR: CalibEntry '+str(CalibEntry)
             errlist.append(errcode)
             #errlist.append('E0032')
@@ -164,29 +164,29 @@ def calcTxPlan(plan, errlist):
             #ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
             ROFEntry = OUTPUTFACTOR.objects.get(Filter=CalibEntry.id, Cone=PlanConeId)
         except:
-            plan.ROF = 0
+            plan.ROF_Exposure = 0
             errcode = 'ERR: '+str(ROFEntry)
             errlist.append(errcode)
             #errlist.append('E0033') #'Filter/Cone Combination Not Commissioned. '
 
         try:
-            plan.ROF=getROF(ROFEntry, plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
+            plan.ROF_Exposure=getROF(ROFEntry, plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
+            autoROF = plan.ROF_Exposure
         except ValueError as err:
-            plan.ROF = 0
+            plan.ROF_Exposure = 0
             errlist.append(str(err)) #'Cutout Out of Commissioned Range. '
         except LookupError as err:
-            plan.ROF = 0
+            plan.ROF_Exposure = 0
             errlist.append(str(err)) #'Unknown Cutout REF Fitting Method. '
         except:
-            plan.ROF = 0
+            plan.ROF_Exposure = 0
             errlist.append('E1004') #'Unknown Error in CurveFitting. '
         #else:
-        #    plan.ROF = ROFEntry.ConeFactor
-        autoROF = plan.ROF
+        #    plan.ROF_Exposure = ROFEntry.ConeFactor
         
     # Air Kerma rate at target surface
-    # plan.KR_air = plan.KR_air_CalibCone * plan.Filter.P_stem * plan.ISF * plan.ROF
-    plan.KR_air = plan.KR_air_CalibCone * plan.ISF * plan.ROF
+    # plan.KR_air = plan.KR_air_CalibCone * plan.Filter.P_stem * plan.ISF * plan.ROF_Exposure
+    plan.KR_air = plan.KR_air_CalibCone * plan.ISF * plan.ROF_Exposure
             
     # get backscattering factor and mass absorption coefficient
     # Note plan.Filter is actually pointing to class Calibration.
