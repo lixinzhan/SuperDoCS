@@ -49,7 +49,7 @@ class TREATMENTPLAN(models.Model):
     DequivSurface = models.FloatField(default=0) # Equiv. Diameter at Medium Surface
 
     SpecifyROF = models.BooleanField(default=False)
-    ROF = models.FloatField(default=0)           # Relative Output Factor
+    ROF_Exposure = models.FloatField(default=0)           # Relative Output Factor
 
     PDD = models.FloatField(default=100)           # Percentage Depth Dose
 
