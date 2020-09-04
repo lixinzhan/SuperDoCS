@@ -21,12 +21,12 @@
     };
     
     function ShowROFEntry() {
-        $('#setup-table input#id_ROF').parents("tr").show();
+        $('#setup-table input#id_ROF_Exposure').parents("tr").show();
     }
     function HideROFEntry() {
         var autoROF = $('input#id_autoROF').val();
-        $('#setup-table input#id_ROF').val(autoROF);
-        $('#setup-table input#id_ROF').parents("tr").hide();
+        $('#setup-table input#id_ROF_Exposure').val(autoROF);
+        $('#setup-table input#id_ROF_Exposure').parents("tr").hide();
     }
     
     ////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@
           '#setup-table input#id_CutoutThickness, '+
           '#setup-table input#id_StandOut, '+
           '#setup-table input#id_SpecifyROF, '+
-          '#setup-table input#id_ROF').change(function() {
+          '#setup-table input#id_ROF_Exposure').change(function() {
             if ($(this).data('init_value') != $(this).serialize()) {
                 FormChanged_CalcPart = true
                 $('#calc_time').hide();

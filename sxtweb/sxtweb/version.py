@@ -3,13 +3,14 @@
 #
 VERSION = '3.0' # Version
 DEVSTAGE = 'Alpha'  # Stage of development: Alpha, Beta, RC, Release.
+
 #
 # Format: DB-CALC-TEMPL
 #   DB:    db model and data entry; 
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D22-C101-T102'
+REVISION = 'D23-C101-T102'
 
 #
 # DB Schema Revision
@@ -17,6 +18,8 @@ REVISION = 'D22-C101-T102'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 2.3: 2020-09-03
+#   Changed ROF to ROF_Exposure for fixing failed SpecifyROF calculation issue.
 # 2.2: 2019-03-31
 #   Added Status to many tables including outputfactor.
 # 2.1: 2019-01-07
@@ -32,7 +35,7 @@ REVISION = 'D22-C101-T102'
 # 1.0: 2012-11-20
 #   First creation of this entry based on Ver. 1.0b4.
 #
-DB_SCHEMA='2.2'
+DB_SCHEMA='2.3'
 
 #
 # Copyright Information.

@@ -165,7 +165,7 @@ class TreatmentPlanForm(forms.ModelForm):
     CutoutThickness = forms.FloatField(label=_("Cutout Thickness (cm)"),initial=0.2, widget=forms.TextInput(attrs={'size':'30'}))
     StandOut = forms.FloatField(label=_("Stand In(-)/Out(+) (cm)"), widget=forms.TextInput(attrs={'size':'30'}))
     SpecifyROF = forms.BooleanField(label=_("User Specify REF"),required=False)
-    ROF = forms.FloatField(label=_("Relative Exposure Factor"),initial=0,widget=forms.TextInput(attrs={'size':'30'}))
+    ROF_Exposure = forms.FloatField(label=_("Relative Exposure Factor"),initial=0,widget=forms.TextInput(attrs={'size':'30'}))
     Comment = forms.CharField(label=_('Comment'),
                               max_length=512,
                               required=False,
