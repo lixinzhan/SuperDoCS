@@ -78,7 +78,7 @@
             <input type="hidden" name="FCD" value={{plan.FCD}} id="id_FCD" />
             <input type="hidden" name="FSD" value={{plan.FSD}} id="id_FSD" />
             <input type="hidden" name="ISF" value={{plan.ISF}} id="id_ISF" />
-            <input type="hidden" name="ROF" value={{plan.ROF}} id="id_ROF" />
+            <input type="hidden" name="ROF" value={{plan.ROF_Exposure}} id="id_ROF_Exposure" />
             <input type="hidden" name="PDD" value={{plan.PDD}} id="id_PDD" />
             <input type="hidden" name="Dequiv" value={{plan.Dequiv}} id="id_Dequiv" />
             <input type="hidden" name="DequivCalib" value={{plan.DequivCalib}} id="id_DequivCalib" />
@@ -269,7 +269,7 @@
             <tr><td>Equiv Diameter at Medium Surface (cm):</td>
                 <td>{{ plan.Dequiv|floatformat:"-3" }}  </td></tr>
             <tr><td>Relative Output Factor:</td>
-                <td>{{ plan.ROF|floatformat:3 }}</td></tr>
+                <td>{{ plan.ROF_Exposure|floatformat:3 }}</td></tr>
             <tr><th>Kerma Rate in Air at Surface:</th>
                 <th>{{ plan.KR_air|floatformat:3 }}</th></tr>
             <tr><td>Back Scattering Factor for Water (Bw):</td>

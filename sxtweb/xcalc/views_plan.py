@@ -185,7 +185,7 @@ def plan_edit_page(request, planid):
     access = 'edit'
     changeflag = 'none'
     errlist = []
-    autoROF = ''
+    autoROF = 0.0
     
     if planid[:3]=='new':
         plan = TREATMENTPLAN()
@@ -214,7 +214,7 @@ def plan_edit_page(request, planid):
         elif planid=='new':
             planform = TreatmentPlanForm(request.POST)
         else:
-            autoROF = plan.ROF ########### autoROF ###########
+            # autoROF = plan.ROF_Exposure ########### autoROF ###########
             planform = TreatmentPlanForm(instance=plan,data=request.POST)
            
         if 'cancel_submit' in request.POST:
@@ -236,6 +236,8 @@ def plan_edit_page(request, planid):
             #    return HttpResponseRedirect(reverse(plan_edit_page, args=('new_'+str(plan.pk),)))
             elif 'calc_submit' in request.POST:
                 calcTxPlan(plan, errlist)
+                if not plan.SpecifyROF:
+                    autoROF=plan.ROF_Exposure  ####### autoROF #######
                 changeflag = 'newcalc'
                 if planid=='new':
                     plan.PlanStatus = 'Active'
@@ -254,7 +256,7 @@ def plan_edit_page(request, planid):
         elif planid=='new':
             planform = TreatmentPlanForm()
         else:
-            autoROF = plan.ROF ########### autoROF ###########
+            # autoROF = plan.ROF_Exposure ########### autoROF ###########
             planform = TreatmentPlanForm(instance=plan)
             
     try:
