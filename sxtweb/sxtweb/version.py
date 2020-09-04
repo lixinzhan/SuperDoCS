@@ -9,7 +9,7 @@ VERSION = '2.1' # Version
 #   CALC:  dose calculation algorithm,
 #   TEMPL: web page layout
 #
-REVISION = 'D22-C101-T101'
+REVISION = 'D23-C101-T101'
 
 #
 # DB Schema Revision
