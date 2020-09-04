@@ -1,7 +1,7 @@
 django==2.2.*
 django-admin
 docutils
-numpy==1.18.*
-scipy==1.4.*
+numpy==1.19.*
+scipy==1.5.*
 xhtml2pdf>=0.2.4
 gunicorn>=20.0,<21.0
