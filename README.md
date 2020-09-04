@@ -34,8 +34,10 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 Now you can use http://your-ip:8000 for web site access.
 
 
-**This is now also the development branch.**
+**This is the development branch.**
 
-More installation procedure can be found in the description for releases and the docker hub.
+More installation procedure can be found in the description for releases. There are a docker container release but not guaranteed to be the latest. Contact me if you are interested in an installation based on a docker image.
+
+Version 2.x is based on Django 1.11.x; Version 3.x is based on Django 2.2.x
 
 (Note: Django 1.11 works with Python 2.7, 3.4-3.7, Django 2.2 works with Python 3.5-3.8)
