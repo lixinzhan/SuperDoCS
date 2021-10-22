@@ -1,4 +1,3 @@
-wheel
 django==2.2.*
 django-admin
 docutils

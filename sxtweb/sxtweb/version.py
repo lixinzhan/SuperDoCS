@@ -18,6 +18,8 @@ REVISION = 'D23-C101-T102'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 2.3.1: 2021-10-22
+#   Fixed issues with pip3 setup and added packaging time.
 # 2.3: 2020-09-03
 #   Changed ROF to ROF_Exposure for fixing failed SpecifyROF calculation issue.
 # 2.2: 2019-03-31
@@ -40,7 +42,7 @@ DB_SCHEMA='2.3'
 #
 # Copyright Information.
 #
-COPYRIGHT = 'Copyleft 2014-2020, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2021, Lixin Zhan @GRRCC'
 
 #
 # Support Information
