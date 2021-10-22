@@ -1,8 +1,8 @@
+wheel
 django>=1.11.0,<2.0
 django-admin
 docutils
-numpy
-scipy
-xhtml2pdf
-Cython
-gunicorn
+numpy==1.19.*
+scipy==1.5.*
+xhtml2pdf==0.2.4
+gunicorn>=20.0,<21.0

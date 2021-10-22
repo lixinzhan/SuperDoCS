@@ -11,7 +11,7 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 0. Ubuntu base installation (any flavors, including WSL)
 
-1. sudo apt install gcc g++ gfortran python3-dev python3-venv
+1. sudo apt install gcc g++ gfortran python3-dev python3-venv libjpeg-dev
 
 2. python3 -m venv .env-SuperDoCS
 
