@@ -41,11 +41,42 @@ Migrated to Py3 and got a working copy.
 
 *** 20181211 ***
 
-First release of Alpha version. 
+First release of Alpha version for 2.0. 
 
 
 *** 20181218 ***
 
 Script and docker installation implemented.
 
+*** 20190114 ***
 
+Version updated to 2.0 Beta1
+
+*** 20190324 ***
+
+Corrected issues with Plan Calculation, due to the mix of NominalCalib and regular calibration.
+
+*** 20190327 ***
+
+Version 2.0 RC1 released
+
+*** 20190330 ***
+
+Version was reversed back to 2.0 Beta4, due to the update of APPRV_STATUS_CHOICES_ALL.
+
+*** 20200327 ***
+
+Redesigned the way to package
+Release as Version 2.0
+
+*** 20200904 ***
+
+Version changed to 2.1
+
+*** 20211022 ***
+
+Version changed to 2.3.1 for the release_v2 branch, with minor fixes.
+
+*** 20211022 ***
+
+It is decided that the master branch will be with Django 3.2 for the development of SuperDoCS v3.x.
