@@ -9,7 +9,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
-        url(r'^$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    url(r'^$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     url(r'^help/(\w+)/$', help_page, name='help_page'),
     url(r'^help/$',help_page, name='help_page'),
     url(r'^plansearch/$', plan_search_page, name='plan_search_page'),

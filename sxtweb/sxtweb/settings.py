@@ -18,6 +18,9 @@ DATABASES = {
     }
 }
 
+# For Default ForeignKey AutoField in modles
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
 # For the language selection.
 LOCAL_PATH = '/locale/'
 LANGUAGES = (
