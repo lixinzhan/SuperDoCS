@@ -13,6 +13,7 @@ PACKAGE="SuperDoCS"
 VERSION=`grep VERSION sxtweb/version.py | awk -F\' '{print $2}'`
 SITE=${PACKAGE}_${VERSION}
 PRJ=${PACKAGE}
+PKGTIME=$(date +"%Y-%m-%d %H:%M:%S")
 
 mkdir -p ../${SITE}
 cd ../${SITE}
@@ -53,6 +54,8 @@ echo "GCC Version:      ${GCC_VER}" >> PLATFORM
 echo "Glibc Version:    ${GLIBC_VER}" >> PLATFORM
 echo "Python Version:   ${PYTHON_VER}" >> PLATFORM
 echo "Django Version:   ${DJANGO_VER}" >> PLATFORM
+echo "" >> PLATFORM
+echo "Package Generation Time: $(PKGTIME)" >> PLATFORM
 
 cd ..
 tar zcvf ${PACKAGE}_${VERSION}_${OS_NAME}_${OS_VER}_${HW_PLATFORM}.tar.gz ${SITE}
