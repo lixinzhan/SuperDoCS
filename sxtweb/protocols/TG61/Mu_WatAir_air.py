@@ -28,11 +28,11 @@ class Mu_WatAir_air:
         if HVLUnit == 'mm Al': # create the table for Al
             xytable = np.array([ [ self.MuTable[i][1],self.MuTable[i][2] ]
                   for i in range(len(self.MuTable))
-                  if self.MuTable[i][0]=='Al'], dtype=np.float)
+                  if self.MuTable[i][0]=='Al'], dtype=float)
         elif HVLUnit == 'mm Cu': # create the table for Cu
             xytable = np.array([ (self.MuTable[i][1],self.MuTable[i][2])
                   for i in range(len(self.MuTable))
-                  if self.MuTable[i][0]=='Cu'], dtype=np.float)
+                  if self.MuTable[i][0]=='Cu'], dtype=float)
         else:
             raise LookupError('Incorrect HVLUnit.')
 

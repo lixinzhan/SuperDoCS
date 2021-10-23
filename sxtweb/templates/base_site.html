@@ -20,7 +20,7 @@
                     <select name="language">
                     {% get_language_info_list for LANGUAGES as languages %}
                     {% for language in languages %}
-                    <option {%ifequal language.code LANGUAGE_CODE%} selected="yes" {% endifequal %} value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+                    <option {%if language.code == LANGUAGE_CODE%} selected="yes" {% endif %} value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
                     {% endfor %}
                     </select>
                     <input type="submit" id="setlang" value={% trans "Set" %} />
@@ -67,26 +67,26 @@
 <div id="site_tabs">
     <ul id="portal-globalnav">
         <!--
-        <li {% ifequal site_tab "home" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "home" %} class="selected" {% endif %}>
             <a href="/" title={% trans "Home of SuperDoCS" %}>
                <span>{% trans "HOME" %}</span>
             </a>
         </li>
         -->
-        <li {% ifequal site_tab "search" %} class="selected" {% endifequal %}>
-            <!-- {% ifequal site_tab "home" %} class="selected" {%endifequal %} > -->
+        <li {% if site_tab == "search" %} class="selected" {% endif %}>
+            <!-- {% if site_tab == "home" %} class="selected" {%endif %} > -->
             <a href="/plansearch/" title={% trans "Search" %}>
                <span>{% trans "HOME" %}</span>
             </a>
         </li>
-        <li {% ifequal site_tab "planning" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "planning" %} class="selected" {% endif %}>
             {% block plan_link %}
             <a href="/plan/new/" title={% trans "Planning" %}>
                <span>{% trans "PLANNING" %}</span>
             </a>
             {% endblock %}
         </li>
-        <li {% ifequal site_tab "plan_qa" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "plan_qa" %} class="selected" {% endif %}>
             {% block qa_link %}
             <a href="/plan_qa/new/" title={% trans "Plan_QA" %}>
                <span>{% trans "PLAN QA" %}</span>
@@ -94,26 +94,26 @@
             {% endblock %}
         </li>
         {% if user.is_active %}        
-        <li {% ifequal site_tab "settings" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "settings" %} class="selected" {% endif %}>
             <a href="/user/{{ user.username }}/profile/" title={% trans "Settings" %}>
                <span>{% trans "SETTINGS" %}</span>
             </a>
         </li>
         {% endif %}
         {% if user.is_superuser %}
-        <li {% ifequal site_tab "admin" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "admin" %} class="selected" {% endif %}>
             <a href="/admin/" title={% trans "Administration" %}>
                <span>{% trans "ADMIN" %}</span>
             </a>
         </li>
         {% else %} {%if user|in_group:"Physicists" %}
-        <li {% ifequal site_tab "admin" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "admin" %} class="selected" {% endif %}>
             <a href="/admin/" title={% trans "Commission" %}>
                <span>{% trans "COMMISSION" %}</span>
             </a> </li> {% endif %}
         {% endif %}
         
-        <li {% ifequal site_tab "help" %} class="selected" {% endifequal %}>
+        <li {% if site_tab == "help" %} class="selected" {% endif %}>
             <a href="/help/" title={% trans "Help" %}>
                <span>{% trans "HELP" %}</span>
             </a>
@@ -126,7 +126,7 @@
 {% block promptbar %}
 <div id="promptbar">
     <div id="bar-prompt">
-    {% ifequal site_tab 'home' %}
+    {% if site_tab == 'home' %}
         {% if user.is_active %}
         {% trans 'Welcome to SuperDoCS, you can now' %}
         <a href="/plan/new/">{% trans 'Create a New Treatment Plan' %}</a>
@@ -135,33 +135,33 @@
         {% else %}
         {% trans 'Please <a href="/">LOGIN</a> first' %}
         {% endif %}
-    {% endifequal %}
-    {% ifequal site_tab 'search' %}
+    {% endif %}
+    {% if site_tab == 'search' %}
         {% trans 'Search for existing plans using the combination of filters.' %}
         {% trans 'For creating a new plan, please just <a href="/plan/new/">click here</a> or the "New Plan" button.' %}
-    {% endifequal %}
-    {% ifequal site_tab 'planning'%}
+    {% endif %}
+    {% if site_tab == 'planning'%}
         <a href="/plan/current/">{% trans 'Plan Edit' %}</a> &nbsp; &nbsp; &nbsp; &nbsp;
         <a href="/planstatus/current/">{% trans 'Change Plan Status' %}</a>
-    {% endifequal %}
-    {% ifequal site_tab 'plan_qa' %}
+    {% endif %}
+    {% if site_tab == 'plan_qa' %}
         {% trans 'Physicist can QA a plan here. The plan can only be approved by a physicist.' %}
-    {% endifequal %}
-    {% ifequal site_tab 'settings'%}
+    {% endif %}
+    {% if site_tab == 'settings'%}
         <a href="/user/{{ user.username }}/profile/">{% trans 'Profile' %}</a>
         &nbsp; &nbsp; &nbsp; &nbsp;
         <!--
         <a href="/user/{{ user.username }}/preference/">Preference</a>
         -->
-    {% endifequal %}
-    {% ifequal site_tab 'help' %}
+    {% endif %}
+    {% if site_tab == 'help' %}
         <!--
         <a href="/help/about/">{% trans 'About' %}</a> &nbsp; &nbsp; &nbsp; &nbsp;
         <a href="/help/documents/">{% trans 'Documents' %}</a> 
         -->        
         &nbsp; &nbsp; &nbsp;
         <a href="/help/">{% trans 'Brief User\'s Manual' %}</a>
-    {% endifequal %}
+    {% endif %}
     </div>
 </div>
 {% endblock %}

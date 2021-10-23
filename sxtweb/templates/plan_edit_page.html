@@ -27,9 +27,9 @@
         SXT &rsaquo;
         <a href="/plansearch/">Search</a> &rsaquo;
         {% if plan.pk %}
-            {% ifequal access 'edit' %}Edit ({{plan.PlanName }}){% endifequal %}
-            {% ifequal access 'view' %}View ({{plan.PlanName }}){% endifequal %}
-            {% ifequal access 'delete' %}Delete ({{plan.PlanName }}){% endifequal %}
+            {% if access == 'edit' %}Edit ({{plan.PlanName }}){% endif %}
+            {% if access == 'view' %}View ({{plan.PlanName }}){% endif %}
+            {% if access == 'delete' %}Delete ({{plan.PlanName }}){% endif %}
         {% else %}
             New Plan
         {% endif %}
@@ -123,7 +123,7 @@
                 {% if error %}
                     <span class="emphasize">{{ error }}</span>
                 {% else %}
-                    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+                    {% if plan.Cone.Machine.OutputControl == 'min' %}
                         {% trans 'Fractional Treatment Time (min):' %}
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp; &nbsp; &nbsp;
@@ -131,7 +131,7 @@
                           {{ plan.TxTime|floatformat:2 }} {% trans 'min' %}
                         </span>
                     {% else %}
-                        {%ifequal plan.Cone.Machine.OutputControl 'MU' %}
+                        {%if plan.Cone.Machine.OutputControl == 'MU' %}
                         {% trans 'MU per Fraction:' %}
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp; &nbsp; &nbsp;
@@ -145,55 +145,55 @@
                         <span id="calc_time" class="emphasize">
                           {{ plan.TxTime|floatformat:1 }}
                         </span>
-                        {% endifequal %}
-                    {% endifequal %}
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
             </div>
             
-        {% ifnotequal plan.ApprvStatus 'Approved' %}
-            {% ifnotequal plan.PlanStatus 'Active' %}
+        {% if plan.ApprvStatus != 'Approved' %}
+            {% if plan.PlanStatus != 'Active' %}
                 <br />
                 {% trans 'Plan Status:' %} &nbsp; &nbsp; {{ plan.PlanStatus }}. &nbsp; &nbsp;
             {% else %}
                 <br />
                 {% trans 'Apprv Status:' %} &nbsp; {{ plan.ApprvStatus }}. &nbsp; &nbsp;
-            {% endifnotequal %}
+            {% endif %}
             <span class='warning'>
             Physics Approval Required Before Clinics Ready!
             </span>
-        {% endifnotequal %}
+        {% endif %}
 <!--        
-        {% ifnotequal plan.ApprvStatus 'NotApproved' %}
+        {% if plan.ApprvStatus != 'NotApproved' %}
             <br />
             {% trans 'Apprv Status:' %} &nbsp; {{ plan.ApprvStatus }}
-        {% endifnotequal %}
+        {% endif %}
 -->
         <!--
-        {% ifequal plan.PlanStatus 'Active' %}
-        {% ifnotequal plan.ApprvStatus 'Approved' %}
+        {% if plan.PlanStatus == 'Active' %}
+        {% if plan.ApprvStatus != 'Approved' %}
             <br />
             Before saving, please make sure you have <strong>RE-CALCULATED</strong> the treatment time upon any related changes
-        {% endifnotequal %}
-        {% endifequal %}
+        {% endif %}
+        {% endif %}
 
-        {% ifequal changeflag 'newcalc' %}
+        {% if changeflag == 'newcalc' %}
             <div id="id_{{ changeflag }}">
                 You just computed/recomputed the treatment time.
                 Please save your plan before leaving the page.
             </div>
-        {% endifequal %}
+        {% endif %}
         -->
         
         <br />
         <hr class="fulllength" />
         <br />        
         <input type="submit" name="qa_submit" class="float-right" value="&nbsp; {% trans 'Plan QA' %} &nbsp;" />
-        {% ifequal plan.PlanStatus 'Active' %}
-        {% ifnotequal plan.ApprvStatus 'Approved' %}
+        {% if plan.PlanStatus == 'Active' %}
+        {% if plan.ApprvStatus != 'Approved' %}
         <input type="submit" name="save_submit" value="&nbsp; &nbsp; {% trans 'Save' %} &nbsp; &nbsp;" />
         &nbsp; &nbsp; &nbsp; &nbsp;
-        {% endifnotequal %}
-        {% endifequal %}
+        {% endif %}
+        {% endif %}
         <input type="submit" name="cancel_submit" value="&nbsp; {% trans 'Cancel' %} &nbsp;" />
         </div> <!-- txbuttongroup -->
         

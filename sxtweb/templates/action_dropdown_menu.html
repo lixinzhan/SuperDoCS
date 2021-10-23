@@ -1,35 +1,35 @@
 {% load i18n %}
 
 <ul class="action-dropdown">
-    {% ifequal page_id 'status' %}
+    {% if page_id == 'status' %}
         <li class="menu-top">
             <a href="/plan/{{ planid }}/">Edit Plan</a>
         </li>
     {% else %} <!-- page_id -->
 
-        {% ifnotequal planid|slice:":3" 'new' %}
-            {% ifequal site_tab 'planning'%}
+        {% if planid|slice:":3" != 'new' %}
+            {% if site_tab == 'planning'%}
             <li class="menu-top">
             <a href="/planstatus/{{ plan.pk }}/">Change Status</a>
             </li>
-            {% endifequal %} <!-- site_tab -->
+            {% endif %} <!-- site_tab -->
 
             <li class="menu-top">
             <a href="#">{% trans 'Tools' %} &raquo;</a>
             <ul>
                 <li><a href="/plan/new_{{ planid }}/">{% trans 'Copy Plan' %}</a></li>
                 <li><a href="/plan_export/pdf/{{ planid }}">{% trans 'Export to PDF' %}</a></li>
-                {% ifequal plan.PlanStatus 'Active' %}
-                    {% ifequal plan.ApprvStatus 'Approved' %}
+                {% if plan.PlanStatus == 'Active' %}
+                    {% if plan.ApprvStatus == 'Approved' %}
                     <li><a href="/plan_export/csv/{{ planid }}">{% trans 'Export to CSV' %}</a></li>
-                    {% endifequal %}
-                {% endifequal %}
+                    {% endif %}
+                {% endif %}
             </ul>
             </li>
-        {% endifnotequal %} <!-- plan_id -->
+        {% endif %} <!-- plan_id -->
         <li class="menu-top">
         <a href="javascript:window.print()">Print</a>
         </li>
 
-    {% endifequal %}   <!-- page_id -->
+    {% endif %}   <!-- page_id -->
 </ul>
