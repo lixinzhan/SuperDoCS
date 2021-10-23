@@ -1,1 +1,1 @@
-default_app_config = 'xcalib.apps.XcalibConfig'
+#default_app_config = 'xcalib.apps.XcalibConfig'
