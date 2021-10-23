@@ -142,4 +142,4 @@ class NOMINALCALIBRATIONAdmin(admin.ModelAdmin):
     list_display = ('NCalibName', 'Filter', 'Cone', 'Status', 'Air_Kerma_Rate', 'Status')
 
 admin.site.register(NOMINALCALIBRATION, NOMINALCALIBRATIONAdmin)
-
+admin.site.enable_nav_sidebar = False
