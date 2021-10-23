@@ -44,7 +44,7 @@ class HVLAlCu:
             [ 8000.0000,        0.02437 ],
             [10000.0000,        0.02318 ],
             [15000.0000,        0.02195 ],
-            [20000.0000,        0.02168 ] ], dtype=np.float)
+            [20000.0000,        0.02168 ] ], dtype=float)
         
         # Mass Attn Coeff for Copper from NIST
         self.CuMassAttenuationCoeff = np.array([
@@ -88,12 +88,12 @@ class HVLAlCu:
             [ 8000.00000,        0.03074 ],
             [10000.00000,        0.03103 ],
             [15000.00000,        0.03247 ],
-            [20000.00000,        0.03408 ] ], dtype=np.float)
+            [20000.00000,        0.03408 ] ], dtype=float)
                 
-        self.AlDensity = np.float(2.699) # g/cm3
-        self.CuDensity = np.float(8.960) # g/cm3
-        self.AlCharactE = np.float(1.5596) # keV
-        self.CuCharactE = np.float(8.97890) # keV
+        self.AlDensity = float(2.699) # g/cm3
+        self.CuDensity = float(8.960) # g/cm3
+        self.AlCharactE = float(1.5596) # keV
+        self.CuCharactE = float(8.97890) # keV
 
         self.AlHVLTable = np.array(self.AlMassAttenuationCoeff)
         self.AlHVLTable[:,1]=np.log(2.0)*10.0/(self.AlMassAttenuationCoeff[:,1]*self.AlDensity)

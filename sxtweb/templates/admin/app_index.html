@@ -7,11 +7,11 @@
 <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
 &rsaquo;
 {% for app in app_list %}
-    {% ifequal app.name 'Xcalc' %}
+    {% if app.name == 'Xcalc' %}
         {% trans 'Xcalc' %}
     {% else %}
         {% blocktrans with app.name as name %}{{ name }}{% endblocktrans %}
-    {% endifequal %}
+    {% endif %}
 {% endfor %}
 
 </div>

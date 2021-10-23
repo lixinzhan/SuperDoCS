@@ -36,14 +36,14 @@
         <td>{{ plan.DoseCalibDate|date }}</td>
     </tr>
     <tr>
-        {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+        {% if plan.Cone.Machine.OutputControl == 'min' %}
         <td>{% trans 'End Effect (min)' %}:</td>
         {% else %}
         <td>{% trans 'End Effect (MU)' %}:</td>
-        {% endifequal %}
+        {% endif %}
         <td>{{ plan.Filter.Filter.EndEffect }}</td>
     </tr>
-    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    {% if plan.Cone.Machine.OutputControl == 'min' %}
     <tr><th>{% trans 'Air Kerma Rate in Air for Calib. Applicator (cGy/min)' %}:</th>
         <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
     </tr>
@@ -51,7 +51,7 @@
     <tr><th>{% trans 'Air Kerma in Air per MU for Calib. Applicator (cGy/MU)' %}:</th>
         <th>{{ plan.KR_air_CalibCone|floatformat:3 }}</th>
     </tr>
-    {% endifequal %}
+    {% endif %}
         -->
     <tr><td>{% trans 'Applicator' %}:</td>
         <td>{{ plan.Cone }}</td>
@@ -112,7 +112,7 @@
     <tr><td>{% if plan.SpecifyROF %}{% trans 'User Specified ' %}{% endif %}{% trans 'Relative Exposure Factor' %}:</td>
         <td>{{ plan.ROF_Exposure|floatformat:3 }}</td>
     </tr>
-    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    {% if plan.Cone.Machine.OutputControl == 'min' %}
     <tr><th>{% trans 'Air Kerma Rate in Air at Surface (cGy/min)' %}:</th>
         <th>{{ plan.KR_air|floatformat:3 }}</th>
     </tr>
@@ -120,20 +120,20 @@
     <tr><th>{% trans 'Air Kerma in Air per MU at Surface (cGy/MU)' %}:</th>
         <th>{{ plan.KR_air|floatformat:3 }}</th>
     </tr>
-    {% endifequal %}
+    {% endif %}
     <tr><td>{% trans 'Back Scattering Factor for Water (Bw)' %}:</td>
         <td>{{ plan.BSF_wat|floatformat:3 }}</td>
     </tr>
-    {% ifnotequal plan.Cone.ConeEnd 'Open' %}
+    {% if plan.Cone.ConeEnd != 'Open' %}
     <tr><td>{% trans 'BSF Correction Factor for Cone End' %}:</td>
         <td>{{ plan.BSF_ConeEnd|floatformat:3 }}</td>
     </tr>
-    {% endifnotequal %}
+    {% endif %}
     <tr><td>{% trans 'Mass Abs. Coeff. (Water to Air in Air)' %}:</td>
         <td>{{ plan.MassAbs_WatAir_air|floatformat:3 }}</td>
     </tr>
 
-    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    {% if plan.Cone.Machine.OutputControl == 'min' %}
     <tr><th>{% trans 'Dose Rate at Water Surface (cGy/min)' %}:</th>
         <th>{{ plan.DR_wat|floatformat:3 }}</th>
     </tr>
@@ -141,7 +141,7 @@
     <tr><th>{% trans 'Dose per MU at Water Surface (cGy/MU)' %}:</th>
         <th>{{ plan.DR_wat|floatformat:3 }}</th>
     </tr>
-    {% endifequal %}
+    {% endif %}
     
     <tr><td>{% trans 'Destination Medium' %}:</td>
         <td>{{ plan.TargetTissue }}</td>
@@ -152,7 +152,7 @@
     <tr><td>{% trans 'BSF Ratio, Medium to Water (Bmed/Bw)' %}:</td>
         <td>{{ plan.B_MedWat|floatformat:3 }}</td>
     </tr>
-    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    {% if plan.Cone.Machine.OutputControl == 'min' %}
     <tr><th>{% trans 'Dose Rate at Medium Surface (cGy/min)' %}:</th>
         <th>{{ plan.DR_med|floatformat:3 }}</th>
     </tr>
@@ -160,7 +160,7 @@
     <tr><th>{% trans 'Dose per MU at Medium Surface (cGy/MU)' %}:</th>
         <th>{{ plan.DR_med|floatformat:3 }}</th>
     </tr>
-    {% endifequal %}
+    {% endif %}
 -->
     <tr><td>{% trans 'Total Dose (cGy)' %}: </td>
         <td>{{plan.TotalDose }}</td>
@@ -174,7 +174,7 @@
     <tr><td>{% trans 'Percentage Depth Dose (%)' %}:</td>
         <td>{{ plan.PDD|floatformat:"-3" }}</td>
     </tr>
-    {% ifequal plan.Cone.Machine.OutputControl 'min' %}
+    {% if plan.Cone.Machine.OutputControl == 'min' %}
     <tr id="final-result"><th>{% trans 'Fractional Treatment Time (min)' %}:</th>
         <th><span class="emphasize">{{ plan.TxTime|floatformat:3 }}</span>  </th>
     </tr>
@@ -182,23 +182,23 @@
     <tr id="final-result"><th>{% trans 'MU Delivery per Fraction (MU)' %}:</th>
         <th><span class="emphasize">{{ plan.TxTime|floatformat:1 }}</span>  </th>
     </tr>
-    {% endifequal %}
+    {% endif %}
     <tr><td>{% trans 'Physician' %}: </td>
         <td>{{ plan.Doctor }} </td>
     </tr>
     <tr><td>{% trans 'Plan Status' %}: </td>
-     {% ifnotequal plan.PlanStatus 'Active' %}
+     {% if plan.PlanStatus != 'Active' %}
         <td>{{ plan.PlanStatus }} ({{ plan.StatusChangedBy }}) </td>
      {% else %}
         <td>{{ plan.PlanStatus }} </td>
-     {% endifnotequal %}
+     {% endif %}
     </tr>
     <tr><td>{% trans 'Physics Approval' %} </td>
-     {% ifnotequal plan.ApprvStatus 'NotApproved' %}
+     {% if plan.ApprvStatus != 'NotApproved' %}
         <td>{{ plan.ApprvStatus }} ({{ plan.ApprovedBy }})</td>
      {% else %}
         <td>{{ plan.ApprvStatus }}</td>
-     {% endifnotequal %}
+     {% endif %}
     </tr>
     <tr><td>{% trans 'Software Version for Calculation' %}: </td>
         <td>{{ plan.SXTCalcVersion }}</td>

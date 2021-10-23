@@ -17,7 +17,7 @@ class MuWatAirTable:
             if len(line)>0 and line[0] != '#':
                 MWATable.append(line.split())
         fh.close()
-        self.MWATable = np.array(MWATable, dtype=np.float)
+        self.MWATable = np.array(MWATable, dtype=float)
 
     def showTables(self):
         '''Show the contents of the table. It is often for debugging'''
