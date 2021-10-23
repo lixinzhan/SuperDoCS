@@ -7,7 +7,7 @@ It is based on the Django platform (2.x on Django-1.11 and 3.x on Django 3.2).
 Before setting up the development virtual environment, packages
 linux-source, python3-dev, python3 and git are required.
 
-SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu 18.04:
+SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu 20.04:
 
 0. Ubuntu base installation (any flavors, including WSL)
 

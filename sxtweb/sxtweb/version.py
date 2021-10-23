@@ -18,6 +18,9 @@ REVISION = 'D23-C101-T102'
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
 #
+# 3.0-Alpha: 2021-10-23
+#   Migrated to Django 3.2, and updated features deprecated in Django4.
+#
 # 2.3.1: 2021-10-22
 #   Fixed issues with pip3 setup and added packaging time.
 # 2.3: 2020-09-03
