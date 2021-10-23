@@ -1,1 +1,1 @@
-default_app_config = 'xcalc.apps.XcalcConfig'
+#default_app_config = 'xcalc.apps.XcalcConfig'
