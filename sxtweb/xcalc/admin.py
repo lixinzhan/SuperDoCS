@@ -30,3 +30,4 @@ class TreatmentPlanAdmin(admin.ModelAdmin):
         return False
 
 admin.site.register(TREATMENTPLAN,TreatmentPlanAdmin)
+admin.site.enable_nav_sidebar = False

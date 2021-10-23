@@ -33,4 +33,4 @@ class DoctorAdmin(admin.ModelAdmin):
         return '{}, {} {}'.format(obj.LastName, obj.FirstName, obj.MiddleName)
     list_display = ('StaffId','Full_Name', 'Status')
 admin.site.register(DOCTOR,DoctorAdmin)
-
+admin.site.enable_nav_sidebar = False
