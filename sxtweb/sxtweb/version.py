@@ -45,7 +45,7 @@ DB_SCHEMA='2.3'
 #
 # Copyright Information.
 #
-COPYRIGHT = 'Copyleft 2014-2021, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2023, Lixin Zhan @GRRCC'
 
 #
 # Support Information
