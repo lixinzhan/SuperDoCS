@@ -38,4 +38,4 @@ Now you can use http://your-ip:8000 for web site access.
 
 More installation procedure can be found in the description for releases. There are a docker container release but not guaranteed to be the latest. Contact me if you are interested in an installation based on a docker image.
 
-(Note: Django 1.11 works with Python 2.7, 3.4-3.7, Django 3.2 works with Python 3.6-3.10)
+(Note: Django 1.11 works with Python 2.7, 3.4-3.7, Django 3.2 (together with numpy and scipy) works with Python 3.8-3.10)
