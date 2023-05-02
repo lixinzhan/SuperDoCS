@@ -38,8 +38,8 @@ Now you can use http://your-ip:8000 for web site access.
 
 ```
 # copy the existing DB to the sxtweb/sxt.db
-python3 management.py makemigrations
-python3 management.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
 
