@@ -84,3 +84,8 @@ It is decided that the master branch will be with Django 3.2 for the development
 *** 20211023 ***
 
 Updated all deprecated features in django 4.0, even though the current version is targeting Django 3.2.
+
+*** 20230502 ***
+
+Minor changes to page display. Nothing else.
+
