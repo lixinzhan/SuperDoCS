@@ -15,7 +15,7 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 2. `python3 -m venv .env-SuperDoCS`
 
-3. `source .env-SuperDoCS/bin/active
+3. `source .env-SuperDoCS/bin/active`
 
 4. `git clone https://github.com/lixinzhan/SuperDoCS.git`
 
