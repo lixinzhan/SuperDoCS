@@ -2,7 +2,7 @@
 # Main, Secondary, and Minor version numbers.
 #
 VERSION = '3.0' # Version
-DEVSTAGE = 'Alpha'  # Stage of development: Alpha, Beta, RC, Release.
+DEVSTAGE = 'Release'  # Stage of development: Alpha, Beta, RC, Release.
 
 #
 # Format: DB-CALC-TEMPL
@@ -17,6 +17,9 @@ REVISION = 'D23-C101-T102'
 #   Any changes in DB schema results in the DB processing during upgrade.
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
+#
+# 3.0: 2023-05-02
+#   Minor update to page display.
 #
 # 3.0-Alpha: 2021-10-23
 #   Migrated to Django 3.2, and updated features deprecated in Django4.
