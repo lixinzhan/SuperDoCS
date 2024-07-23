@@ -2,34 +2,52 @@
 Superficial/Orthovoltage Dose Calculation System
 
 SuperDoCS is a Dose Calculation and Calibration System for Superficial/Orthovoltage X-ray machines. 
-It is based on the Django platform (2.x on Django-1.11 and 3.x on Django 3.2).
+It is based on the Django platform (2.x on Django-1.11, 3.x on Django 3.2 and 4.x on Django 4.2).
 
 Before setting up the development virtual environment, packages
 linux-source, python3-dev, python3 and git are required.
 
-SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu 20.04:
+SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu:
 
-0. Ubuntu base installation (any flavors, including WSL)
+0. Ubuntu base installation (any flavors, including WSL). Make sure the Ubuntu version has a Python version that Django supports.
 
-1. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
+   - Django 1.11: Python 2.7, 3.4-3.7 (Ubuntu 18.04)
+   - Django 2.2: Python 3.5-3.9 (Ubuntu 18.04, 20.04)
+   - Django 3.2: Python 3.6-3.10 (Ubuntu 18.04, 20.04, 22.04)
+   - Django 4.2: Python 3.8-3.12 (Ubuntu 20.04, 22.04, 24.04)
+  
+   _Note: Default Python versions in Ubuntu_
 
-2. `python3 -m venv .env-SuperDoCS`
+   - Ubuntu 18.04: 2.7, 3.6
+   - Ubuntu 20.04: 3.8
+   - Ubuntu 22.04: 3.10
+   - Ubuntu 24.04: 3.12
 
-3. `source .env-SuperDoCS/bin/active`
+2. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
 
-4. `git clone https://github.com/lixinzhan/SuperDoCS.git`
+_Must have: python3-venv, git_
 
-   `git config --global user.name "Your Name"`
-   
-   `git config --global user.email you@email`
-   
-5. `cd SuperDoCS`
+2. Download SuperDoCS
 
-6. `pip3 install -r requirement.txt`
+   ```
+   git clone https://github.com/lixinzhan/SuperDoCS.git
+   git config --global user.name "Your Name"
+   git config --global user.email you@email
+   ```
 
-7. `vi sxtweb/sxtweb/local.py` # make sure DEBUG=True and add your servers IP address to ALLOWED_HOSTS
+4. Setup Virtual Environment
+  
+   ```
+   cd SuperDoCS
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install --upgrade pip
+   pip3 install -r requirement.txt
+   ```
 
-8. `python3 manage.py runserver 0:8000`
+9. `vi sxtweb/sxtweb/local.py` # make sure DEBUG=True and add your servers IP address to ALLOWED_HOSTS
+
+10. `python3 manage.py runserver 0:8000`
 
 Now you can use http://your-ip:8000 for web site access.
 
