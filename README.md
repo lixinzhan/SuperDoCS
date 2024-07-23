@@ -11,13 +11,12 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 0. Ubuntu base installation (any flavors, including WSL). Make sure it has a Python version that Django supports.
 
-   | SuperDoCS | Django | Django EOL  | Python | Ubuntu |
-   | ----------| ---    | ---         | ---    | ---    |
-   | 2.x       | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04 |
-   | ---       | 2.2    | 20220411    | 3.5-3.9 | 18.04, 20.04 |
-   | 3.x       | 3.2    | 20240401    | 3.6-3.10 | 18.04, 20.04, 22.04 |
-   | 4.x       | 4.2    | 20260401    | 3.8-3.12 | 20.04, 22.04, 24.04 |
-   | 5.x       | 5.2    | 20280401    | ---      | 22.04, 24.04, 26.04 |
+   | SuperDoCS | Django | Django EOL  | Python       | Ubuntu              | Comment |
+   | ----------| ---    | ---         | ---          | ---                 | ---     |
+   | 2.x       | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04               | gunicorn 20.x |
+   | 3.x       | 3.2    | 20240401    | 3.6-3.10     | 20.04, 22.04        | gunicorn 22.x |
+   | 4.x       | 4.2    | 20260401    | 3.8-3.12     | 20.04, 22.04, 24.04 | |
+   | 5.x       | 5.2    | 20280401    | ---          | 22.04, 24.04, 26.04 | |
   
    _Note: Default Python versions in Ubuntu_
 
@@ -28,7 +27,7 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 2. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
 
-   _Must have: python3-venv, git_
+   _Note: the development tools above are required for building python wheels_
 
 2. Download SuperDoCS
 
