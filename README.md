@@ -68,4 +68,6 @@ python3 manage.py migrate
 
 More installation procedure can be found in the description for releases. Contact me if you are interested in an installation based on a docker image.
 
-(Note: Django 1.11 works with Python 2.7, 3.4-3.7, Django 3.2 (together with numpy and scipy) works with Python 3.8-3.11)
+TODO:
+
+- update jQuery scripts from Ver 4.x.
