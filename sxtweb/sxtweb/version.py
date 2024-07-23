@@ -4,6 +4,21 @@
 VERSION = '3.1' # Version
 DEVSTAGE = 'Release'  # Stage of development: Alpha, Beta, RC, Release.
 
+# Version History
+#
+# 3.1: 2024-07-23
+#   updated requirements for running under Ubuntu 22.04
+#
+# 3.0: 2023-05-02
+#   Minor update to page display.
+#
+# 3.0-Alpha: 2021-10-23
+#   Migrated to Django 3.2, and updated features deprecated in Django4.
+#
+# 2.3.1: 2021-10-22
+#   Fixed issues with pip3 setup and added packaging time.
+#
+
 #
 # Format: DB-CALC-TEMPL
 #   DB:    db model and data entry; 
@@ -17,18 +32,6 @@ REVISION = 'D23-C101-T102'
 #   Any changes in DB schema results in the DB processing during upgrade.
 #   Calibration data changes will be reflected above but not here.
 #   A short description of Schema change should be described here as well.
-#
-# 3.1: 2024-07-23
-#   updated requirements for running under Ubuntu 22.04
-#
-# 3.0: 2023-05-02
-#   Minor update to page display.
-#
-# 3.0-Alpha: 2021-10-23
-#   Migrated to Django 3.2, and updated features deprecated in Django4.
-#
-# 2.3.1: 2021-10-22
-#   Fixed issues with pip3 setup and added packaging time.
 #
 # 2.3: 2020-09-03
 #   Changed ROF to ROF_Exposure for fixing failed SpecifyROF calculation issue.
@@ -58,7 +61,7 @@ DB_SCHEMA='2.3'
 #
 # Copyright Information.
 #
-COPYRIGHT = 'Copyleft 2014-2023, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2024, Lixin Zhan @GRRCC'
 
 #
 # Support Information
