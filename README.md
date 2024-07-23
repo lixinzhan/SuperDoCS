@@ -9,12 +9,15 @@ linux-source, python3-dev, python3 and git are required.
 
 SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu:
 
-0. Ubuntu base installation (any flavors, including WSL). Make sure the Ubuntu version has a Python version that Django supports.
+0. Ubuntu base installation (any flavors, including WSL). Make sure it has a Python version that Django supports.
 
-   - Django 1.11: Python 2.7, 3.4-3.7 (Ubuntu 18.04)
-   - Django 2.2: Python 3.5-3.9 (Ubuntu 18.04, 20.04)
-   - Django 3.2: Python 3.6-3.10 (Ubuntu 18.04, 20.04, 22.04)
-   - Django 4.2: Python 3.8-3.12 (Ubuntu 20.04, 22.04, 24.04)
+   | Django | End of Life | Python | Ubuntu |
+   | ---    | ---         | ---    | ---    |
+   | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04 |
+   | 2.2    | 20220411    | 3.5-3.9 | 18.04, 20.04 |
+   | 3.2    | 20240401    | 3.6-3.10 | 18.04, 20.04, 22.04 |
+   | 4.2    | 20260401    | 3.8-3.12 | 20.04, 22.04, 24.04 |
+   | 5.2    | 20280401    | ---      | 22.04, 24.04, 26.04 |
   
    _Note: Default Python versions in Ubuntu_
 
