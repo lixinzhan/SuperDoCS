@@ -4,7 +4,7 @@
 # Get the current directory and project.
 CWD=$(pwd)
 PRJ=$(basename $CWD)
-ENV=$(pwd)/.env
+ENV=$(pwd)/.venv
 PORT=8000
 HOSTNAME=$(ip route get 1 | awk '{print $7;exit}' | head -1)
 USRID=$(id -u)
@@ -61,8 +61,9 @@ fi
 
 # seup virtual environment
 sudo chown -R $USRID:$GRPID .
-python3 -m venv .env
-source .env/bin/activate
+python3 -m venv $ENV
+source $ENV/bin/activate
+pip install --upgrade pip
 pip install -r config/requirements.txt
 deactivate
 echo "Setting up virtual environment done!"
