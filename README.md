@@ -25,7 +25,7 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 2. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
 
-_Must have: python3-venv, git_
+   _Must have: python3-venv, git_
 
 2. Download SuperDoCS
 
