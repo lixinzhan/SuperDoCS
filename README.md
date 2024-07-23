@@ -11,13 +11,13 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
 
 0. Ubuntu base installation (any flavors, including WSL). Make sure it has a Python version that Django supports.
 
-   | Django | End of Life | Python | Ubuntu |
-   | ---    | ---         | ---    | ---    |
-   | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04 |
-   | 2.2    | 20220411    | 3.5-3.9 | 18.04, 20.04 |
-   | 3.2    | 20240401    | 3.6-3.10 | 18.04, 20.04, 22.04 |
-   | 4.2    | 20260401    | 3.8-3.12 | 20.04, 22.04, 24.04 |
-   | 5.2    | 20280401    | ---      | 22.04, 24.04, 26.04 |
+   | SuperDoCS | Django | Django EOL  | Python | Ubuntu |
+   | ----------| ---    | ---         | ---    | ---    |
+   | 2.x       | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04 |
+   | ---       | 2.2    | 20220411    | 3.5-3.9 | 18.04, 20.04 |
+   | 3.x       | 3.2    | 20240401    | 3.6-3.10 | 18.04, 20.04, 22.04 |
+   | 4.x       | 4.2    | 20260401    | 3.8-3.12 | 20.04, 22.04, 24.04 |
+   | 5.x       | 5.2    | 20280401    | ---      | 22.04, 24.04, 26.04 |
   
    _Note: Default Python versions in Ubuntu_
 
@@ -36,6 +36,7 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
    git clone https://github.com/lixinzhan/SuperDoCS.git
    git config --global user.name "Your Name"
    git config --global user.email you@email
+   git config --global core.editor "vim"
    ```
 
 4. Setup Virtual Environment
