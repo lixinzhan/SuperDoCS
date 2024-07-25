@@ -58,7 +58,9 @@ TODO:
 
 - update jQuery scripts from Ver 4.x.
 
-<h3>Compatibility Matrix</h3>
+----------------------------------------------------
+
+<h3>Appendix: Compatibility Matrix</h3>
 
    | SuperDoCS | Django | Django EOL  | Python       | Ubuntu              | Comment |
    | ----------| ---    | ---         | ---          | ---                 | ---     |
