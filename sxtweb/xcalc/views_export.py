@@ -31,7 +31,7 @@ from protocols.TG61.Mu_WatAir_air import Mu_WatAir_air
 
 import xhtml2pdf.pisa as pisa
 from io import StringIO, BytesIO
-import cgi
+# import cgi
 import csv
 import hashlib
 import platform

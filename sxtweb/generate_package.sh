@@ -22,19 +22,6 @@ cp ../LICENSE ../README.md ../CHANGES.txt .
 sed "s/^DEBUG\ =.*/DEBUG\ =\ False/" ../sxtweb/sxtweb/local.py > ./sxtweb/local.py
 
 ##########################################################################################
-# docker related.
-sed -i "s:^ENV prj .*:ENV prj ${PACKAGE}:g" Dockerfile
-sed -i "s:^ENV ver .*:ENV ver ${VERSION}:g" Dockerfile
-sed -i "s:^ENV prjroot .*:ENV prjroot /var/www/${PRJ}:g" Dockerfile
-
-sed -i "s|sxt_vol:/var.*|sxt_vol:/var/www/${PRJ}/sxtweb|g" docker-compose.yml
-sed -i "s|static_vol:/var.*|static_vol:/var/www/${PRJ}/static|g" docker-compose.yml
-sed -i "s|media_vol:/var.*|media_vol:/var/www/${PRJ}/media|g" docker-compose.yml
-sed -i "s|usercodes_vol:/var.*|usercodes_vol:/var/www/${PRJ}/xcalc/UserCodes|g" docker-compose.yml
-sed -i "s|nginxconf_vol:/var.*|nginxconf_vol:/var/www/${PRJ}/config/nginx_conf.d|g" docker-compose.yml
-sed -i "s|nginxconf_vol:/etc.*|nginxconf_vol:/etc/nginx/conf.d|g" docker-compose.yml
-# docker related done.
-##########################################################################################
 
 python3 manage.py collectstatic --noinput
 
