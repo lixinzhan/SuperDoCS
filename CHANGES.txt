@@ -93,3 +93,6 @@ Minor changes to page display. Nothing else.
 
 Updated the package dependancy, and confirmed Ubuntu 22.04 is compatible. Version raised to 3.1.
 
+*** 20240730 ***
+
+Updated Django dependency to 4.2. Package are to be simplified for easy depoloyment.
