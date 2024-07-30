@@ -1,4 +1,4 @@
-django==3.2.*
+django==4.2.*
 django-admin
 docutils
 numpy>=1.23,<2.0
