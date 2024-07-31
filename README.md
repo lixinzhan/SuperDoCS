@@ -57,16 +57,19 @@ Now you can use http://your-ip:8000 for web site access.
    git config --global core.editor "vim"
    ```
 
-4. `cd SuperDoCS && vi sxtweb/sxtweb/local.py`  # make necessary changes matching production site information
-
-5. Setup the services
-
+4. Make necessary changes in `local.py`
    ```
    cd SuperDoCS
+   vi sxtweb/sxtweb/local.py
+   ```
+
+7. Setup services
+
+   ```
    ./setup.sh -a 2>&1 | tee /tmp/sxt_install.log
    ```
 
-6. Access the webpage and commission the system.
+8. Access the webpage and commission the system.
 
 
 
