@@ -7,15 +7,17 @@ It is based on the Django platform (2.x on Django-1.11, 3.x on Django 3.2 and 4.
 Before setting up the development virtual environment, packages
 linux-source, python3-dev, python3 and git are required.
 
-SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to set up a development environment on Ubuntu:
+SuperDoCS is being developed based on Ubuntu. Setup steps below are hence Ubuntu based, for both development and production:
 
-0. Ubuntu base installation (any flavors, including WSL). Make sure it has a Python version that Django supports. See Compatibility Matrix for more information.
+<h3>Setup Steps for Development System</h3>
+
+1. Ubuntu base installation (any flavors, including WSL). Make sure it has a Python version that Django supports. See Compatibility Matrix for more information.
 
 2. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
 
    _Note: the development tools above are required for building python wheels_
 
-2. Download SuperDoCS
+3. Download SuperDoCS
 
    ```
    git clone https://github.com/lixinzhan/SuperDoCS.git
@@ -34,14 +36,41 @@ SuperDoCS is being developed mainly on Ubuntu. Steps below briefly shows how to 
    pip3 install -r requirement.txt
    ```
 
-9. `vi sxtweb/sxtweb/local.py` # make sure DEBUG=True and add your servers IP address to ALLOWED_HOSTS
+5. `vi sxtweb/sxtweb/local.py` # make sure DEBUG=True and add your servers IP address to ALLOWED_HOSTS
 
-10. `python3 manage.py runserver 0:8000`
+6. `python3 manage.py runserver 0:8000`
 
 Now you can use http://your-ip:8000 for web site access.
 
 
-**To Migrate existing DB**
+<h3>Setup Steps for Production System</h3>
+
+1. Ubuntu based installation (Ubuntu LTS recommented). Make sure that SuperDoCS -- Django -- Python -- Ubuntu versions are matching. See Compatibility Matrix for more information.
+
+2. `sudo apt install git vim`
+
+3. Download SuperDoCS
+   ```
+   git clone https://github.com/lixinzhan/SuperDoCS.git
+   git config --global user.name "Your Name"
+   git config --global user.email you@email
+   git config --global core.editor "vim"
+   ```
+
+4. `cd SuperDoCS && vi sxtweb/sxtweb/local.py`  # make necessary changes matching production site information
+
+5. Setup the services
+
+   ```
+   cd SuperDoCS
+   ./setup.sh -a 2>&1 | tee /tmp/sxt_install.log
+   ```
+
+6. Access the webpage and commission the system.
+
+
+
+<h3>To Migrate existing DB</h3>
 
 ```
 # copy the existing DB to the sxtweb/sxt.db
@@ -50,13 +79,13 @@ python3 manage.py migrate
 ```
 
 
-**This is the development branch.**
 
-More installation procedure can be found in the description for releases. Contact me if you are interested in an installation based on a docker image.
-
-TODO:
+<h3>TODO:</h3>
 
 - update jQuery scripts from Ver 4.x.
+- simplify the system setup procedure.
+- add unit tests.
+
 
 ----------------------------------------------------
 
