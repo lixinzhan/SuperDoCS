@@ -109,6 +109,7 @@ python3 manage.py migrate
    - Ubuntu 20.04: 3.8
    - Ubuntu 22.04: 3.10
    - Ubuntu 24.04: 3.12
+   - Ubuntu 26.04: 3.14(?)
    - RHEL 7.7+: 2.7, 3.6
    - RHEL 8: 3.6 (available 2.7, 3.8, 3.9, 3.11, 3.12)
    - RHEL 9: 3.9 (available 3.11, 3.12)
