@@ -84,7 +84,7 @@ echo "GRPID:   $GRPID"
 echo "USRNAME: $USRNAME"
 
 echo
-echo "Setup Infor for Web Service"
+echo "Setup Info for Web Service"
 echo "WWWPORT: $WWWPORT"
 echo "WWWGRP:  $WWWGRP"
 
@@ -120,7 +120,7 @@ install-package()
         echo "$1 exists!"
     else
 	echo "Install package $1 ..."
-        sudo apt install -y $1 && echo "Package $1 installed!" || echo "Error in installing $1 !!"
+        sudo apt-get install -y $1 && echo "Package $1 installed!" || echo "Error in installing $1 !!"
     fi
     echo
 }
@@ -145,8 +145,8 @@ start-service()
 # add universe and update the sytem to the latest.
 sudo add-apt-repository -y universe
 sudo systemctl daemon-reload
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 
 if $SETENV; then
