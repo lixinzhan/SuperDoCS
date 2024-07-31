@@ -73,7 +73,7 @@ Now you can use http://your-ip:8000 for web site access.
 
 
 
-<h3>To Migrate existing DB</h3>
+<h3>Migrate Existing DB</h3>
 
 ```
 # copy the existing DB to the sxtweb/sxt.db
