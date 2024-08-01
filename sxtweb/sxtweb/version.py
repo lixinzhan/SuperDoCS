@@ -1,7 +1,7 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '3.1' # Version
+VERSION = '4.0-Alpha1' # Version
 DEVSTAGE = 'Release'  # Stage of development: Alpha, Beta, RC, Release.
 
 # Version History
