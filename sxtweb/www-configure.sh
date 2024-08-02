@@ -26,7 +26,7 @@ if [[ $(apt -v | head -1 | cut -d " " -f1) -ne "apt" ]]; then
 fi
 
 # add universe.
-sudo add-apt-repository universe
+sudo add-apt-repository -y universe
 
 
 # check if packages python3-dev and nginx are installed.
