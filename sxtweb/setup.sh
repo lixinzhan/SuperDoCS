@@ -59,7 +59,7 @@ fi
  
 # Get the current directory and project info.
 PRJDIR=$(pwd)
-PRJ=$(basename $SXTDIR)
+PRJ=$(basename $PRJDIR)
 ENV=$PRJDIR/.venv
 
 # info for web service setup
