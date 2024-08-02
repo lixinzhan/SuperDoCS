@@ -34,6 +34,7 @@ while getopts ${OPTSTRING} opt; do
 	    SETENV=true
 	    ;;
         w)
+        SETENV=true
 	    SETWEB=true
 	    ;;
         s)
@@ -57,9 +58,9 @@ if [ $# = 0 ]; then
 fi
  
 # Get the current directory and project info.
-CWD=$(pwd)
-PRJ=$(basename $CWD)
-ENV=$(pwd)/.venv
+PRJDIR=$(pwd)
+PRJ=$(basename $SXTDIR)
+ENV=$PRJDIR/.venv
 
 # info for web service setup
 WWWPORT=8000 		# `grep WWWPORT settings.py | awk -F= '{print$2}' | xargs`
@@ -74,7 +75,7 @@ GRPID=$(id -g)
 USRNAME=$(whoami)
 
 echo "System Environment" 
-echo "CWD:     $CWD"
+echo "PRJDIR:  $PRJDIR"
 echo "PRJ:     $PRJ"
 echo "ENV:     $ENV"
 echo "HOST:    $HOSTNAME"
@@ -158,10 +159,10 @@ if $SETENV; then
     install-package python3-venv
     install-package python3-wheel
 
-    python3 -m venv .venv
-    source .venv/bin/activate
+    python3 -m venv $ENV
+    source $ENV/bin/activate
     pip install --upgrade pip
-    pip install -r requirements.txt
+    pip install -r $PRJDIR/config/requirements.txt
     deactivate
     echo "Setting up virtual environment done!"
     echo
@@ -172,7 +173,69 @@ fi
 #
 
 if $SETWEB; then
-    echo "In setup web"
+    echo
+    echo "In Web Setup"
+    echo
+
+    install-package nginx
+
+    source $ENV/bin/activate
+
+    # No debug mode
+    sed -i "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py
+
+    # collect static files
+    python3 manage.py collectstatic --noinput
+
+    # stop web services
+    stop-service gunicorn.socket
+    stop-service gunicorn.service
+    stop-service nginx.service
+
+    #
+    # Setup services for gunicorn and nginx
+    #
+
+    # gunicorn service
+    echo "Configure gunicorn service ..."
+    SYSDIR=/etc/systemd/system
+    sudo cp -rf $PRJDIR/config/gunicorn.service $SYSDIR
+    sudo cp -rf $PRJDIR/config/gunicorn.socket  $SYSDIR
+    sudo sed -i "s:^User=.*:User=$USRNAME:g" $SYSDIR/gunicorn.service
+    sudo sed -i "s:^WorkingDirectory=.*:WorkingDirectory=$PRJDIR:g" $SYSDIR/gunicorn.service
+    sudo sed -i "s:^ExecStart=.*:ExecStart=$ENV/bin/gunicorn \\\:g" $SYSDIR/gunicorn.service
+    sudo sed -i "s:access-logfile.*:access-logfile $PRJDIR/log/access.log \\\:g" $SYSDIR/gunicorn.service
+    sudo sed -i "s:error-logfile.*:error-logfile $PRJDIR/log/error.log \\\:g" $SYSDIR/gunicorn.service
+
+    # nginx service
+    echo "Configure nginx service ..."
+    NGAVL=/etc/nginx/sites-available
+    NGENB=/etc/nginx/sites-enabled
+    echo "NGAVL: $NGAVL"
+    echo "NGENB: $NGENB"
+    sudo cp -rf $PRJDIR/config/superdocs_nginx.conf $NGAVL/
+    sudo rm -rf $NGENB/superdocs_nginx.conf > /dev/null 2>&1
+    sudo ln -s $NGAVL/superdocs_nginx.conf $NGENB/
+    sudo sed -i "s:listen.*:listen $WWWPORT;:g" $NGAVL/superdocs_nginx.conf
+    sudo sed -i "s:server_name.*:server_name $IP 127.0.0.1;:g" $NGAVL/superdocs_nginx.conf
+    sudo sed -i "s:alias.*media/;:alias $PRJDIR/media/;:g" $NGAVL/superdocs_nginx.conf
+    sudo sed -i "s:alias.*static/;:alias $PRJDIR/static/;:g" $NGAVL/superdocs_nginx.conf
+    sudo rm -f $NGENB/default
+
+    sudo chown -R $USRNAME:$WWWGRP $PRJDIR
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable gunicorn.service
+    sudo systemctl enable nginx
+
+    start-service gunicorn.socket
+    start-service gunicorn.service
+    start-service nginx.service
+
+    echo
+    echo "Web server for SuperDoCS done! Please check by visiting http://$IP:$WWWPORT/ :)"
+    echo
+
 fi  # web
 
 
