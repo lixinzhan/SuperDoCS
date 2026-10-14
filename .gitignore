@@ -104,3 +104,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+CODE_REVIEW.md
