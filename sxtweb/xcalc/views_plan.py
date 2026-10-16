@@ -73,7 +73,7 @@ def plan_search_page(request):
             if maxentry=='All':
                 num_entry = np.iinfo(np.uint32).max
             else:
-                num_entry = np.int(maxentry)
+                num_entry = int(maxentry)
             
             paginator = Paginator(planlist, num_entry)
             try:
