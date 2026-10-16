@@ -157,18 +157,14 @@ def calcTxPlan(plan, errlist):
                                                  Status='Active')
         except:
             plan.ROF_Exposure = 0
-            errcode = 'ERR: CalibEntry '+str(CalibEntry)
-            errlist.append(errcode)
-            #errlist.append('E0032')
+            errlist.append('E0032')
 
         try:   # plan.Filter is actually the calibration of a filter here.
             #ROFEntry = OUTPUTFACTOR.objects.get(Filter=plan.Filter.id, Cone=plan.Cone.id)
             ROFEntry = OUTPUTFACTOR.objects.get(Filter=CalibEntry.id, Cone=PlanConeId)
         except:
             plan.ROF_Exposure = 0
-            errcode = 'ERR: '+str(ROFEntry)
-            errlist.append(errcode)
-            #errlist.append('E0033') #'Filter/Cone Combination Not Commissioned. '
+            errlist.append('E0033')
 
         try:
             plan.ROF_Exposure=getROF(ROFEntry, plan.Dequiv, plan.CutoutRequired, plan.CutoutThickness)
