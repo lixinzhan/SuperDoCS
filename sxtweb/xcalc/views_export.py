@@ -122,8 +122,7 @@ def csv_export_page(request, planid):
     
     patient_DOB = ''
     if plan.DOB:
-        patient_DOB = timezone.make_aware(datetime.datetime.strftime(plan.DOB,"%Y/%m/%d"))
-        # patient_DOB = datetime.datetime.strftime(plan.DOB,"%Y/%m/%d")
+        patient_DOB = datetime.datetime.strftime(plan.DOB, "%Y/%m/%d")
         
         
     EntryTitle = ['PlanId', 'PatientId', 'PatientDOB', 
