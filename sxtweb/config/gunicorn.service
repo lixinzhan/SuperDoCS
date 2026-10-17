@@ -7,7 +7,7 @@ After=network.target
 User=www-data
 Group=www-data
 WorkingDirectory=/home/lzhan/SuperDoCS/sxtweb
-ExecStart=/home/lzhan/SuperDoCS/sxtweb/.env/bin/gunicorn \
+ExecStart=/home/lzhan/SuperDoCS/sxtweb/.venv/bin/gunicorn \
           --access-logfile /home/lzhan/SuperDoCS/sxtweb/log/access.log \
           --error-logfile /home/lzhan/SuperDoCS/sxtweb/log/error.log \
           --workers 3 \
