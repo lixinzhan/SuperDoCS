@@ -117,7 +117,7 @@ class CONE(models.Model):
         if self.Shape=='Square':
             return self.Breadth
         elif self.Shape=='Circle':
-            return math.sqrt(pi)*self.Breadth/2.0
+            return math.sqrt(math.pi)*self.Breadth/2.0
         else: # rectangle
             return 2.0*self.Breadth*self.Width/(self.Breadth+self.Width)
         return -1

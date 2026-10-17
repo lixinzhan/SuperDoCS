@@ -15,7 +15,7 @@ SuperDoCS is being developed based on Ubuntu. Setup steps below are hence Ubuntu
 
 2. `sudo apt install gcc g++ gfortran python3-dev python3-pip python3-venv python3-wheel libjpeg-dev`
 
-   _Note: the development tools above are required for building python wheels_
+   _Note: these tools may be needed to build dependency wheels when prebuilt wheels are unavailable. The application is distributed as Python source and does not require Cython compilation._
 
 3. Download SuperDoCS
 
@@ -33,12 +33,12 @@ SuperDoCS is being developed based on Ubuntu. Setup steps below are hence Ubuntu
    python3 -m venv .venv
    source .venv/bin/activate
    pip install --upgrade pip
-   pip3 install -r requirement.txt
+   python -m pip install -r sxtweb/config/requirements.txt
    ```
 
 5. `vi sxtweb/sxtweb/local.py` # make sure DEBUG=True and add your servers IP address to ALLOWED_HOSTS
 
-6. `python3 manage.py runserver 0:8000`
+6. `cd sxtweb && python3 manage.py runserver 0:8000`
 
 Now you can use http://your-ip:8000 for web site access.
 
@@ -82,6 +82,8 @@ python3 manage.py migrate
 ```
 
 
+
+Release packages contain the complete application source. Installing a release does not require a Docker build or Cython compilation.
 
 <h3>TODO:</h3>
 

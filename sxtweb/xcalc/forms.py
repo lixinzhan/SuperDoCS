@@ -215,11 +215,16 @@ class TreatmentPlanForm(forms.ModelForm):
             raise forms.ValidationError(_('Non-ZERO depth NOT supported yet!'))
         return PrescriptionDepth
 
-    def clean__DOB(self):
-        DOB = self.cleaned_data['DOB']
-        if DOB > timezone.localdate():  #datetime.date.today():
+    def clean_DOB(self):
+        DOB = self.cleaned_data.get('DOB')
+        if DOB is None:
+            return DOB
+
+        today = timezone.localdate()
+        oldest_allowed = today - timezone.timedelta(days=365*150)
+        if DOB > today:
             raise forms.ValidationError(_('DOB cannot be in the future!'))
-        if DOB < timezone.localdate()-timezone.timedelta(days=365*150):
+        if DOB < oldest_allowed:
             raise forms.ValidationError(_('More than 150 years old?'))
         return DOB
 

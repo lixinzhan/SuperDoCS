@@ -1,5 +1,5 @@
-django==4.2.*
-django-admin
+# Direct runtime dependencies for the Django 4.2 series.
+Django==4.2.*
 docutils
 numpy>=1.23,<2.0
 scipy>=1.9

@@ -36,7 +36,7 @@ import csv
 import hashlib
 import platform
 
-#@login_required
+@login_required
 def pdf_export_page(request, planid):    
     if planid=='new' or planid=='0':
         return HttpResponseRedirect(reverse(plan_search_page))
@@ -61,6 +61,7 @@ def pdf_export_page(request, planid):
         response['Content-Disposition'] = 'attachment; filename=%s' % fname_pdf
         return response
 
+@login_required
 def csv_export_page(request, planid):
     if planid=='new' or planid=='0':
         return HttpResponseRedirect(reverse(plan_search_page))
@@ -121,8 +122,7 @@ def csv_export_page(request, planid):
     
     patient_DOB = ''
     if plan.DOB:
-        patient_DOB = timezone.make_aware(datetime.datetime.strftime(plan.DOB,"%Y/%m/%d"))
-        # patient_DOB = datetime.datetime.strftime(plan.DOB,"%Y/%m/%d")
+        patient_DOB = datetime.datetime.strftime(plan.DOB, "%Y/%m/%d")
         
         
     EntryTitle = ['PlanId', 'PatientId', 'PatientDOB', 
