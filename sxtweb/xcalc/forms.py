@@ -240,59 +240,56 @@ class TreatmentPlanForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(TreatmentPlanForm, self).clean()
         
-        Filter = self.cleaned_data.get('Filter',None)
-        Cone = self.cleaned_data.get('Cone',None)
+        Filter = cleaned_data.get('Filter')
+        Cone = cleaned_data.get('Cone')
         
         FilterConeOK = True
         if not Filter:
-            errmsg = _('This field is required')
-            self._errors['Filter'] = self.error_class([errmsg])
             FilterConeOK = False
         elif Filter.Filter.Machine.Status!='Active':
             errmsg = _('This X-ray Machine is Not Aactive!')
-            self._errors['Filter'] = self.error_class([errmsg])
+            self.add_error('Filter', errmsg)
             FilterConeOK = False                         
         if not Cone:
-            errmsg = _('This field is required.')
-            self._errors['Cone'] = self.error_class([errmsg])
             FilterConeOK = False
         elif Cone.Machine.Status!='Active':
             errmsg = _('This X-Ray Machines is Not Active!')
-            self._errors['Cone'] = self.error_class([errmsg])
+            self.add_error('Cone', errmsg)
             FilterConeOK = False
         if not FilterConeOK:
             return cleaned_data
         
         if Filter.Filter.Machine.pk != Cone.Machine.pk:
             errmsg = _('Filter and Cone are NOT for the same X-Ray Machine!')
-            self._errors['Filter'] = self.error_class([errmsg])
-            self._errors['Cone']   = self.error_class([errmsg])
+            self.add_error('Filter', errmsg)
+            self.add_error('Cone', errmsg)
             return cleaned_data
         
-        CutoutRequired = self.cleaned_data['CutoutRequired']
-        if CutoutRequired:
-            CutoutShape = self.cleaned_data['CutoutShape']
-            CutoutLength = self.cleaned_data['CutoutLength']
-            CutoutWidth = self.cleaned_data['CutoutWidth']
-            CutoutThickness = self.cleaned_data['CutoutThickness']
+        CutoutRequired = cleaned_data.get('CutoutRequired', False)
+        CutoutFields = ('CutoutShape', 'CutoutLength', 'CutoutWidth', 'CutoutThickness')
+        if CutoutRequired and all(field in cleaned_data for field in CutoutFields):
+            CutoutShape = cleaned_data['CutoutShape']
+            CutoutLength = cleaned_data['CutoutLength']
+            CutoutWidth = cleaned_data['CutoutWidth']
+            CutoutThickness = cleaned_data['CutoutThickness']
             CutoutOK = True
             
             if CutoutLength<=0:
                 errmsg_length = _('Must be greater than Zero!')
-                self._errors['CutoutLength'] = self.error_class([errmsg_length])
+                self.add_error('CutoutLength', errmsg_length)
                 CutoutOK = False
             elif CutoutLength>=Cone.getMaxDimension(): #Cone.Diameter:
                 errmsg_length = _('Must be less than cone size!')
-                self._errors['CutoutLength'] = self.error_class([errmsg_length])
+                self.add_error('CutoutLength', errmsg_length)
                 CutoutOK = False
                 
             if CutoutWidth<=0:
                 errmsg_width = _('Must be greater than Zero!')
-                self._errors['CutoutWidth'] = self.error_class([errmsg_width])
+                self.add_error('CutoutWidth', errmsg_width)
                 CutoutOK = False
             elif CutoutWidth>=Cone.getMaxDimension(): #Cone.Diameter:
                 errmsg_width = _('Must be less than cone size!')
-                self._errors['CutoutWidth'] = self.error_class([errmsg_width])
+                self.add_error('CutoutWidth', errmsg_width)
                 CutoutOK = False
                 
             if CutoutOK and CutoutShape=='Rectangle':
@@ -300,22 +297,18 @@ class TreatmentPlanForm(forms.ModelForm):
                 if math.sqrt(CutoutLength**2+CutoutWidth**2) >= Cone.getMaxDimension():
                     errmsg_length = _('Diagonal length must be less than cone size!')
                     errmsg_width  = _('Diagonal length must be less than cone size!')
-                    self._errors['CutoutLength'] = self.error_class([errmsg_length])
-                    self._errors['CutoutWidth']  = self.error_class([errmsg_width])
+                    self.add_error('CutoutLength', errmsg_length)
+                    self.add_error('CutoutWidth', errmsg_width)
                     CutoutOK = False
                     
             if CutoutThickness<0.1:
                 errmsg_thickness = _('Must be no less than 0.1 cm!')
-                self._errors['CutoutThickness'] = self.error_class([errmsg_thickness])
+                self.add_error('CutoutThickness', errmsg_thickness)
                 CutoutOK = False
             elif CutoutThickness>=1.0:
                 errmsg_thickness = _('Must be less than 1.0 cm!')
-                self._errors['CutoutThickness'] = self.error_class([errmsg_thickness])
+                self.add_error('CutoutThickness', errmsg_thickness)
                 CutoutOK = False
-            if not CutoutOK:        
-                del cleaned_data['CutoutLength']
-                del cleaned_data['CutoutWidth']
-                del cleaned_data['CutoutThickness']
         return cleaned_data
             
 class DoctorForm(forms.ModelForm):

@@ -14,6 +14,9 @@ from django.test import Client, SimpleTestCase, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from resources.models import CONE, FILTER, MACHINE
+from xcalib.models import NOMINALCALIBRATION
+from .forms import TreatmentPlanForm
 from .plancalc import calcTxPlan
 
 from protocols.TG61.tests import *
@@ -64,6 +67,75 @@ class TreatmentTimeCalculationTests(SimpleTestCase):
         self.assertTrue(errors)
         self.assertEqual(plan.TxTime, 0.0)
         self.assertTrue(math.isfinite(plan.TxTime))
+
+
+class TreatmentPlanCutoutValidationTests(TestCase):
+    def setUp(self):
+        self.machine = MACHINE.objects.create(
+            MachineCode='T1',
+            MachineName='Cutout test machine',
+            MachineModel='Test',
+            SerialNumber='CUTOUT-TEST',
+            OutputControl='min',
+        )
+        filter_model = FILTER.objects.create(
+            FilterCode='T1',
+            FilterName='Cutout test filter',
+            Machine=self.machine,
+            Energy=100,
+            Current=10,
+            NominalHVL=1,
+            HVL=1,
+            LastModifiedByUser='test',
+        )
+        self.cone = CONE.objects.create(
+            ConeCode='T1',
+            ConeName='Cutout test cone',
+            Machine=self.machine,
+            Shape='Circle',
+            Breadth=10,
+            Width=10,
+            FSD=100,
+        )
+        self.calibration = NOMINALCALIBRATION.objects.create(
+            NCalibName='Cutout test calibration',
+            Filter=filter_model,
+            Cone=self.cone,
+            LastModifiedByUser='test',
+        )
+
+    def form_data(self, **overrides):
+        data = {
+            'Filter': str(self.calibration.pk),
+            'Cone': str(self.cone.pk),
+            'CutoutRequired': 'on',
+            'CutoutShape': 'Oval',
+            'CutoutLength': '2.0',
+            'CutoutWidth': '2.0',
+            'CutoutThickness': '0.2',
+        }
+        data.update(overrides)
+        return data
+
+    def test_invalid_cutout_dimensions_report_field_errors(self):
+        for field, value in (
+            ('CutoutLength', 'not-a-number'),
+            ('CutoutWidth', ''),
+            ('CutoutThickness', 'not-a-number'),
+        ):
+            with self.subTest(field=field):
+                form = TreatmentPlanForm(data=self.form_data(**{field: value}))
+
+                self.assertFalse(form.is_valid())
+                self.assertIn(field, form.errors)
+
+    def test_valid_cutout_dimensions_pass_cross_field_validation(self):
+        form = TreatmentPlanForm(data=self.form_data())
+
+        form.is_valid()
+
+        for field in ('CutoutLength', 'CutoutWidth', 'CutoutThickness'):
+            self.assertNotIn(field, form.errors)
 
 class LogoutPageTests(TestCase):
     def setUp(self):
