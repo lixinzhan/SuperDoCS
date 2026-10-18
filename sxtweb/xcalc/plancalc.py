@@ -254,8 +254,16 @@ def calcTxPlan(plan, errlist):
         plan.DR_med = plan.DR_wat * plan.C_MedWat * plan.B_MedWat
             
     plan.DosePerFrac = plan.TotalDose / plan.Fractions
-            
-    plan.TxTime = plan.DosePerFrac/plan.DR_med + plan.Filter.Filter.EndEffect
+
+    if not math.isfinite(plan.DR_med) or plan.DR_med <= 0:
+        plan.TxTime = 0.0
+        if not errlist:
+            errlist.append('ERRTreatment time could not be calculated: invalid dose rate.')
+    else:
+        plan.TxTime = plan.DosePerFrac/plan.DR_med + plan.Filter.Filter.EndEffect
+        if not math.isfinite(plan.TxTime):
+            plan.TxTime = 0.0
+            errlist.append('ERRTreatment time calculation was not finite.')
     plan.CalculateDateTime = timezone.now()
     plan.SXTCalcVersion = settings.VERSION
     plan.DoseCalibDate = timezone.localdate(plan.Filter.LastModifiedDateTime)

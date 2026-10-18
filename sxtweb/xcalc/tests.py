@@ -5,9 +5,16 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
+import math
+from types import SimpleNamespace
+from unittest.mock import patch
+
 from django.contrib.auth import SESSION_KEY, get_user_model
-from django.test import Client, TestCase
+from django.test import Client, SimpleTestCase, TestCase
 from django.urls import reverse
+from django.utils import timezone
+
+from .plancalc import calcTxPlan
 
 from protocols.TG61.tests import *
 
@@ -17,6 +24,46 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+
+class TreatmentTimeCalculationTests(SimpleTestCase):
+    def test_missing_calibration_does_not_produce_infinite_time(self):
+        filter_data = SimpleNamespace(id=1, HVL=1.0, HVLUnit='mmAl', EndEffect=0.0)
+        calibration_cone = SimpleNamespace(id=1, FSD=50.0)
+        plan_filter = SimpleNamespace(
+            id=1,
+            Cone=calibration_cone,
+            Filter=filter_data,
+            LastModifiedDateTime=timezone.now(),
+        )
+        plan = SimpleNamespace(
+            Filter=plan_filter,
+            Cone=SimpleNamespace(
+                id=2, FSD=100.0, ConeEnd='Open',
+                getEquivDiameter=lambda: 5.0,
+            ),
+            CutoutRequired=False,
+            CutoutThickness=0.0,
+            StandOut=0.0,
+            SpecifyROF=False,
+            TargetTissue='Air',
+            TotalDose=100.0,
+            Fractions=1,
+            TxTime=0.0,
+        )
+        errors = []
+
+        with patch('xcalc.plancalc.NOMINALCALIBRATION.objects.get',
+                   return_value=SimpleNamespace(DR_Air=1.0)):
+            with patch('xcalc.plancalc.CALIBRATION.objects.get',
+                       side_effect=LookupError):
+                with patch('xcalc.plancalc.BSF_Wat.getValue', return_value=1.0):
+                    with patch('xcalc.plancalc.Mu_WatAir_air.getValue', return_value=1.0):
+                        calcTxPlan(plan, errors)
+
+        self.assertTrue(errors)
+        self.assertEqual(plan.TxTime, 0.0)
+        self.assertTrue(math.isfinite(plan.TxTime))
 
 class LogoutPageTests(TestCase):
     def setUp(self):
