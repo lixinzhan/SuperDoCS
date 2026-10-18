@@ -7,6 +7,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
@@ -17,6 +18,8 @@ from .forms import *
 # Page Views
 #
 
+@require_POST
+@csrf_protect
 def logout_page(request):
     logout(request)
     return HttpResponseRedirect('/')

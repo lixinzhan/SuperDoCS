@@ -42,7 +42,10 @@
         {% if user.is_active %}
             {% trans 'Welcome,' %}
             <strong>{{ user.username }} ({{ user.first_name }} {{user.last_name }})</strong> &nbsp;
-            <a href="/logout/">{% trans 'Logout' %}</a>
+            <form action="{% url 'logout_page' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="button">{% trans 'Logout' %}</button>
+            </form>
         {% else %}
             {% trans 'Please' %} <a href="/login">{% trans 'LOGIN' %}</a>
         {% endif %}    
