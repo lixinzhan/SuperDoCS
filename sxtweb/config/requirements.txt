@@ -1,9 +1,10 @@
-# Direct runtime dependencies for the Django 4.2 series.
-Django==4.2.*
-docutils
-numpy>=1.23,<2.0
-scipy>=1.9
-xhtml2pdf>=0.2.8
-gunicorn>=22.0
-reportlab>=3.6
-python-bidi==0.4.2
+# Runtime dependencies for Django 4.2.30 on Python 3.8-3.12.
+Django==4.2.30
+docutils==0.20.1
+numpy==1.24.4; python_version == "3.8"
+numpy==1.26.4; python_version >= "3.9" and python_version < "3.13"
+scipy==1.10.1; python_version == "3.8"
+scipy==1.11.4; python_version >= "3.9" and python_version < "3.13"
+xhtml2pdf==0.2.17
+gunicorn==23.0.0
+reportlab==4.4.2
