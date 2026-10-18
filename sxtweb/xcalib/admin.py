@@ -1,3 +1,5 @@
+import math
+
 from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -23,19 +25,30 @@ class MEASUREMENTSETForm(forms.ModelForm):
     class Meta:
         model = MEASUREMENTSET
         fields = '__all__'
-    def clean_Filter(self):
-        fltr = self.cleaned_data.get('Filter')
-        lstd = self.cleaned_data.get('LocalStandard')
+    def clean(self):
+        cleaned_data = super().clean()
+        fltr = cleaned_data.get('Filter')
+        local_standard = cleaned_data.get('LocalStandard')
+        if not fltr or not local_standard:
+            return cleaned_data
 
-        if (fltr.HVLUnit==lstd.HVLUnit):
-            tmphvl = fltr.HVL
-        else:
-            tmphvl = HVLAlCu.convertHVLUnit(fltr.HVL, fltr.HVLUnit)
-        if math.fabs(1.0-lstd.HVL/tmphvl)>0.05:
-            raise forms.ValidationError("%f Too much HVL difference for Filter and LocalStandard %f" 
-                % (lstd.HVL, fltr.HVL))
+        try:
+            hvl = fltr.HVL
+            if fltr.HVLUnit != local_standard.HVLUnit:
+                hvl, unit = HVLAlCu().convertHVLUnit(hvl, fltr.HVLUnit)
+                if unit != local_standard.HVLUnit:
+                    raise ValueError
+            hvl = float(hvl)
+            standard_hvl = float(local_standard.HVL)
+            if not math.isfinite(hvl) or not math.isfinite(standard_hvl) or hvl <= 0 or standard_hvl <= 0:
+                raise ValueError
+        except (ValueError, TypeError, ArithmeticError, IndexError, UnboundLocalError):
+            self.add_error('Filter', _('Filter and Local Standard HVLs could not be compared.'))
+            return cleaned_data
 
-        return self.cleaned_data['Filter']
+        if math.fabs(1.0 - standard_hvl / hvl) > 0.05:
+            self.add_error('Filter', _('HVL difference between Filter and Local Standard exceeds 5%.'))
+        return cleaned_data
  
 class MEASUREMENTSETAdmin(admin.ModelAdmin):
      form = MEASUREMENTSETForm
