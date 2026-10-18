@@ -6,7 +6,7 @@ import os
 
 os.environ.setdefault('LANG','en_US')
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = (
     ('Lixin Zhan', 'lixinzhan@gmail.com'),
