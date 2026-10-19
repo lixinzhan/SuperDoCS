@@ -1,35 +1,45 @@
-import sys
 import csv
 import hashlib
+import sys
+
 
 def csv_valid(fname):
-    csvfile = open(fname, 'rb')
-    freader = csv.reader(csvfile)
-    
-    # read lines of the csv file
-    freader.next()          # skip the title line
-    row = freader.next()    # use the data row
-    
-    # Generate md5checksum using data excluding the last column
-    #    Data are combined as a string using ',' as the delimiter
-    #    Also make sure the string is of utf-8 encoding
-    md5hash = hashlib.md5()
-    md5input = ','.join(str(x) for x in row[:-1])
-    print md5input
-    md5hash.update(md5input.encode("utf-8"))
-    md5output = md5hash.hexdigest()
-    
-    # compare with md5checksum came with the file
-    if md5output == str(row[-1]).encode("utf-8"):
-        return True
+    try:
+        with open(fname, 'r', encoding='utf-8-sig', newline='') as csvfile:
+            freader = csv.reader(csvfile)
+            title = next(freader, None)
+            row = next(freader, None)
+            checksum_row = next(freader, None)
+            extra_row = next(freader, None)
+    except (OSError, UnicodeError, csv.Error):
+        return False
 
-    return False
+    # The exporter writes a header, one data row, and a one-cell checksum row.
+    if (not title or not row or len(title) != len(row)
+            or checksum_row is None or len(checksum_row) != 1
+            or extra_row is not None):
+        return False
 
-if __name__ == "__main__":
-    # the csv file name is from the command line parameter
-    fname = sys.argv[1]
-    
-    if csv_valid(fname):
+    # Match the exporter's checksum input: the comma-joined data fields in UTF-8.
+    md5input = ','.join(row)
+    md5output = hashlib.md5(md5input.encode('utf-8')).hexdigest()
+    return md5output == checksum_row[0]
+
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    if len(argv) != 1:
+        print('Usage: verifychecksum.py CSV_FILE', file=sys.stderr)
+        return 2
+
+    if csv_valid(argv[0]):
         print('CSV checksum passed!')
-    else:
-        print('CSV checksum failed!')
+        return 0
+
+    print('CSV checksum failed!')
+    return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -8,6 +8,8 @@ Replace this with more appropriate tests for your application.
 import csv
 import math
 from io import StringIO
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -21,6 +23,7 @@ from xcalib.models import NOMINALCALIBRATION
 from .forms import TreatmentPlanForm
 from .plancalc import calcTxPlan
 from .views_export import csv_export_page
+from scripts.verifychecksum import csv_valid
 
 from protocols.TG61.tests import *
 
@@ -61,7 +64,7 @@ class CsvExportTests(SimpleTestCase):
             CutoutRequired=False,
             CutoutShape='',
             DOB=None,
-            LastName='Test',
+            LastName='Test, É',
             FirstName='Patient',
             MiddleName='',
             PlanName='CSV test',
@@ -80,6 +83,20 @@ class CsvExportTests(SimpleTestCase):
 
         rows = list(csv.reader(StringIO(response.content.decode('utf-8'))))
         self.assertEqual(rows[1][8], '13.9')
+
+        with TemporaryDirectory() as temp_dir:
+            csv_path = Path(temp_dir) / 'export.csv'
+            csv_path.write_bytes(response.content)
+            self.assertTrue(csv_valid(csv_path))
+
+            rows[1][1] = 'P2'
+            with csv_path.open('w', encoding='utf-8', newline='') as csvfile:
+                csv.writer(csvfile).writerows(rows)
+            self.assertFalse(csv_valid(csv_path))
+
+            with csv_path.open('w', encoding='utf-8', newline='') as csvfile:
+                csv.writer(csvfile).writerows(rows[:2])
+            self.assertFalse(csv_valid(csv_path))
 
 
 class TreatmentTimeCalculationTests(SimpleTestCase):
