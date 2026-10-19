@@ -5,12 +5,14 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
+import csv
 import math
+from io import StringIO
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from django.contrib.auth import SESSION_KEY, get_user_model
-from django.test import Client, SimpleTestCase, TestCase
+from django.test import Client, RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
@@ -18,6 +20,7 @@ from resources.models import CONE, FILTER, MACHINE
 from xcalib.models import NOMINALCALIBRATION
 from .forms import TreatmentPlanForm
 from .plancalc import calcTxPlan
+from .views_export import csv_export_page
 
 from protocols.TG61.tests import *
 
@@ -27,6 +30,56 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+
+class CsvExportTests(SimpleTestCase):
+    def test_mu_is_exported_with_one_decimal_place(self):
+        machine = SimpleNamespace(
+            MachineCode='M1',
+            OutputControl='MU',
+            SerialNumber='SN1',
+        )
+        filter_model = SimpleNamespace(
+            Machine=machine,
+            FilterCode='F1',
+            HVLUnit='mm Al',
+            Energy=100,
+            Current=10,
+            NominalHVL=1.0,
+        )
+        plan = SimpleNamespace(
+            PatientId='P1',
+            Filter=SimpleNamespace(Filter=filter_model),
+            TxTime=13.94,
+            Cone=SimpleNamespace(
+                Breadth=1.0,
+                Width=1.0,
+                Shape='Circle',
+                FSD=100.0,
+                ConeCode='C1',
+            ),
+            CutoutRequired=False,
+            CutoutShape='',
+            DOB=None,
+            LastName='Test',
+            FirstName='Patient',
+            MiddleName='',
+            PlanName='CSV test',
+            Fractions=1,
+            TotalDose=100.0,
+            CutoutWidth=0.0,
+            CutoutLength=0.0,
+            CutoutThickness=0.0,
+            StandOut=0.0,
+        )
+        request = RequestFactory().get('/plan_export/csv/1')
+        request.user = SimpleNamespace(is_authenticated=True)
+
+        with patch('xcalc.views_export.get_object_or_404', return_value=plan):
+            response = csv_export_page(request, '1')
+
+        rows = list(csv.reader(StringIO(response.content.decode('utf-8'))))
+        self.assertEqual(rows[1][8], '13.9')
 
 
 class TreatmentTimeCalculationTests(SimpleTestCase):

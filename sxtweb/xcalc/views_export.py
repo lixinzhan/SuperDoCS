@@ -78,7 +78,7 @@ def csv_export_page(request, planid):
     FractionRad = ''
     if plan.Filter.Filter.Machine.OutputControl == 'MU':
         OutputControlCode = 1
-        FractionRad = '%d' % plan.TxTime
+        FractionRad = '%.1f' % plan.TxTime
     elif plan.Filter.Filter.Machine.OutputControl == 'min':
         OutputControlCode = 0
         FractionRad = '%.2f' % plan.TxTime
