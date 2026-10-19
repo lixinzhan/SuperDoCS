@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 #
 
 #
@@ -14,7 +15,6 @@ usage()
     echo "    -s    setup security: firewall and system hardening"
     echo "    -h    display this help"
     echo
-    exit 0 
 }
 
 SETALL=false
@@ -22,7 +22,7 @@ SETSEC=false
 SETWEB=false
 SETENV=false
 OPTSTRING="aewsh"
-while getopts ${OPTSTRING} opt; do
+while getopts "$OPTSTRING" opt; do
     case ${opt} in
         a)
 	    SETALL=true
@@ -45,7 +45,7 @@ while getopts ${OPTSTRING} opt; do
 	    exit 0
             ;;
         ?)
-            echo "Invalid option: -${OPTARG}."
+            echo "Invalid option: -${OPTARG:-}."
 	    echo
 	    usage
             exit 1
@@ -53,14 +53,18 @@ while getopts ${OPTSTRING} opt; do
     esac
 done
 
-if [ $# = 0 ]; then
+if [ "$#" = 0 ]; then
     usage
+    exit 0
 fi
  
-# Get the current directory and project info.
-PRJDIR=$(pwd)
-PRJ=$(basename $PRJDIR)
-ENV=$PRJDIR/.venv
+# Resolve paths from this script so it works from any current directory.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+PRJDIR="$SCRIPT_DIR"
+PRJ="$(basename "$PROJECT_ROOT")"
+VENV_DIR="$PROJECT_ROOT/.venv"
+cd "$PRJDIR"
 
 # info for web service setup
 WWWPORT=8000 		# `grep WWWPORT settings.py | awk -F= '{print$2}' | xargs`
@@ -68,7 +72,6 @@ WWWGRP="www-data" 	#`grep WWWGRP settings.py | awk -F= '{print$2}' | xargs`
 
 # system info
 IP=$(ip route get 1 | awk '{print $7;exit}' | head -1)
-FQDN=$(hostname -f)
 HOSTNAME=$(hostname -s)
 USRID=$(id -u)
 GRPID=$(id -g)
@@ -77,7 +80,7 @@ USRNAME=$(whoami)
 echo "System Environment" 
 echo "PRJDIR:  $PRJDIR"
 echo "PRJ:     $PRJ"
-echo "ENV:     $ENV"
+echo "VENV:    $VENV_DIR"
 echo "HOST:    $HOSTNAME"
 echo "IP:      $IP"
 echo "USRID:   $USRID"
@@ -106,7 +109,7 @@ else
     OSFAMILY="UNKNOWN"
 fi
 
-if [ $OSFAMILY == "DEBIAN" ]; then
+if [[ "$OSFAMILY" == "DEBIAN" ]]; then
     echo OS: $(cat /etc/os-release | grep PRETTY_NAME | awk -F \" '{print $2}')
     echo
 else
@@ -115,13 +118,14 @@ else
 fi
 
 # function to check if a packgage installed. If not, install it.
-install-package() 
+install-package()
 {
-    if [[ $(dpkg -l $1 | grep '^ii' | awk '{print $2}') = $1 ]]; then
+    if dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q '^install ok installed$'; then
         echo "$1 exists!"
     else
-	echo "Install package $1 ..."
-        sudo apt-get install -y $1 && echo "Package $1 installed!" || echo "Error in installing $1 !!"
+        echo "Install package $1 ..."
+        sudo apt-get install -y "$1"
+        echo "Package $1 installed!"
     fi
     echo
 }
@@ -129,23 +133,28 @@ install-package()
 # function for service stop if active
 stop-service()
 {
-    systemctl is-active --quiet $1 \
-        && sudo systemctl stop $1 \
-        && echo "Service $1 stopped!"
+    if systemctl is-active --quiet "$1"; then
+        sudo systemctl stop "$1"
+        echo "Service $1 stopped!"
+    fi
 }
 # function to start a system service
 start-service()
 {
-    systemctl is-active --quiet $1 && sudo systemctl stop $1 
-    sudo systemctl start $1 \
-        && echo "Service $1 start successfully!" \
-        || echo "Service $1 start failed!"
+    if systemctl is-active --quiet "$1"; then
+        sudo systemctl stop "$1"
+    fi
+    if sudo systemctl start "$1"; then
+        echo "Service $1 start successfully!"
+    else
+        echo "Service $1 start failed!" >&2
+        return 1
+    fi
 }
 
 
 # add universe and update the sytem to the latest.
 sudo add-apt-repository -y universe
-sudo systemctl daemon-reload
 sudo apt-get update
 sudo apt-get upgrade -y
 
@@ -159,10 +168,10 @@ if $SETENV; then
     install-package python3-venv
     install-package python3-wheel
 
-    python3 -m venv $ENV
-    source $ENV/bin/activate
+    python3 -m venv "$VENV_DIR"
+    source "$VENV_DIR/bin/activate"
     pip install --upgrade pip
-    pip install -r $PRJDIR/config/requirements.txt
+    pip install -r "$PRJDIR/config/requirements.txt"
     deactivate
     echo "Setting up virtual environment done!"
     echo
@@ -179,10 +188,10 @@ if $SETWEB; then
 
     install-package nginx
 
-    source $ENV/bin/activate
+    source "$VENV_DIR/bin/activate"
 
     # No debug mode
-    sed -i "s/^DEBUG\ =.*/DEBUG\ =\ False/" sxtweb/local.py
+    sed -i "s/^DEBUG\ =.*/DEBUG\ =\ False/" "$PRJDIR/sxtweb/local.py"
 
     # collect static files
     python3 manage.py collectstatic --noinput
@@ -192,6 +201,9 @@ if $SETWEB; then
     stop-service gunicorn.service
     stop-service nginx.service
 
+    # Apply checked-in schema migrations before starting the web service.
+    python3 manage.py migrate --noinput
+
     #
     # Setup services for gunicorn and nginx
     #
@@ -199,13 +211,13 @@ if $SETWEB; then
     # gunicorn service
     echo "Configure gunicorn service ..."
     SYSDIR=/etc/systemd/system
-    sudo cp -rf $PRJDIR/config/gunicorn.service $SYSDIR
-    sudo cp -rf $PRJDIR/config/gunicorn.socket  $SYSDIR
-    sudo sed -i "s:^User=.*:User=$USRNAME:g" $SYSDIR/gunicorn.service
-    sudo sed -i "s:^WorkingDirectory=.*:WorkingDirectory=$PRJDIR:g" $SYSDIR/gunicorn.service
-    sudo sed -i "s:^ExecStart=.*:ExecStart=$ENV/bin/gunicorn \\\:g" $SYSDIR/gunicorn.service
-    sudo sed -i "s:access-logfile.*:access-logfile $PRJDIR/log/access.log \\\:g" $SYSDIR/gunicorn.service
-    sudo sed -i "s:error-logfile.*:error-logfile $PRJDIR/log/error.log \\\:g" $SYSDIR/gunicorn.service
+    sudo cp -f "$PRJDIR/config/gunicorn.service" "$SYSDIR/"
+    sudo cp -f "$PRJDIR/config/gunicorn.socket" "$SYSDIR/"
+    sudo sed -i "s:^User=.*:User=$USRNAME:g" "$SYSDIR/gunicorn.service"
+    sudo sed -i "s:^WorkingDirectory=.*:WorkingDirectory=\"$PRJDIR\":g" "$SYSDIR/gunicorn.service"
+    sudo sed -i "s:^ExecStart=.*:ExecStart=\"$VENV_DIR/bin/gunicorn\" \\\:g" "$SYSDIR/gunicorn.service"
+    sudo sed -i "s:access-logfile.*:access-logfile \"$PRJDIR/log/access.log\" \\\:g" "$SYSDIR/gunicorn.service"
+    sudo sed -i "s:error-logfile.*:error-logfile \"$PRJDIR/log/error.log\" \\\:g" "$SYSDIR/gunicorn.service"
 
     # nginx service
     echo "Configure nginx service ..."
@@ -213,16 +225,16 @@ if $SETWEB; then
     NGENB=/etc/nginx/sites-enabled
     echo "NGAVL: $NGAVL"
     echo "NGENB: $NGENB"
-    sudo cp -rf $PRJDIR/config/superdocs_nginx.conf $NGAVL/
-    sudo rm -rf $NGENB/superdocs_nginx.conf > /dev/null 2>&1
-    sudo ln -s $NGAVL/superdocs_nginx.conf $NGENB/
-    sudo sed -i "s:listen.*:listen $WWWPORT;:g" $NGAVL/superdocs_nginx.conf
-    sudo sed -i "s:server_name.*:server_name $IP 127.0.0.1;:g" $NGAVL/superdocs_nginx.conf
-    sudo sed -i "s:alias.*media/;:alias $PRJDIR/media/;:g" $NGAVL/superdocs_nginx.conf
-    sudo sed -i "s:alias.*static/;:alias $PRJDIR/static/;:g" $NGAVL/superdocs_nginx.conf
-    sudo rm -f $NGENB/default
+    sudo cp -f "$PRJDIR/config/superdocs_nginx.conf" "$NGAVL/"
+    sudo rm -f "$NGENB/superdocs_nginx.conf" > /dev/null 2>&1
+    sudo ln -s "$NGAVL/superdocs_nginx.conf" "$NGENB/"
+    sudo sed -i "s:listen.*:listen $WWWPORT;:g" "$NGAVL/superdocs_nginx.conf"
+    sudo sed -i "s:server_name.*:server_name $IP 127.0.0.1;:g" "$NGAVL/superdocs_nginx.conf"
+    sudo sed -i "s:alias.*media/;:alias \"$PRJDIR/media/\";:g" "$NGAVL/superdocs_nginx.conf"
+    sudo sed -i "s:alias.*static/;:alias \"$PRJDIR/static/\";:g" "$NGAVL/superdocs_nginx.conf"
+    sudo rm -f "$NGENB/default"
 
-    sudo chown -R $USRNAME:$WWWGRP $PRJDIR
+    sudo chown -R "$USRNAME:$WWWGRP" "$PRJDIR"
 
     sudo systemctl daemon-reload
     sudo systemctl enable gunicorn.service
@@ -251,7 +263,7 @@ if $SETSEC; then
 
     install-package ufw
     sudo ufw enable
-    sudo ufw allow $WWWPORT
+    sudo ufw allow "$WWWPORT"
     sudo ufw reload
     echo
     sudo ufw status verbose

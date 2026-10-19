@@ -63,23 +63,34 @@ Now you can use http://your-ip:8000 for web site access.
    vi sxtweb/sxtweb/local.py
    ```
 
-7. Setup services
+5. Before upgrading an existing installation, stop the service and back up the database at `sxtweb/sxtweb/sxt.db` to a safe location outside the checkout.
 
+6. Run the installer from the repository root. It creates `.venv` in the repository root, applies checked-in database migrations before starting services, and returns a failure status if a required command fails.
+
+   ```sh
+   set -o pipefail
+   ./sxtweb/setup.sh -a 2>&1 | tee /tmp/sxt_install.log
    ```
-   ./setup.sh -a 2>&1 | tee /tmp/sxt_install.log
+
+7. On a fresh installation, create the initial administrator account from the repository root:
+
+   ```sh
+   ./.venv/bin/python sxtweb/manage.py createsuperuser
    ```
 
 8. Access the webpage and commission the system.
 
 
 
-<h3>Migrate Existing DB</h3>
+<h3>Database Migrations</h3>
 
+The setup script applies checked-in migrations with `migrate --noinput` before starting the web service. Back up an existing production database before running the installer. If applying migrations manually, run this from the repository root:
+
+```sh
+./.venv/bin/python sxtweb/manage.py migrate --noinput
 ```
-# copy the existing DB to the sxtweb/sxt.db
-python3 manage.py makemigrations
-python3 manage.py migrate
-```
+
+Create the initial administrator account with `createsuperuser` as shown above. Generate and review migration files during development; do not run `makemigrations` on a production host.
 
 
 
