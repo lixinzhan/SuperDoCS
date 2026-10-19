@@ -1,5 +1,6 @@
 # Project specific
 sxtweb/static/*
+sxtweb/sxtweb/sxt.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
