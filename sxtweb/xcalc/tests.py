@@ -122,6 +122,46 @@ class TreatmentTimeCalculationTests(SimpleTestCase):
         self.assertTrue(math.isfinite(plan.TxTime))
 
 
+class ConeGeometryTests(SimpleTestCase):
+    def cone(self, shape, breadth, width):
+        return CONE(Shape=shape, Breadth=breadth, Width=width)
+
+    def test_max_dimension_uses_the_cone_shape(self):
+        self.assertEqual(self.cone('Circle', 5.0, 5.0).getMaxDimension(), 5.0)
+        self.assertAlmostEqual(
+            self.cone('Square', 5.0, 5.0).getMaxDimension(), math.sqrt(50.0))
+        self.assertAlmostEqual(
+            self.cone('Rectangle', 4.0, 3.0).getMaxDimension(), 5.0)
+
+    def test_cone_labels_preserve_fractional_dimensions(self):
+        self.assertEqual(self.cone('Circle', 7.5, 7.5).getConeShape(), 'Circ 7.5')
+        self.assertEqual(self.cone('Square', 7.5, 7.5).getConeShape(), '7.5x7.5')
+        self.assertEqual(self.cone('Rectangle', 7.5, 3.25).getConeShape(), '7.5x3.25')
+
+    def test_cutout_containment_uses_circle_geometry(self):
+        cone = self.cone('Circle', 10.0, 10.0)
+        self.assertTrue(cone.canContainCutout('Oval', 9.0, 8.0))
+        self.assertFalse(cone.canContainCutout('Oval', 10.0, 1.0))
+        self.assertTrue(cone.canContainCutout('Rectangle', 6.0, 7.0))
+        self.assertFalse(cone.canContainCutout('Rectangle', 8.0, 8.0))
+
+    def test_cutout_containment_uses_aligned_square_and_rectangle_axes(self):
+        square = self.cone('Square', 10.0, 10.0)
+        self.assertTrue(square.canContainCutout('Rectangle', 9.0, 9.0))
+        self.assertFalse(square.canContainCutout('Rectangle', 10.0, 5.0))
+
+        rectangle = self.cone('Rectangle', 10.0, 6.0)
+        self.assertTrue(rectangle.canContainCutout('Rectangle', 5.0, 9.0))
+        self.assertFalse(rectangle.canContainCutout('Rectangle', 9.0, 7.0))
+
+    def test_cutout_containment_rejects_invalid_dimensions_and_shapes(self):
+        cone = self.cone('Rectangle', 10.0, 6.0)
+        self.assertFalse(cone.canContainCutout('Rectangle', 0.0, 1.0))
+        self.assertFalse(cone.canContainCutout('Triangle', 1.0, 1.0))
+        self.assertFalse(self.cone('Rectangle', 10.0, 0.0).canContainCutout(
+            'Rectangle', 1.0, 1.0))
+
+
 class TreatmentPlanCutoutValidationTests(TestCase):
     def setUp(self):
         self.machine = MACHINE.objects.create(
@@ -181,6 +221,41 @@ class TreatmentPlanCutoutValidationTests(TestCase):
 
                 self.assertFalse(form.is_valid())
                 self.assertIn(field, form.errors)
+
+    def test_circle_rejects_rectangular_cutout_that_exceeds_its_diameter(self):
+        form = TreatmentPlanForm(data=self.form_data(
+            CutoutShape='Rectangle', CutoutLength='8.0', CutoutWidth='8.0'))
+
+        form.is_valid()
+
+        self.assertIn('CutoutLength', form.errors)
+        self.assertIn('CutoutWidth', form.errors)
+
+    def test_rectangle_rejects_cutout_that_exceeds_one_axis(self):
+        self.cone.Shape = 'Rectangle'
+        self.cone.Breadth = 10.0
+        self.cone.Width = 6.0
+        self.cone.save(update_fields=('Shape', 'Breadth', 'Width'))
+        form = TreatmentPlanForm(data=self.form_data(
+            CutoutShape='Rectangle', CutoutLength='9.0', CutoutWidth='7.0'))
+
+        form.is_valid()
+
+        self.assertIn('CutoutLength', form.errors)
+        self.assertIn('CutoutWidth', form.errors)
+
+    def test_square_accepts_aligned_cutout_that_fits_each_axis(self):
+        self.cone.Shape = 'Square'
+        self.cone.Breadth = 10.0
+        self.cone.Width = 10.0
+        self.cone.save(update_fields=('Shape', 'Breadth', 'Width'))
+        form = TreatmentPlanForm(data=self.form_data(
+            CutoutShape='Rectangle', CutoutLength='9.0', CutoutWidth='9.0'))
+
+        form.is_valid()
+
+        self.assertNotIn('CutoutLength', form.errors)
+        self.assertNotIn('CutoutWidth', form.errors)
 
     def test_valid_cutout_dimensions_pass_cross_field_validation(self):
         form = TreatmentPlanForm(data=self.form_data())

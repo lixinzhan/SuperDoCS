@@ -122,22 +122,51 @@ class CONE(models.Model):
             return 2.0*self.Breadth*self.Width/(self.Breadth+self.Width)
         return -1
     def getMaxDimension(self):
-        if self.Shape=='Square':
+        if self.Shape == 'Circle':
             return self.Breadth
-        elif self.Shape=='Square':
-            return self.Breadth*math.sqrt(2.0)
-        else: #rectangle
-            return math.sqrt(self.Breadth**2+self.Width**2)
+        elif self.Shape == 'Square':
+            return self.Breadth * math.sqrt(2.0)
+        elif self.Shape == 'Rectangle':
+            return math.hypot(self.Breadth, self.Width)
         return -1
+
+    def canContainCutout(self, cutout_shape, length, width):
+        if (cutout_shape not in ('Oval', 'Rectangle') or length <= 0 or width <= 0
+                or self.Breadth <= 0):
+            return False
+
+        if self.Shape == 'Circle':
+            if cutout_shape == 'Rectangle':
+                return math.hypot(length, width) < self.Breadth
+            return max(length, width) < self.Breadth
+
+        if self.Shape == 'Square':
+            aperture_breadth = aperture_width = self.Breadth
+        elif self.Shape == 'Rectangle':
+            aperture_breadth = self.Breadth
+            aperture_width = self.Width
+        else:
+            return False
+
+        if aperture_width <= 0:
+            return False
+
+        # Cutouts align with the applicator axes; either axis may be swapped.
+        return (
+            (length < aperture_breadth and width < aperture_width)
+            or (width < aperture_breadth and length < aperture_width)
+        )
     #def __unicode__(self):
     #    return '%s, %s (FCD %d cm)' % (self.Machine.MachineName, self.ConeName, \
     #                                   self.FSD)
     def getConeShape(self):
-        if self.Shape=='Circle':
-            return 'Circ %d' % self.Breadth
-        elif self.Shape=='Square':
-            return '%dx%d'% (self.Breadth, self.Breadth)
-        return '%dx%d' % (self.Breadth, self.Width)
+        if self.Shape == 'Circle':
+            return 'Circ %g' % self.Breadth
+        elif self.Shape == 'Square':
+            return '%gx%g' % (self.Breadth, self.Breadth)
+        elif self.Shape == 'Rectangle':
+            return '%gx%g' % (self.Breadth, self.Width)
+        return 'Unknown'
         
     def __str__(self):
         return '%s -- %s, FCD %g, %s' % (

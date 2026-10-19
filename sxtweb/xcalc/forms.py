@@ -278,28 +278,17 @@ class TreatmentPlanForm(forms.ModelForm):
                 errmsg_length = _('Must be greater than Zero!')
                 self.add_error('CutoutLength', errmsg_length)
                 CutoutOK = False
-            elif CutoutLength>=Cone.getMaxDimension(): #Cone.Diameter:
-                errmsg_length = _('Must be less than cone size!')
-                self.add_error('CutoutLength', errmsg_length)
-                CutoutOK = False
-                
             if CutoutWidth<=0:
                 errmsg_width = _('Must be greater than Zero!')
                 self.add_error('CutoutWidth', errmsg_width)
                 CutoutOK = False
-            elif CutoutWidth>=Cone.getMaxDimension(): #Cone.Diameter:
-                errmsg_width = _('Must be less than cone size!')
-                self.add_error('CutoutWidth', errmsg_width)
+
+            if CutoutOK and not Cone.canContainCutout(
+                    CutoutShape, CutoutLength, CutoutWidth):
+                errmsg = _('Cutout dimensions do not fit within the selected cone.')
+                self.add_error('CutoutLength', errmsg)
+                self.add_error('CutoutWidth', errmsg)
                 CutoutOK = False
-                
-            if CutoutOK and CutoutShape=='Rectangle':
-                #if CutoutLength**2+CutoutWidth**2 >= Cone.Diameter**2:
-                if math.sqrt(CutoutLength**2+CutoutWidth**2) >= Cone.getMaxDimension():
-                    errmsg_length = _('Diagonal length must be less than cone size!')
-                    errmsg_width  = _('Diagonal length must be less than cone size!')
-                    self.add_error('CutoutLength', errmsg_length)
-                    self.add_error('CutoutWidth', errmsg_width)
-                    CutoutOK = False
                     
             if CutoutThickness<0.1:
                 errmsg_thickness = _('Must be no less than 0.1 cm!')
