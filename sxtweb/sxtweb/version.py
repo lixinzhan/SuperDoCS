@@ -1,10 +1,29 @@
 #
 # Main, Secondary, and Minor version numbers.
 #
-VERSION = '4.0-Alpha1' # Version
+VERSION = '4.0-Alpha2' # Version
 DEVSTAGE = 'Release'  # Stage of development: Alpha, Beta, RC, Release.
 
+#
+# Format: DB-CALC-TEMPL
+#   DB:    db model and data entry;
+#   CALC:  dose calculation algorithm,
+#   TEMPL: web page layout
+#
+REVISION = 'D23-C102-T102'
+
+#
+# DB Schema Revision
+#   Any changes in DB schema results in the DB processing during upgrade.
+#   Calibration data changes will be reflected above but not here.
+#   A short description of Schema change should be described here as well.
+#
+
 # Version History
+#
+# 3.1.1: 2026-10-17
+#
+#   minor update to data validation, error code display, export issues, and package dependency.
 #
 # 3.1: 2024-07-23
 #   updated requirements for running under Ubuntu 22.04
@@ -17,21 +36,6 @@ DEVSTAGE = 'Release'  # Stage of development: Alpha, Beta, RC, Release.
 #
 # 2.3.1: 2021-10-22
 #   Fixed issues with pip3 setup and added packaging time.
-#
-
-#
-# Format: DB-CALC-TEMPL
-#   DB:    db model and data entry; 
-#   CALC:  dose calculation algorithm,
-#   TEMPL: web page layout
-#
-REVISION = 'D23-C101-T102'
-
-#
-# DB Schema Revision
-#   Any changes in DB schema results in the DB processing during upgrade.
-#   Calibration data changes will be reflected above but not here.
-#   A short description of Schema change should be described here as well.
 #
 # 2.3: 2020-09-03
 #   Changed ROF to ROF_Exposure for fixing failed SpecifyROF calculation issue.
@@ -61,7 +65,7 @@ DB_SCHEMA='2.3'
 #
 # Copyright Information.
 #
-COPYRIGHT = 'Copyleft 2014-2024, Lixin Zhan @GRRCC'
+COPYRIGHT = 'Copyleft 2014-2026, Lixin Zhan @WRHN'
 
 #
 # Support Information

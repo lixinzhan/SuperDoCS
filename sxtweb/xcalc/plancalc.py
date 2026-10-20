@@ -56,6 +56,7 @@ def getPlanFormData(plan,planform):
         plan.TargetTissue = planform.cleaned_data['TargetTissue']
         plan.Filter = planform.cleaned_data['Filter'] # plan.Filter is Calibratin
         plan.Cone = planform.cleaned_data['Cone']
+        plan.Doctor = planform.cleaned_data['Doctor']
         plan.CutoutRequired = planform.cleaned_data['CutoutRequired']
         plan.CutoutLength = planform.cleaned_data['CutoutLength']
         plan.CutoutShape = planform.cleaned_data['CutoutShape']
@@ -82,9 +83,7 @@ def getPlanFormData(plan,planform):
         plan.B_MedWat = planform.cleaned_data['B_MedWat']
         plan.DR_med = planform.cleaned_data['DR_med']
         plan.TxTime = planform.cleaned_data['TxTime']
-        plan.ModifiedByUser = planform.cleaned_data['ModifiedByUser']
-        plan.SXTCalcVersion = planform.cleaned_data['SXTCalcVersion']
-        plan.DoseCalibDate = planform.cleaned_data['DoseCalibDate']
+        plan.Comment = planform.cleaned_data['Comment']
         plan.ApprovedBy = planform.cleaned_data['ApprovedBy']
         #plan.ApprvDateTime = planform.cleaned_data['ApprvDateTime']
         plan.ApprvStatus = planform.cleaned_data['ApprvStatus']

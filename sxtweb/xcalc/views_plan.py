@@ -5,7 +5,7 @@ import numpy as np
 import urllib.parse
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
@@ -176,6 +176,15 @@ def plan_qa_page(request, planid):
         
     return render(request, 'plan_qa_page.html', variables)
 
+@login_required
+def plan_cone_options(request):
+    planform = TreatmentPlanForm(data={'Filter': request.GET.get('filter', '')})
+    cones = planform.fields['Cone'].queryset.order_by('ConeName')
+    return JsonResponse({
+        'cones': [{'id': cone.pk, 'label': str(cone)} for cone in cones]
+    })
+
+
 @csrf_protect    
 @login_required
 def plan_edit_page(request, planid):
@@ -221,6 +230,11 @@ def plan_edit_page(request, planid):
             return HttpResponseRedirect(reverse(plan_search_page, args=(None)))
         elif planform.is_valid():
             getPlanFormData(plan, planform)
+            plan.ModifiedByUser = request.user.username
+            if not plan.SXTCalcVersion:
+                plan.SXTCalcVersion = settings.VERSION
+            if plan.DoseCalibDate is None:
+                plan.DoseCalibDate = timezone.localdate(plan.Filter.LastModifiedDateTime)
             
             if 'save_submit' in request.POST:
                 saved_plan=planform.save()
@@ -246,6 +260,7 @@ def plan_edit_page(request, planid):
                     plan.ApprvStatus = 'NotApproved'
                     plan.ApprovedBy = 'nobody'
                     plan.ApprvDateTime = timezone.now()
+                planform = TreatmentPlanForm(instance=plan)
     else: # not request.POST
         if planid[:4]=='new_' and planid[4:]:
             oldplanid = planid[4:]

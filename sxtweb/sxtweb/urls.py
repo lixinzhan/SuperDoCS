@@ -14,6 +14,7 @@ urlpatterns = [
     re_path(r'^help/(\w+)/$', help_page, name='help_page'),
     re_path(r'^help/$',help_page, name='help_page'),
     re_path(r'^plansearch/$', plan_search_page, name='plan_search_page'),
+    re_path(r'^plan/cones/$', plan_cone_options, name='plan_cone_options'),
     re_path(r'^plan/(\w+)/$', plan_edit_page, name='plan_edit_page'),
     re_path(r'^plan/$', RedirectView.as_view(url='/plan/new/')),
     re_path(r'^plan_qa/(\w+)/$', plan_qa_page, name='plan_qa_page'),

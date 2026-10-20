@@ -53,6 +53,77 @@
         $('#setup-table input#id_CutoutThickness').parents("tr").hide();        
     }
 
+    handleConeFilterChange = function(optionsUrl) {
+        var $filter = $('#setup-table select#id_Filter');
+        var $cone = $('#setup-table select#id_Cone');
+        if (!$filter.length || !$cone.length) { return; }
+
+        var request = null;
+        var requestId = 0;
+        var emptyOption = $cone.find('option[value=""]').first().clone();
+        if (!emptyOption.length) {
+            emptyOption = $('<option>', {value: '', text: '---------'});
+        }
+
+        function replaceConeOptions(cones) {
+            $cone.empty().append(emptyOption.clone());
+            $.each(cones, function(index, cone) {
+                $('<option>', {value: cone.id, text: cone.label}).appendTo($cone);
+            });
+            $cone.val('');
+        }
+
+        function loadCones(preserveSelection) {
+            var selectedCone = preserveSelection ? $cone.val() : '';
+            requestId += 1;
+            var currentRequestId = requestId;
+            if (request) {
+                request.abort();
+                request = null;
+            }
+
+            if (!$filter.val()) {
+                replaceConeOptions([]);
+                $cone.attr('disabled', 'disabled');
+                return;
+            }
+
+            $cone.attr('disabled', 'disabled');
+            request = $.ajax({
+                type: 'GET',
+                url: optionsUrl,
+                data: {filter: $filter.val()},
+                dataType: 'json',
+                success: function(data) {
+                    if (currentRequestId !== requestId) { return; }
+                    replaceConeOptions(data.cones || []);
+                    if (selectedCone && $cone.find('option').filter(function() {
+                        return this.value === selectedCone;
+                    }).length) {
+                        $cone.val(selectedCone);
+                    }
+                },
+                error: function(xhr, status) {
+                    if (currentRequestId !== requestId || status === 'abort') { return; }
+                    replaceConeOptions([]);
+                },
+                complete: function() {
+                    if (currentRequestId === requestId) {
+                        $cone.removeAttr('disabled');
+                        request = null;
+                    }
+                }
+            });
+        }
+
+        $filter.change(function() { loadCones(false); });
+        if ($filter.val()) {
+            loadCones(true);
+        } else {
+            $cone.attr('disabled', 'disabled');
+        }
+    };
+
     ////////////////////////////////////////////////////////////////
 
     var FormChanged_NonCalcPart = false

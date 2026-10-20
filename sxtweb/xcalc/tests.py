@@ -18,8 +18,14 @@ from django.test import Client, RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from resources.models import CONE, FILTER, MACHINE
-from xcalib.models import NOMINALCALIBRATION
+from resources.models import CHAMBER, CONE, ELECTROMETER, FILTER, MACHINE
+from xcalib.models import (
+    CALIBRATION,
+    LOCALSTANDARD,
+    MEASUREMENTSET,
+    NOMINALCALIBRATION,
+    OUTPUTFACTOR,
+)
 from .forms import TreatmentPlanForm
 from .plancalc import calcTxPlan
 from .views_export import csv_export_page
@@ -206,6 +212,61 @@ class TreatmentPlanCutoutValidationTests(TestCase):
             Breadth=10,
             Width=10,
             FSD=100,
+        )
+        electrometer = ELECTROMETER.objects.create(
+            ElectrometerName='Cutout test electrometer',
+            ElectrometerModel='Test',
+            SerialNumber='CUTOUT-TEST-E',
+        )
+        chamber = CHAMBER.objects.create(
+            ChamberName='Cutout test chamber',
+            ChamberModel='Test',
+            SerialNumber='CUTOUT-TEST-C',
+        )
+        local_standard = LOCALSTANDARD.objects.create(
+            LocalStandardId='Cutout test standard',
+            Electrometer=electrometer,
+            Chamber=chamber,
+            HVL=1,
+            Status='Active',
+            CalibrationDate=timezone.localdate(),
+            CalibratedBy='NRC',
+        )
+        measurement_set = MEASUREMENTSET.objects.create(
+            MSetName='Cutout test measurements',
+            Electrometer=electrometer,
+            Chamber=chamber,
+            LocalStandard=local_standard,
+            Filter=filter_model,
+            Cone=self.cone,
+            M_LS=1,
+            M_MS=1,
+            Status='Active',
+            CalibrationDate=timezone.localdate(),
+            CalibratedByUser='test',
+        )
+        absolute_calibration = CALIBRATION.objects.create(
+            CalibName='Cutout test absolute calibration',
+            Filter=filter_model,
+            Cone=self.cone,
+            MeasurementSet=measurement_set,
+            FDD=100,
+            Pressure=760,
+            Temperature=20,
+            BeamDuration=1,
+            M_std=1,
+            M_opp=-1,
+            M_low=1,
+            MeasurementDate=timezone.localdate(),
+            MeasuredByUser='test',
+            LastModifiedByUser='test',
+        )
+        OUTPUTFACTOR.objects.create(
+            ROFName='Cutout test reference output factor',
+            Filter=absolute_calibration,
+            Cone=self.cone,
+            FitMethod='Default',
+            ConeFactor=1,
         )
         self.calibration = NOMINALCALIBRATION.objects.create(
             NCalibName='Cutout test calibration',

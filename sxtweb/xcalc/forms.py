@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.db.models import Exists, F, OuterRef, Q
 from django.contrib.auth.models import User
 
 from common.choices import *
@@ -135,14 +136,56 @@ class TreatmentPlanForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TreatmentPlanForm, self).__init__(*args, **kwargs)
         active_machine = MACHINE.objects.filter(Status__exact='Active')
-        active_filter = FILTER.objects.filter(Status__exact='Active'
-                                              ).filter(Machine__in=active_machine)
-        self.fields['Filter'].queryset = \
-            NOMINALCALIBRATION.objects.filter(Status__exact='Active' #Active__exact=True
-                                       ).filter(Filter__in=active_filter)
-        self.fields['Cone'].queryset = \
-            CONE.objects.filter(Status__exact='Active'
-                                ).filter(Machine__in=active_machine)
+        active_calibration = CALIBRATION.objects.filter(
+            Filter_id=OuterRef('Filter_id'),
+            Cone_id=OuterRef('Cone_id'),
+            Status__exact='Active',
+        )
+        self.fields['Filter'].queryset = NOMINALCALIBRATION.objects.annotate(
+            _has_active_calibration=Exists(active_calibration),
+        ).filter(
+            Status__exact='Active',
+            Filter__Status__exact='Active',
+            Filter__Machine__in=active_machine,
+            Cone__Status__exact='Active',
+            Cone__Machine__in=active_machine,
+            Cone__Machine=F('Filter__Machine'),
+            _has_active_calibration=True,
+        )
+
+        if self.is_bound:
+            selected_filter_value = self.data.get(self.add_prefix('Filter'))
+        else:
+            selected_filter_value = self.initial.get('Filter')
+            if selected_filter_value is None:
+                selected_filter_value = getattr(self.instance, 'Filter_id', None)
+        selected_filter_id = getattr(selected_filter_value, 'pk', selected_filter_value)
+
+        try:
+            selected_filter = self.fields['Filter'].queryset.get(pk=selected_filter_id)
+        except (TypeError, ValueError, NOMINALCALIBRATION.DoesNotExist):
+            selected_filter = None
+
+        if selected_filter is None:
+            self.fields['Cone'].queryset = CONE.objects.none()
+        else:
+            active_calibrations = CALIBRATION.objects.filter(
+                Filter=selected_filter.Filter,
+                Cone=selected_filter.Cone,
+                Status__exact='Active',
+            )
+            active_cone_ids = OUTPUTFACTOR.objects.filter(
+                Filter__in=active_calibrations,
+                Status__exact='Active',
+                Cone__Status__exact='Active',
+                Cone__Machine=selected_filter.Filter.Machine,
+            ).values_list('Cone_id', flat=True)
+            self.fields['Cone'].queryset = CONE.objects.filter(
+                pk__in=active_cone_ids,
+                Status__exact='Active',
+                Machine__in=active_machine,
+                Machine=selected_filter.Filter.Machine,
+            ).distinct()
         
     PlanName = forms.CharField(label=_("Plan Name"), widget=forms.TextInput(attrs={'size':'30'}))
     PatientId = forms.CharField(label = _("Patient MRN"), widget=forms.TextInput(attrs={'size':'30'}))
@@ -191,10 +234,7 @@ class TreatmentPlanForm(forms.ModelForm):
     DR_med = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Dose Rate at Medium Surface
     DosePerFrac = forms.FloatField(initial=0, widget=forms.HiddenInput)   # Dose Per Fraction
     #TxTime = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Treatment Time
-    TxTime = forms.CharField(initial='', widget=forms.HiddenInput)    # Treatment Time
-    SXTCalcVersion = forms.CharField(widget=forms.HiddenInput)
-    DoseCalibDate = forms.DateField(widget=forms.HiddenInput)
-    ModifiedByUser = forms.CharField(widget=forms.HiddenInput)
+    TxTime = forms.FloatField(initial=0, widget=forms.HiddenInput)    # Treatment Time
     
     PlanStatus = forms.CharField(initial='Active',required=False,widget=forms.HiddenInput)
     StatusChangedBy = forms.CharField(initial='nobody',required=False,widget=forms.HiddenInput)
@@ -206,6 +246,7 @@ class TreatmentPlanForm(forms.ModelForm):
     class Meta:
         model = TREATMENTPLAN
         fields = "__all__"
+        exclude = ('SXTCalcVersion', 'DoseCalibDate', 'ModifiedByUser')
         #exclude=('PlanStatus','StatusChangeDateTime','StatusChangedBy',
         #         'ApprvStatus','ApprovedBy','ApprvDateTime',)
     

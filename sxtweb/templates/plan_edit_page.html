@@ -15,6 +15,7 @@
         //showAlert();
         handleROF();
         handleCutout();
+        handleConeFilterChange("{% url 'plan_cone_options' %}");
         handleFormChange();
     });
     </script>
@@ -75,7 +76,7 @@
                {{ planform.as_table }}
             </table>
             
-            <input type="hidden" name="autoROF" value="{{ autoROF|floatformat:'3' }}" id="id_autoROF" />
+            <input type="hidden" name="autoROF" value="{{ autoROF|floatformat:'-6' }}" id="id_autoROF" />
             
             <br /> <br />
             
@@ -233,7 +234,7 @@
             <tr><td>Equiv Diameter at Medium Surface (cm):</td>
                 <td>{{ plan.Dequiv|floatformat:"-3" }}  </td></tr>
             <tr><td>Relative Output Factor:</td>
-                <td>{{ plan.ROF_Exposure|floatformat:3 }}</td></tr>
+                <td>{{ plan.ROF_Exposure|floatformat:'-6' }}</td></tr>
             <tr><th>Kerma Rate in Air at Surface:</th>
                 <th>{{ plan.KR_air|floatformat:3 }}</th></tr>
             <tr><td>Back Scattering Factor for Water (Bw):</td>
