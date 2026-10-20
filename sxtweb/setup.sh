@@ -214,7 +214,7 @@ if $SETWEB; then
     sudo cp -f "$PRJDIR/config/gunicorn.service" "$SYSDIR/"
     sudo cp -f "$PRJDIR/config/gunicorn.socket" "$SYSDIR/"
     sudo sed -i "s:^User=.*:User=$USRNAME:g" "$SYSDIR/gunicorn.service"
-    sudo sed -i "s:^WorkingDirectory=.*:WorkingDirectory=\"$PRJDIR\":g" "$SYSDIR/gunicorn.service"
+    sudo sed -i "s:^WorkingDirectory=.*:WorkingDirectory=$PRJDIR:g" "$SYSDIR/gunicorn.service"
     sudo sed -i "s:^ExecStart=.*:ExecStart=\"$VENV_DIR/bin/gunicorn\" \\\:g" "$SYSDIR/gunicorn.service"
     sudo sed -i "s:access-logfile.*:access-logfile \"$PRJDIR/log/access.log\" \\\:g" "$SYSDIR/gunicorn.service"
     sudo sed -i "s:error-logfile.*:error-logfile \"$PRJDIR/log/error.log\" \\\:g" "$SYSDIR/gunicorn.service"
