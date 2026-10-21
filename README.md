@@ -107,12 +107,12 @@ Release packages contain the complete application source. Installing a release d
 
 <h3>Appendix: Compatibility Matrix</h3>
 
-   | SuperDoCS | Django | Django EOL  | Python       | Ubuntu              | RHEL    | Comment |
-   | ----------| ---    | ---         | ---          | ---                 | ---     | ---     |
-   | 2.x       | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04               | 7, 8    | gunicorn 20.x |
-   | 3.x       | 3.2    | 20240401    | 3.6-3.10     | 20.04, 22.04        | 7, 8, 9 | gunicorn 22.x |
-   | 4.x       | 4.2    | 20260401    | 3.8-3.12     | 20.04, 22.04, 24.04 | 8, 9    | |
-   | 5.x       | 5.2    | 20280401    | 3.10-3.14    | 22.04, 24.04, 26.04 | 8, 9    | |
+   | SuperDoCS | Django | Django EOL  | Python       | Ubuntu              | RHEL     | Comment |
+   | ----------| ---    | ---         | ---          | ---                 | ---      | ---     |
+   | 2.x       | 1.11   | 20200401    | 2.7, 3.4-3.7 | 18.04               | 7, 8     | gunicorn 20.x |
+   | 3.x       | 3.2    | 20240401    | 3.6-3.10     | 20.04, 22.04        | 7, 8, 9  | gunicorn 22.x |
+   | 4.x       | 4.2    | 20260401    | 3.8-3.12     | 20.04, 22.04, 24.04 | 8, 9     | |
+   | 5.x       | 5.2    | 20280401    | 3.10-3.14    | 22.04, 24.04, 26.04 | 8, 9, 10 | |
   
    _Notes:_
    
