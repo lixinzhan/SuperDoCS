@@ -126,6 +126,6 @@ Release packages contain the complete application source. Installing a release d
    - RHEL 7.7+: 2.7, 3.6
    - RHEL 8: 3.6 (available 2.7, 3.8, 3.9, 3.11, 3.12)
    - RHEL 9: 3.9 (available 3.11, 3.12)
-   - RHEL 10: 3.12
+   - RHEL 10: 3.12 (available 3.14)
 
 2. [Python version support information](https://devguide.python.org/versions/)_
